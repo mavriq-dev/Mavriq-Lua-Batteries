@@ -9,7 +9,7 @@ jobs:
     steps:
     - name: setup 
       run: |
-        # curl -sSL -o LuaVM-0.5.0-vs2015-x64.exe https://dl.bintray.com/xpol/luavm/LuaVM-0.5.0-vs2015-x64.exe
+        # curl -sSL -o LuaVM-0.5.0-vs2015-x64.exe https://github.com/xpol/luavm/releases/download/0.5.4/LuaVM-0.5.4-vs2015-x64.exe
         Invoke-WebRequest -OutFile LuaVM-0.5.0-vs2015-x64.exe https://dl.bintray.com/xpol/luavm/LuaVM-0.5.0-vs2015-x64.exe
         pwd
         ls
