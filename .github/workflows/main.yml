@@ -14,7 +14,7 @@ jobs:
         pwd
         ls
         .\LuaVM-0.5.4-vs2015-x64.exe /verysilent
-        set PATH=%LocalAppData%\LuaVM;%PATH%
+        $env:Path += ";%LocalAppData%\LuaVM;"
         luarocks install busted
         luarocks install moonscript
         luarocks install luaossl
