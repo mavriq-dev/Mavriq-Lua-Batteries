@@ -18,6 +18,8 @@ jobs:
     - name: setup 
       run: |
         luarocks install busted
+        luarocks install moonscript
+        luarocks install luaossl
 
     - name: test
       run: |
