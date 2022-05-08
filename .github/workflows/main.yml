@@ -16,7 +16,9 @@ jobs:
         echo "starting install"
         Start-Process .\LuaVM-0.5.4-vs2015-x64.exe -argumentlist "/verysilent" -Wait 
         echo "install finished"
-        $env:Path += ";%LocalAppData%\LuaVM;"
+        $env:Path
+        $env:Path += $env:LOCALAPPDATA
+        $env:Path
         luarocks install busted
         luarocks install moonscript
         luarocks install luaossl
