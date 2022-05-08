@@ -1,25 +1,42 @@
-name: test
+name: Build
 
 on: [push]
 
 jobs:
-  test:
+  build_win:
     runs-on: windows-latest
 
     steps:
-    - name: setup 
-      run: |
-        Set-PSDebug -Trace 1
-        # curl -sSL -o LuaVM-0.5.0-vs2015-x64.exe https://github.com/xpol/luavm/releases/download/0.5.4/LuaVM-0.5.4-vs2015-x64.exe
-        Invoke-WebRequest -OutFile LuaVM-0.5.4-vs2015-x64.exe https://github.com/xpol/luavm/releases/download/0.5.4/LuaVM-0.5.4-vs2015-x64.exe
-        pwd
-        ls
-        echo "starting install"
-        Start-Process .\LuaVM-0.5.4-vs2015-x64.exe -argumentlist "/verysilent" -Wait 
-        echo "install finished"
-        $env:Path
-        $env:Path += $env:LOCALAPPDATA
-        $env:Path
-        luarocks install busted
-        luarocks install moonscript
-        luarocks install luaossl
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+          toolset: 14.0
+          sdk: 10.0.17763.0
+
+      - name: LuaRocks Install
+        run: |
+          # Set-PSDebug -Trace 1
+          # curl -sSL -o LuaVM-0.5.0-vs2015-x64.exe https://github.com/xpol/luavm/releases/download/0.5.4/LuaVM-0.5.4-vs2015-x64.exe
+          Invoke-WebRequest -OutFile LuaVM-0.5.4-vs2015-x64.exe https://github.com/xpol/luavm/releases/download/0.5.4/LuaVM-0.5.4-vs2015-x64.exe
+          pwd
+          ls
+          echo "Installing LuaVM"
+          Start-Process .\LuaVM-0.5.4-vs2015-x64.exe -argumentlist "/verysilent" -Wait 
+          echo "Install Finished"
+          $env:Path += ";" + $env:LOCALAPPDATA + "\LuaVM;" + $env:LOCALAPPDATA + "\LuaVM\externals\bin;" + $env:LOCALAPPDATA + "\LuaVM\versions\5.3"
+          luavm use 5.3
+
+      -name: Build Modules
+        run: |
+          luarocks install luasocket --lua-ver=5.3
+
+      - name: Collect files
+        run: |
+          mkdir archive
+          cp -r  $env:LOCALAPPDATA"\LuaVM\versions\5.3" archive
+
+      - name: Upload windows artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Mavriq-Lua-Batteries(win)
+          path: archive
