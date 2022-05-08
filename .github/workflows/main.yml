@@ -12,7 +12,7 @@ jobs:
         curl -sSL -o LuaVM-0.5.0-vs2015-x64.exe https://dl.bintray.com/xpol/luavm/LuaVM-0.5.0-vs2015-x64.exe
         pwd
         ls
-        .\LuaVM-0.5.0-vs2015-x64.exe /verysilent
+        .\LuaVM-0.5.0-vs2015-2x64.exe /verysilent
         set PATH=%LocalAppData%\LuaVM;%PATH%
         luarocks install busted
         luarocks install moonscript
