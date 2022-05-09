@@ -28,7 +28,15 @@ jobs:
           luarocks config --lua-ver
           luarocks config --lua-libdir
           luarocks config --lua-incdir
-          luarocks install luasocket 
+          luarocks install luasocket
+          # Fix as lua-cjson releases broken on windows
+          git clone https://github.com/openresty/lua-cjson
+          cd lua-cjson
+          luarocks make
+          cd -
+
+          luarocks install lpeg
+
 
       - name: Collect files
         run: |
