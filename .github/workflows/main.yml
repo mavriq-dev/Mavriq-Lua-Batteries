@@ -28,7 +28,7 @@ jobs:
           luarocks config --lua-ver
           luarocks config --lua-libdir
           luarocks config --lua-incdir
-          luarocks install luasocket --lua-ver=5.3
+          luarocks install luasocket 
 
       - name: Collect files
         run: |
