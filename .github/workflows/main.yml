@@ -25,8 +25,8 @@ jobs:
           echo "Install Finished"
           $env:Path += ";" + $env:LOCALAPPDATA + "\LuaVM;" + $env:LOCALAPPDATA + "\LuaVM\externals\bin;" + $env:LOCALAPPDATA + "\LuaVM\versions\5.3"
           luavm use 5.3
-
-      -name: Build Modules
+          
+      - name: Build Modules
         run: |
           luarocks install luasocket --lua-ver=5.3
 
