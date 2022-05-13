@@ -7,43 +7,209 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - uses: actions/checkout@v3
       - uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: x64
           toolset: 14.0
           sdk: 10.0.17763.0
 
-      - name: LuaRocks Install
+      - name: Install LuaVM
         run: |
-          # Set-PSDebug -Trace 1
-          # curl -sSL -o LuaVM-0.5.0-vs2015-x64.exe https://github.com/xpol/luavm/releases/download/0.5.4/LuaVM-0.5.4-vs2015-x64.exe
+          $ErrorActionPreference = "Stop"
+          
           Invoke-WebRequest -OutFile LuaVM-0.5.4-vs2015-x64.exe https://github.com/xpol/luavm/releases/download/0.5.4/LuaVM-0.5.4-vs2015-x64.exe
-          pwd
-          ls
           echo "Installing LuaVM"
           Start-Process .\LuaVM-0.5.4-vs2015-x64.exe -argumentlist "/verysilent" -Wait 
           echo "Install Finished"
-          $env:Path += ";" + $env:LOCALAPPDATA + "\LuaVM;" + $env:LOCALAPPDATA + "\LuaVM\externals\bin;" + $env:LOCALAPPDATA + "\LuaVM\versions\5.3"
-          luavm use 5.3
-          luarocks config --lua-ver
-          luarocks config --lua-libdir
-          luarocks config --lua-incdir
+          $env:Path += ";" + $env:LOCALAPPDATA + "\LuaVM;" + $env:LOCALAPPDATA + "\LuaVM\externals\bin;" + $env:LOCALAPPDATA + "\LuaVM\versions\5.3" 
+          luavm use 5.3 
+          echo $env:LOCALAPPDATA"\LuaVM;"$env:LOCALAPPDATA"\LuaVM\externals\bin;"$env:LOCALAPPDATA"\LuaVM\versions\5.3" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Build Lua5.3.3
+        run: |
+          $ErrorActionPreference = "Stop"
+          
+          Invoke-WebRequest -OutFile lua-5.3.3.tar.gz https://www.lua.org/ftp/lua-5.3.3.tar.gz
+          tar -xvf lua-5.3.3.tar.gz
+          patch lua-5.3.3/src/lauxlib.c checkversion.patch --binary
+          pushd .
+          cd lua-5.3.3/src
+          cl /MD /O2 /c /DLUA_BUILD_AS_DLL *.c
+          ren lua.obj lua.o
+          ren luac.obj luac.o
+          link /DLL /IMPLIB:lua53.lib /OUT:lua53.dll *.obj
+          popd
+          echo "$PATH"
+
+      - name: Build Zlib
+        run: |
+          $ErrorActionPreference = "Stop"
+
+
+          git clone https://github.com/madler/zlib
+          mkdir zlib/build 
+          pushd .
+          cd zlib/build
+          cmake ..
+          msbuild .\zlib.vcxproj /property:Configuration=Release /property:Platform=x64
+          msbuild .\zlibstatic.vcxproj /property:Configuration=Release /property:Platform=x64
+          cp Release/zlib.dll $env:LOCALAPPDATA"\LuaVM\externals\bin"
+          cp Release/zlib.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
+          cp Release/zlibstatic.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
+          popd
+
+      - name: Build BZip2
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          git clone https://github.com/libarchive/bzip2
+          mkdir bzip2/build 
+          pushd .
+          cd bzip2/build
+          cmake -DENABLE_STATIC_LIB=true ..
+          cmake --build . --config Release
+          cp Release/bz2.dll $env:LOCALAPPDATA"\LuaVM\externals\bin"
+          cp Release/bz2.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
+          cp Release/bz2_static.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
+          cp ../*.h $env:LOCALAPPDATA"\LuaVM\externals\include"
+          popd
+
+      - name: Build Zstd
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          git clone https://github.com/facebook/zstd
+          mkdir zstd/build/cmake/builddir
+          pushd .
+          cd zstd/build/cmake/builddir
+          cmake ..  
+          cmake --build . --config Release
+          cp lib\Release/zstd.dll $env:LOCALAPPDATA"\LuaVM\externals\bin"
+          cp lib\Release/zstd.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
+          cp lib\Release/zstd_static.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
+          cp ../../../lib/*.h $env:LOCALAPPDATA"\LuaVM\externals\include"
+          popd
+
+      - name: Build lzma(xz)
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          git clone https://github.com/xz-mirror/xz
+          mkdir xz/build
+          pushd .
+          cd xz/build
+          cmake ..
+          cmake --build . --config Release
+          cp Release/liblzma.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
+          cp ../src/liblzma/api/*.h $env:LOCALAPPDATA"\LuaVM\externals\include"
+          mkdir $env:LOCALAPPDATA"\LuaVM\externals\include\lzma"
+          cp ../src/liblzma/api/lzma/*.h $env:LOCALAPPDATA"\LuaVM\externals\include\lzma"
+          popd
+
+      - name: Build LibZip
+        run: |
+          $ErrorActionPreference = "Stop"          
+
+          git clone https://github.com/nih-at/libzip
+          patch libzip/lib/zip_algorithm_xz.c libzip.patch --binary
+          mkdir libzip/build
+          pushd .
+          cd libzip/build
+          cmake -DBUILD_SHARED_LIBS=OFF .. # -DZLIB_INCLUDE_DIR=$env:LOCALAPPDATA"\LuaVM\externals\include" -DZLIB_LIBRARY_RELEASE=$env:LOCALAPPDATA"\LuaVM\externals\lib\zlib.lib"..
+          cmake --build . --config Release
+          cp lib\Release/zip.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
+          cp ../lib/zip.h $env:LOCALAPPDATA"\LuaVM\externals\include"
+          cp zipconf.h $env:LOCALAPPDATA"\LuaVM\externals\include"
+          popd
+
+      - name: Build Lua-Zip
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          luarocks unpack lua-zip 
+          patch lua-zip-0.2-0/lua-zip/lua-zip-0.2-0.rockspec lua-zip.patch --binary
+          pushd .
+          cd lua-zip-0.2-0/lua-zip
+          luarocks make lua-zip-0.2-0.rockspec
+          mkdir $env:LOCALAPPDATA"\LuaVM\externals\bin\brimworks"
+          mkdir $env:LOCALAPPDATA"\LuaVM\externals\lib\brimworks"
+          cp brimworks\zip.dll $env:LOCALAPPDATA"\LuaVM\externals\bin\brimworks"
+          cp brimworks\zip.lib $env:LOCALAPPDATA"\LuaVM\externals\lib\brimworks"
+          popd
+
+
+      - name: Build LuaSocket
+        run: |
+          $ErrorActionPreference = "Stop"
+
           luarocks install luasocket
           # Fix as lua-cjson releases broken on windows
           git clone https://github.com/openresty/lua-cjson
+          pushd .
           cd lua-cjson
           luarocks make
-          cd -
+          popd
+
+      - name: Build Lpeg
+        run: |
+          $ErrorActionPreference = "Stop" 
 
           luarocks install lpeg
 
+      - name: Build luafilesystem
+        run: |
+          $ErrorActionPreference = "Stop"
+          
+          luarocks install luafilesystem
+
+      - name: Build Lua-cjson
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          git clone https://github.com/mpx/lua-cjson
+          patch lua-cjson/lua_cjson.c lua-cjson.patch --binary
+          pushd .
+          cd lua-cjson
+          luarocks make
+          popd
+
+      - name: Build Penlight
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          luarocks install penlight
+
+      - name: Build Lua-Zlib
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          luarocks unpack lua-zlib
+          patch lua-zlib-1.2-2\lua-zlib/lua-zlib-1.2-2.rockspec lua-zlib.patch --binary
+          pushd .
+          cd lua-zlib-1.2-2\lua-zlib
+          luarocks build lua-zlib-1.2-2.rockspec
+          popd
+
+      - name: Build ZipWriter
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          luarocks install ZipWriter
 
       - name: Collect files
+        if: always()
         run: |
           mkdir archive
-          cp -r  $env:LOCALAPPDATA"\LuaVM\versions\5.3" archive
+          mkdir archive\bin
+          mkdir archive\lua
+          mkdir archive\share
+          cp lua-5.3.3\src\lua53.dll archive\bin
+          cp -r  $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod\*" archive\bin
+          cp -r  $env:LOCALAPPDATA"\LuaVM\versions\5.3\lua\*" archive\lua
 
       - name: Upload windows artifacts
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: Mavriq-Lua-Batteries(win)

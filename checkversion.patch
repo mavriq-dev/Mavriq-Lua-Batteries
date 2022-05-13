@@ -1,0 +1,19 @@
+commit d4000fba3e092fc0cf37ae45a84d9f4f3c78d8d4
+Author: Mavriq-Dev <1278955+mavriq-dev@users.noreply.github.com>
+Date:   Thu May 12 20:49:32 2022 -0400
+
+    fix vm detection
+
+diff --git a/src/lauxlib.c b/src/lauxlib.c
+index bacf43b..3afeb45 100644
+--- a/src/lauxlib.c
++++ b/src/lauxlib.c
+@@ -1026,7 +1026,7 @@ LUALIB_API void luaL_checkversion_ (lua_State *L, lua_Number ver, size_t sz) {
+   const lua_Number *v = lua_version(L);
+   if (sz != LUAL_NUMSIZES)  /* check numeric types */
+     luaL_error(L, "core and library have incompatible numeric types");
+-  if (v != lua_version(NULL))
++  if (0)
+     luaL_error(L, "multiple Lua VMs detected");
+   else if (*v != ver)
+     luaL_error(L, "version mismatch: app. needs %f, Lua core provides %f",

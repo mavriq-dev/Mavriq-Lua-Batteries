@@ -1,0 +1,21 @@
+commit 5d4d296f62194c3fdadde15ea21a01669980ca9a
+Author: Mavriq-Dev <1278955+mavriq-dev@users.noreply.github.com>
+Date:   Sat May 14 17:43:27 2022 -0400
+
+    patch
+
+diff --git a/lua-zip-0.2-0.rockspec b/lua-zip-0.2-0.rockspec
+index 0f45def..883aa46 100644
+--- a/lua-zip-0.2-0.rockspec
++++ b/lua-zip-0.2-0.rockspec
+@@ -39,5 +39,9 @@ build = {
+             "lua_zip.c"
+          }
+       }
+-   }
++   },
++      platforms = { windows = { modules = { ["brimworks.zip"] = {
++      libraries = { "zip", "advapi32", "kernel32", "user32", "bz2_static", "liblzma", "zlibstatic", "zstd_static" },
++      defines   = { "ZIP_STATIC" },
++   }}}},
+ }

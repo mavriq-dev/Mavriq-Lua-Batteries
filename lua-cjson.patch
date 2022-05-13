@@ -1,0 +1,26 @@
+commit 3bd3b5383418a49fbe8d66e0e839e4082b710686
+Author: Mavriq-Dev <1278955+mavriq-dev@users.noreply.github.com>
+Date:   Fri May 13 00:19:32 2022 -0400
+
+    patch
+
+diff --git a/lua_cjson.c b/lua_cjson.c
+index 4a78b19..62e1494 100644
+--- a/lua_cjson.c
++++ b/lua_cjson.c
+@@ -80,6 +80,15 @@
+ #define DEFAULT_DECODE_INVALID_NUMBERS 0
+ #endif
+ 
++#ifdef _MSC_VER
++int strncasecmp(char *s1, char *s2, register int n)
++{
++  while (--n >= 0 && toupper((unsigned char)*s1) == toupper((unsigned char)*s2++))
++      if (*s1++ == ' ')  return 0;
++  return(n < 0 ? 0 : toupper((unsigned char)*s1) - toupper((unsigned char)*--s2));
++}
++#endif
++
+ typedef enum {
+     T_OBJ_BEGIN,
+     T_OBJ_END,
