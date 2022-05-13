@@ -1,0 +1,32 @@
+commit 2d8812d28b8f0cfc8cf2a535ff8fc223b570bfb7
+Author: Mavriq-Dev <1278955+mavriq-dev@users.noreply.github.com>
+Date:   Fri May 20 17:52:54 2022 -0400
+
+    patch
+
+diff --git a/src/pcre/lpcre.c b/src/pcre/lpcre.c
+index 4ecd3b0..c413381 100644
+--- a/src/pcre/lpcre.c
++++ b/src/pcre/lpcre.c
+@@ -1,6 +1,8 @@
+ /* lpcre.c - Lua binding of PCRE library */
+ /* See Copyright Notice in the file LICENSE */
+ 
++#define PCRE_STATIC
++
+ #include <stdlib.h>
+ #include <string.h>
+ #include <locale.h>
+diff --git a/src/pcre/lpcre_f.c b/src/pcre/lpcre_f.c
+index 0b4883d..721115b 100644
+--- a/src/pcre/lpcre_f.c
++++ b/src/pcre/lpcre_f.c
+@@ -1,6 +1,8 @@
+ /* lpcre.c - PCRE regular expression library */
+ /* See Copyright Notice in the file LICENSE */
+ 
++#define PCRE_STATIC
++
+ #include <pcre.h>
+ #include "lua.h"
+ #include "lauxlib.h"

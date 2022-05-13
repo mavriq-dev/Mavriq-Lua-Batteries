@@ -1,0 +1,15 @@
+commit 3dda7eac202e6ff976799309035d958107e600f5
+Author: Mavriq-Dev <1278955+mavriq-dev@users.noreply.github.com>
+Date:   Fri May 13 22:21:17 2022 -0400
+
+    patch
+
+diff --git a/zip_algorithm_xz.c b/zip_algorithm_xz.c
+index 7389ccc..c75bacc 100644
+--- a/zip_algorithm_xz.c
++++ b/zip_algorithm_xz.c
+@@ -1,3 +1,4 @@
++#define LZMA_API_IMPORT
+ /*
+   zip_algorithm_xz.c -- LZMA/XZ (de)compression routines
+   Bazed on zip_algorithm_deflate.c -- deflate (de)compression routines

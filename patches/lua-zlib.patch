@@ -1,0 +1,19 @@
+commit 04da97a699e7d0631ec9fd3ed364f4a9ef40edea
+Author: Mavriq-Dev <1278955+mavriq-dev@users.noreply.github.com>
+Date:   Mon May 16 15:19:48 2022 -0400
+
+    patch
+
+diff --git a/lua-zlib-1.2-2.rockspec b/lua-zlib-1.2-2.rockspec
+index 2e0c5b8..0f4bb4d 100644
+--- a/lua-zlib-1.2-2.rockspec
++++ b/lua-zlib-1.2-2.rockspec
+@@ -36,7 +36,7 @@ build = {
+    },
+    platforms = {
+       windows = { modules = { zlib = { libraries = {
+-         "$(ZLIB_LIBDIR)/zlib" -- Must full path to `"zlib"`, or else will cause the `LINK : fatal error LNK1149`
++         "$(ZLIB_LIBDIR)/zlibstatic" -- Must full path to `"zlib"`, or else will cause the `LINK : fatal error LNK1149`
+       } } } }
+    }
+ }

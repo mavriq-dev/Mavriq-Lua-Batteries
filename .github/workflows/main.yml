@@ -7,43 +7,148 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - uses: actions/checkout@v3
       - uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: x64
           toolset: 14.0
           sdk: 10.0.17763.0
 
-      - name: LuaRocks Install
+      - name: Install LuaVM
         run: |
-          # Set-PSDebug -Trace 1
-          # curl -sSL -o LuaVM-0.5.0-vs2015-x64.exe https://github.com/xpol/luavm/releases/download/0.5.4/LuaVM-0.5.4-vs2015-x64.exe
+          $ErrorActionPreference = "Stop"
+          
           Invoke-WebRequest -OutFile LuaVM-0.5.4-vs2015-x64.exe https://github.com/xpol/luavm/releases/download/0.5.4/LuaVM-0.5.4-vs2015-x64.exe
-          pwd
-          ls
           echo "Installing LuaVM"
           Start-Process .\LuaVM-0.5.4-vs2015-x64.exe -argumentlist "/verysilent" -Wait 
           echo "Install Finished"
-          $env:Path += ";" + $env:LOCALAPPDATA + "\LuaVM;" + $env:LOCALAPPDATA + "\LuaVM\externals\bin;" + $env:LOCALAPPDATA + "\LuaVM\versions\5.3"
-          luavm use 5.3
-          luarocks config --lua-ver
-          luarocks config --lua-libdir
-          luarocks config --lua-incdir
-          luarocks install luasocket
-          # Fix as lua-cjson releases broken on windows
-          git clone https://github.com/openresty/lua-cjson
+          $env:Path += ";" + $env:LOCALAPPDATA + "\LuaVM;" + $env:LOCALAPPDATA + "\LuaVM\externals\bin;" + $env:LOCALAPPDATA + "\LuaVM\versions\5.3" 
+          luavm use 5.3 
+          echo $env:LOCALAPPDATA"\LuaVM;"$env:LOCALAPPDATA"\LuaVM\externals\bin;"$env:LOCALAPPDATA"\LuaVM\versions\5.3" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+
+      - name: Copy Libs
+        run: |
+          $ErrorActionPreference = "Stop" 
+
+          Copy-Item externals/bin/* -Destination $env:LOCALAPPDATA"\LuaVM\externals\bin" -Recurse -Force
+          Copy-Item externals/lib/* -Destination $env:LOCALAPPDATA"\LuaVM\externals\lib" -Recurse -Force
+          Copy-Item externals/include/* -Destination $env:LOCALAPPDATA"\LuaVM\externals\include" -Recurse -Force
+
+      - name: Build luasql-firebird
+        run: |
+          luarocks install rockspecs/luasql-firebird-2.6.0-1.rockspec
+
+      - name: Build luasql-postgres
+        run: |
+          luarocks install rockspecs/luasql-postgres-2.6.0-1.rockspec
+
+      - name: Build luasql-sqlite3
+        run: |
+          luarocks install rockspecs/luasql-sqlite3-2.6.0-1.rockspec
+
+      - name: Build luasql-odbc
+        run: |
+          luarocks install rockspecs\luasql-odbc-2.6.0-1.rockspec
+
+      - name: Build lrexlib-pcre
+        run: |
+          luarocks unpack lrexlib-pcre
+          pushd .
+          cd .\lrexlib-pcre-2.9.1-1\lrexlib\
+          patch -p1 -i ..\..\patches\lrexlib.patch --binary
+          luarocks make 
+          popd
+
+      - name: Build stdlib
+        run: |
+          luarocks install stdlib
+
+      - name: Build luaexpat
+        run: |
+          luarocks unpack luaexpat
+          pushd .
+          cd luaexpat-1.4.1-1\luaexpat\
+          patch -p1 -i ..\..\patches\luaexpat.patch --binary
+          luarocks make .\luaexpat-1.4.1-1.rockspec
+          popd
+
+      - name: Build luasec
+        run: |
+          luarocks install rockspecs/luasec-1.1.0-1.rockspec  
+
+      - name: Build Lua-Zip
+        run: |
+          luarocks install rockspecs/lua-zip-0.2-0.rockspec 
+
+      - name: Build LuaSocket
+        run: |
+           luarocks install luasocket
+
+      - name: Build Lpeg
+        run: |
+          luarocks install lpeg
+
+      - name: Build luafilesystem
+        run: |
+          luarocks install luafilesystem
+
+      - name: Build Lua-cjson
+        run: |
+          git clone https://github.com/mpx/lua-cjson
+          patch lua-cjson/lua_cjson.c  patches/lua-cjson.patch --binary
+          pushd .
           cd lua-cjson
           luarocks make
-          cd -
+          popd
 
-          luarocks install lpeg
+      - name: Build Penlight
+        run: |
+          luarocks install penlight
+
+      - name: Build Lua-Zlib
+        run: |
+          luarocks install rockspecs/lua-zlib-1.2-2.rockspec 
+
+      - name: Build ZipWriter
+        run: |
+           luarocks install ZipWriter
+
+      - name: Build luatz
+        run: |
+          luarocks install luatz
+
+      - name: Build dkjson
+        run: |
+          luarocks install dkjson
+
+      - name: Build lxsh
+        run: |
+          luarocks install lxsh
+
+
+
 
 
       - name: Collect files
+        if: always()
         run: |
           mkdir archive
-          cp -r  $env:LOCALAPPDATA"\LuaVM\versions\5.3" archive
+          mkdir archive\bin
+          mkdir archive\lua
+          mkdir archive\share
+          mkdir archive\tests
+          # mkdir archive\luavm
+          cp "batteries_header.lua" archive
+          cp bin\lua53.dll archive\bin
+          cp -r  $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod\*" archive\bin
+          cp -r   $env:LOCALAPPDATA"\LuaVM\versions\5.3\lua\*" archive\lua
+          cp -r  tests/* archive/tests
+          # cp -r  $env:LOCALAPPDATA"\LuaVM\externals archive\luavm
+          Remove-Item archive\lua\luarocks -Recurse
 
       - name: Upload windows artifacts
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: Mavriq-Lua-Batteries(win)

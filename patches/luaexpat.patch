@@ -1,0 +1,31 @@
+commit f9d9bb1819d8c71fb15ed4bc7612d82f51407805
+Author: Mavriq-Dev <1278955+mavriq-dev@users.noreply.github.com>
+Date:   Fri May 20 15:22:07 2022 -0400
+
+    patch
+
+diff --git a/luaexpat-1.4.1-1.rockspec b/luaexpat-1.4.1-1.rockspec
+index c13eafc..52aed3d 100644
+--- a/luaexpat-1.4.1-1.rockspec
++++ b/luaexpat-1.4.1-1.rockspec
+@@ -39,7 +39,7 @@ build = {
+ 	modules = {
+ 		lxp = {
+ 			sources = { "src/lxplib.c" },
+-			libraries = { "expat" },
++			libraries = { "libexpatMD" },
+ 			incdirs = { "$(EXPAT_INCDIR)", "src/" },
+ 			libdirs = { "$(EXPAT_LIBDIR)" },
+ 		},
+diff --git a/src/lxplib.c b/src/lxplib.c
+index 6157204..0d6432d 100644
+--- a/src/lxplib.c
++++ b/src/lxplib.c
+@@ -4,6 +4,7 @@
+ ** See Copyright Notice in license.html
+ */
+ 
++#define XML_STATIC
+ 
+ #include <assert.h>
+ #include <stdlib.h>
