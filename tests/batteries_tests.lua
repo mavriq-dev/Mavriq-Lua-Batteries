@@ -15,20 +15,18 @@ assert(package.loadlib(mav_bin_path .. "bin/lua53." .. extension,"*"))
 package.path = package.path .. ';' .. mav_bin_path .. '/?.lua'
 
 require("tests.socket.test")
-require("tests.cffi-lua.test")
+--require("tests.cffi-lua.test")
+require("tests.lpeg.test")
+--require("tests.luafilesystem.test")
+--require("tests.lua-cjson.test")
+--require("tests.lua-zip.test")
+--require("tests.luasec.test")
+require("tests.MD5.test")
+require("lxp")
+require("luasql.odbc")
+require("luasql.sqlite3")
+
+require("luasql.mysql")
+require("xavante.httpd")
 
 
-
-local lfs = require("lfs")
-local result = lfs.currentdir()
-reaper.ShowConsoleMsg(result)
-
-local lpeg = require("lpeg")
-
-local int = lpeg.P("hello"):match("helloworld") --> a match, returns 6
-reaper.ShowConsoleMsg(int)
-
-require("cjson")
-
-local json_safe = require("cjson.safe")
-local zip = require("brimworks.zip")

@@ -21,11 +21,12 @@ else
   end
 end
 
+reaper.ShowConsoleMsg("Waiting")
 for i=1,50 do
   reaper.ShowConsoleMsg(".")
   sleep(0.01)
 end
-reaper.ShowConsoleMsg("\n")
+reaper.ShowConsoleMsg("Done. \n")
 
 
 ------------------ Printf -------------------------
