@@ -39,6 +39,10 @@ jobs:
       #   run: |
       #     luarocks install lanes
 
+      - name: Build lua-curl
+        run: |
+          luarocks install lua-curl  CC="CL -DCURL_STATICLIB" LD="link wldap32.lib zlibstatic.lib"
+
       - name: Build luafft
         run: |
           luarocks install rockspecs/luafft-1.2-1.rockspec
@@ -46,7 +50,6 @@ jobs:
       - name: Build luatz
         run: |
           luarocks install luatz
-
 
       - name: Build middleclass
         run: |
@@ -110,12 +113,7 @@ jobs:
 
       - name: Build lrexlib-pcre
         run: |
-          luarocks unpack lrexlib-pcre
-          pushd .
-          cd .\lrexlib-pcre-2.9.1-1\lrexlib\
-          patch -p1 -i ..\..\patches\lrexlib.patch --binary
-          luarocks make 
-          popd
+           luarocks install lrexlib-pcre CC="CL -DPCRE_STATIC"
 
       - name: Build stdlib
         run: |

@@ -147,3 +147,8 @@ Building from source
 git clone https://github.com/yaml/libyaml
 usual cmake
 ```
+# libcurl
+```
+cmake .. -DBUILD_SHARED_LIBS=OFF
+just use cmake as usual
+```
