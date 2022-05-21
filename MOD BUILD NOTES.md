@@ -142,3 +142,8 @@ Building from source
       Run next command to create static library: lib sqlite3.obj
       Open properties of your project and add sqlite3.lib to Linker -> Input -> Additional Dependencies.
 ```
+# libyaml
+```
+git clone https://github.com/yaml/libyaml
+usual cmake
+```
