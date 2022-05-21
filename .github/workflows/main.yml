@@ -35,9 +35,9 @@ jobs:
           Copy-Item externals/lib/* -Destination $env:LOCALAPPDATA"\LuaVM\externals\lib" -Recurse -Force
           Copy-Item externals/include/* -Destination $env:LOCALAPPDATA"\LuaVM\externals\include" -Recurse -Force
 
-      - name: Build lanes
-        run: |
-          luarocks install lanes
+      # - name: Build lanes
+      #   run: |
+      #     luarocks install lanes
 
       - name: Build moses
         run: |
