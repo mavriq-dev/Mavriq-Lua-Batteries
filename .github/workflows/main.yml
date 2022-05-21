@@ -35,6 +35,10 @@ jobs:
           Copy-Item externals/lib/* -Destination $env:LOCALAPPDATA"\LuaVM\externals\lib" -Recurse -Force
           Copy-Item externals/include/* -Destination $env:LOCALAPPDATA"\LuaVM\externals\include" -Recurse -Force
 
+      - name: Build luafun
+        run: |
+          luarocks install rockspecs/fun-0.1.3-1.rockspec
+
       - name: Build MD5
         run: |
           luarocks install MD5
