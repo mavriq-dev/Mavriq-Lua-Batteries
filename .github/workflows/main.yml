@@ -39,6 +39,10 @@ jobs:
       #   run: |
       #     luarocks install lanes
 
+      - name: Build lustache
+        run: |
+          luarocks install lustache
+
       - name: Build moses
         run: |
           luarocks install moses
