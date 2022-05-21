@@ -39,6 +39,9 @@ jobs:
       #   run: |
       #     luarocks install lanes
 
+      - name: Build luafft
+        run: |
+          luarocks install rockspecs/luafft-1.2-1.rockspec
 
       - name: Build luatz
         run: |
