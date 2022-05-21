@@ -39,6 +39,12 @@ jobs:
       #   run: |
       #     luarocks install lanes
 
+
+      - name: Build luatz
+        run: |
+          luarocks install luatz
+
+
       - name: Build middleclass
         run: |
           luarocks install middleclass
