@@ -39,6 +39,7 @@ jobs:
       #   run: |
       #     luarocks install lanes
 
+
       - name: Build lua-curl
         run: |
           luarocks install lua-curl  CC="CL -DCURL_STATICLIB" LD="link wldap32.lib zlibstatic.lib"
@@ -195,7 +196,8 @@ jobs:
           mkdir archive\tests
           # mkdir archive\luavm
           cp "batteries_header.lua" archive
-          cp bin\lua53.dll archive\bin
+          cp -r bin\* archive\bin
+          cp -r lua\* archive\lua
           cp -r  $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod\*" archive\bin
           cp -r   $env:LOCALAPPDATA"\LuaVM\versions\5.3\lua\*" archive\lua
           cp -r  tests/* archive/tests
