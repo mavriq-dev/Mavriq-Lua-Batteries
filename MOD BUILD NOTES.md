@@ -152,3 +152,11 @@ usual cmake
 cmake .. -DBUILD_SHARED_LIBS=OFF
 just use cmake as usual
 ```
+# moonglfw (TODO)
+```
+make in msys32
+pacman -S mingw-w64-x86_64-glfw
+make LIBS="-llua -lglfw3"
+Looks like glfw3 is loaded at runtime via dlopen. This needs to be changed.
+
+```

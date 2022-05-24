@@ -39,6 +39,9 @@ jobs:
       #   run: |
       #     luarocks install lanes
 
+      - name: Build coxpcall
+        run: |
+          luarocks install coxpcall
 
       - name: Build lua-curl
         run: |
