@@ -39,6 +39,10 @@ jobs:
       #   run: |
       #     luarocks install lanes
 
+      - name: Build CopasTimer
+        run: |
+          luarocks install CopasTimer
+
       - name: Build rings
         run: |
           luarocks install rings
