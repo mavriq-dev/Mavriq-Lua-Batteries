@@ -47,6 +47,22 @@ jobs:
           cd wxWidgets\build\msw\
           nmake -f makefile.vc SHARED=0 UNICODE=1 BUILD=release TARGET_CPU=AMD64
 
+      - name: Build wxlua
+        run: |
+          echo ${env:GITHUB_WORKSPACE}/wxWidgets/
+          ls ${env:GITHUB_WORKSPACE}/wxWidgets/
+          git clone https://github.com/pkulchenko/wxlua
+          mkdir wxlua/wxlua/wxlua-build
+          pushd .
+          cd wxlua/wxlua/wxlua-build
+          cmake .. -DwxWidgets_ROOT_DIR="$env:GITHUB_WORKSPACE"/wxWidgets/ -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="$env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="$env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
+          cmake --build . --config Release
+          cmake -L -N .
+          cp bin/Release/wx.dll $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod"
+          mkdir /tests/wxlua
+          cp ../samples/* /tests/wxlua
+          popd
+
       - name: Build CopasTimer
         run: |
           luarocks install CopasTimer

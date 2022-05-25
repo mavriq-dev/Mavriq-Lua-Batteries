@@ -160,15 +160,13 @@ make LIBS="-llua -lglfw3"
 Looks like glfw3 is loaded at runtime via dlopen. This needs to be changed.
 
 ```
-# wxwidgets
-```
-cd wxWidgets\build\msw\
-nmake -f makefile.vc SHARED=0 UNICODE=1 BUILD=release TARGET_CPU=AMD64
-```
 # wxLua
 ```
-mkdir wxlua-build
-CD wxlua-build
-
-
+git clone https://github.com/pkulchenko/wxlua
+mkdir wxlua/wxlua/wxlua-build
+pushd .
+CD wxlua/wxlua/wxlua-build
+cmake .. -DwxWidgets_ROOT_DIR="$env:projdir"/wxWidgets/ -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="$env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="$env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
+cmake --build . --config Release
+popd
 ```
