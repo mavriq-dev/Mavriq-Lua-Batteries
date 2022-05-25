@@ -39,6 +39,10 @@ jobs:
       #   run: |
       #     luarocks install lanes
 
+      - name: Build lub
+        run: |
+          luarocks install lub
+
       - name: Build timerwheel
         run: |
           luarocks install timerwheel
@@ -50,7 +54,11 @@ jobs:
       - name: Build lbase64
         run: |
           luarocks install lbase64
-          
+
+      - name: Build rs232
+        run: |
+          luarocks install rs232
+
 
       - name: Build wxWidgets
         run: |
