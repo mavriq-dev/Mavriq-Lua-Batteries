@@ -1,0 +1,19 @@
+commit 68a5d4b4bde453fa150ef03ee8c6fd08cc37c2f3
+Author: Mavriq-Dev <1278955+mavriq-dev@users.noreply.github.com>
+Date:   Wed May 25 16:06:04 2022 -0400
+
+    patch
+
+diff --git a/copas.lua b/copas.lua
+index 5b9624e..41b8727 100644
+--- a/copas.lua
++++ b/copas.lua
+@@ -1021,7 +1021,7 @@ end
+ 
+ do
+   local timeout_register = setmetatable({}, { __mode = "k" })
+-  local timerwheel = require("timerwheel").new({
++  local timerwheel = require("timerwheel.init").new({
+       precision = TIMEOUT_PRECISION,                -- timeout precision 100ms
+       ringsize = math.floor(60/TIMEOUT_PRECISION),  -- ring size 1 minute
+       err_handler = function(...) return _deferror(...) end,
