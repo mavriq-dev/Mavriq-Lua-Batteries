@@ -43,7 +43,9 @@ jobs:
         run: |
           luarocks install timerwheel
 
-
+      - name: Build vstruct
+        run: |
+          luarocks install vstruct
 
 
           
