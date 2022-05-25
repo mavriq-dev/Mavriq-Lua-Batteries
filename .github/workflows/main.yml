@@ -47,7 +47,9 @@ jobs:
         run: |
           luarocks install vstruct
 
-
+      - name: Build lbase64
+        run: |
+          luarocks install lbase64
           
 
       - name: Build wxWidgets
