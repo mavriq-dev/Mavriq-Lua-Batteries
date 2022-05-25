@@ -39,6 +39,14 @@ jobs:
       #   run: |
       #     luarocks install lanes
 
+      - name: Build timerwheel
+        run: |
+          luarocks install timerwheel
+
+
+
+
+          
 
       - name: Build wxWidgets
         run: |
