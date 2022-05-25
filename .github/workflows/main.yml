@@ -39,6 +39,14 @@ jobs:
       #   run: |
       #     luarocks install lanes
 
+
+      - name: Build wxWidgets
+        run: |
+          Invoke-WebRequest -OutFile wxWidgets-3.1.6.zip https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.6/wxWidgets-3.1.6.zip
+          7z x -owxWidgets wxWidgets-3.1.6.zip
+          cd wxWidgets\build\msw\
+          nmake -f makefile.vc SHARED=0 UNICODE=1 BUILD=release TARGET_CPU=AMD64
+
       - name: Build CopasTimer
         run: |
           luarocks install CopasTimer

@@ -160,3 +160,15 @@ make LIBS="-llua -lglfw3"
 Looks like glfw3 is loaded at runtime via dlopen. This needs to be changed.
 
 ```
+# wxwidgets
+```
+cd wxWidgets\build\msw\
+nmake -f makefile.vc SHARED=0 UNICODE=1 BUILD=release TARGET_CPU=AMD64
+```
+# wxLua
+```
+mkdir wxlua-build
+CD wxlua-build
+
+
+```
