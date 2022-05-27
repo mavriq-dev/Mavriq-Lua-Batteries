@@ -14,7 +14,18 @@ jobs:
           toolset: 14.0
           sdk: 10.0.17763.0
 
+
+      - name: Cache LuaVM
+        id: cache-luavm
+        uses: actions/cache@v3
+        with:
+          path: ~\AppData\Local\LUAVM
+          key: ${{ runner.os }}-luavm-
+          restore-keys: |
+            ${{ runner.os }}-luavm-
+
       - name: Install LuaVM
+        if: steps.cache-luavm.outputs.cache-hit != 'true'
         run: |
           $ErrorActionPreference = "Stop"
           
@@ -22,8 +33,13 @@ jobs:
           echo "Installing LuaVM"
           Start-Process .\LuaVM-0.5.4-vs2015-x64.exe -argumentlist "/verysilent" -Wait 
           echo "Install Finished"
+
+
+      - name: Setup LuaVM    
+        run: |
           $env:Path += ";" + $env:LOCALAPPDATA + "\LuaVM;" + $env:LOCALAPPDATA + "\LuaVM\externals\bin;" + $env:LOCALAPPDATA + "\LuaVM\versions\5.3" 
           luavm use 5.3 
+          lua -v
           echo $env:LOCALAPPDATA"\LuaVM;"$env:LOCALAPPDATA"\LuaVM\externals\bin;"$env:LOCALAPPDATA"\LuaVM\versions\5.3" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
 
@@ -43,29 +59,49 @@ jobs:
       #   run: |
       #     scoop install sccache
 
+      - name: Cache wxwidgets
+        id: cache-wxwidgets
+        uses: actions/cache@v3
+        with:
+          path: wxWidgets
+          key: ${{ runner.os }}-wxwidgets-
+          restore-keys: |
+            ${{ runner.os }}-wxwidgets-
 
-      # - name: Build wxWidgets
-      #   run: |
-      #     Invoke-WebRequest -OutFile wxWidgets-3.1.6.zip https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.6/wxWidgets-3.1.6.zip
-      #     7z x -owxWidgets wxWidgets-3.1.6.zip
-      #     cd wxWidgets\build\msw\
-      #     nmake -f makefile.vc SHARED=0 UNICODE=1 BUILD=release TARGET_CPU=AMD64
+      - name: Build wxWidgets
+        if: steps.cache-wxwidgets.outputs.cache-hit != 'true'
+        run: |
+          Invoke-WebRequest -OutFile wxWidgets-3.1.6.zip https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.6/wxWidgets-3.1.6.zip
+          7z x -owxWidgets wxWidgets-3.1.6.zip
+          cd wxWidgets\build\msw\
+          nmake -f makefile.vc SHARED=0 UNICODE=1 BUILD=release TARGET_CPU=AMD64
 
-      # - name: Build wxlua
-      #   run: |
-      #     git clone https://github.com/pkulchenko/wxlua
-      #     patch wxlua/wxlua/modules/luamodule/luamodule.cpp patches/wxlua.patch --binary
-      #     mkdir wxlua/wxlua/wxlua-build
-      #     pushd .
-      #     cd wxlua/wxlua/wxlua-build
-      #     cmake .. -DCMAKE_BUILD_TYPE=Release  -DwxWidgets_ROOT_DIR="$env:GITHUB_WORKSPACE"/wxWidgets/ -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="$env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="$env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
-      #     cmake --build . --config Release
-      #     cp bin/Release/wx.dll $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod"
-      #     popd
-      #     mkdir tests/wxlua
-      #     mkdir docs/wxlua
-      #     cp wxlua/wxlua/samples/* tests/wxlua
-      #     xp wxlua/wxlua/docs/* docs/wxlua
+      - name: Cache wxlua
+        id: cache-wxlua
+        uses: actions/cache@v3
+        with:
+          path: wxlua
+          key: ${{ runner.os }}-wxlua-
+          restore-keys: |
+            ${{ runner.os }}-wxlua-
+
+
+      - name: Build wxlua
+        if: steps.cache-wxlua.outputs.cache-hit != 'true'
+        run: |
+          git clone https://github.com/pkulchenko/wxlua
+          patch wxlua/wxlua/modules/luamodule/luamodule.cpp patches/wxlua.patch --binary
+          mkdir wxlua/wxlua/wxlua-build
+          pushd .
+          cd wxlua/wxlua/wxlua-build
+          cmake .. -DCMAKE_BUILD_TYPE=Release  -DwxWidgets_ROOT_DIR="$env:GITHUB_WORKSPACE"/wxWidgets/ -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="$env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="$env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
+          cmake --build . --config Release
+          cp bin/Release/wx.dll $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod"
+          popd
+          mkdir tests/wxlua
+          mkdir docs/wxlua
+          cp wxlua/wxlua/samples/* tests/wxlua
+          cp wxlua/wxlua/docs/* docs/wxlua
 
       - name: Build LuaSocket
         run: |
@@ -86,7 +122,6 @@ jobs:
           cp timerwheel-0.2.0-2/timerwheel.lua/LICENSE  docs/luasocket
 
       - name: Build binaryheap
-        if: always()
         run: |
           luarocks unpack binaryheap
           luarocks install binaryheap
@@ -96,7 +131,6 @@ jobs:
           Invoke-WebRequest  https://raw.githubusercontent.com/Tieske/binaryheap.lua/master/LICENSE   -OutFile  docs/binaryheap/LICENSE
 
       - name: Build luafilesystem
-        if: always()
         run: |
           luarocks unpack luafilesystem
           luarocks install luafilesystem
@@ -106,7 +140,6 @@ jobs:
           cp luafilesystem-1.8.0-1/luafilesystem/LICENSE  docs/luafilesystem
 
       - name: Build copas
-        if: always()
         run: |
           luarocks unpack rockspecs/copas-3.0.0-3.rockspec
           luarocks install rockspecs/copas-3.0.0-3.rockspec
@@ -117,7 +150,6 @@ jobs:
           cp copas-3.0.0-3/copas/README.md docs/copas
 
       - name: Build coxpcall
-        if: always()
         run: |
           luarocks unpack coxpcall
           luarocks install coxpcall
