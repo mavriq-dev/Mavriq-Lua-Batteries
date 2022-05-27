@@ -44,52 +44,86 @@ jobs:
       #     scoop install sccache
 
 
-      - name: Build wxWidgets
-        run: |
-          Invoke-WebRequest -OutFile wxWidgets-3.1.6.zip https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.6/wxWidgets-3.1.6.zip
-          7z x -owxWidgets wxWidgets-3.1.6.zip
-          cd wxWidgets\build\msw\
-          nmake -f makefile.vc SHARED=0 UNICODE=1 BUILD=release TARGET_CPU=AMD64
+      # - name: Build wxWidgets
+      #   run: |
+      #     Invoke-WebRequest -OutFile wxWidgets-3.1.6.zip https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.6/wxWidgets-3.1.6.zip
+      #     7z x -owxWidgets wxWidgets-3.1.6.zip
+      #     cd wxWidgets\build\msw\
+      #     nmake -f makefile.vc SHARED=0 UNICODE=1 BUILD=release TARGET_CPU=AMD64
 
-      - name: Build wxlua
-        run: |
-          mkdir tests/wxlua
-          git clone https://github.com/pkulchenko/wxlua
-          patch wxlua/wxlua/modules/luamodule/luamodule.cpp patches/wxlua.patch --binary
-          mkdir wxlua/wxlua/wxlua-build
-          pushd .
-          cd wxlua/wxlua/wxlua-build
-          cmake .. -DCMAKE_BUILD_TYPE=Release  -DwxWidgets_ROOT_DIR="$env:GITHUB_WORKSPACE"/wxWidgets/ -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="$env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="$env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
-          cmake --build . --config Release
-          cp bin/Release/wx.dll $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod"
-          popd
-          cp wxlua/wxlua/samples/* tests/wxlua
-          ls wxlua/wxlua/samples
+      # - name: Build wxlua
+      #   run: |
+      #     git clone https://github.com/pkulchenko/wxlua
+      #     patch wxlua/wxlua/modules/luamodule/luamodule.cpp patches/wxlua.patch --binary
+      #     mkdir wxlua/wxlua/wxlua-build
+      #     pushd .
+      #     cd wxlua/wxlua/wxlua-build
+      #     cmake .. -DCMAKE_BUILD_TYPE=Release  -DwxWidgets_ROOT_DIR="$env:GITHUB_WORKSPACE"/wxWidgets/ -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="$env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="$env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
+      #     cmake --build . --config Release
+      #     cp bin/Release/wx.dll $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod"
+      #     popd
+      #     mkdir tests/wxlua
+      #     mkdir docs/wxlua
+      #     cp wxlua/wxlua/samples/* tests/wxlua
+      #     xp wxlua/wxlua/docs/* docs/wxlua
 
       - name: Build LuaSocket
         run: |
-           luarocks install luasocket
+          luarocks unpack luasocket
+          luarocks install luasocket
+          mkdir docs/luasocket
+          cp luasocket-3.0.0-1/luasocket/docs/* docs/luasocket
+          cp luasocket-3.0.0-1/luasocket/README.md docs/luasocket
+          cp luasocket-3.0.0-1/luasocket/LICENSE docs/luasocket
 
       - name: Build timerwheel
         run: |
+          luarocks unpack timerwheel
           luarocks install timerwheel
+          mkdir docs/timerwheel
+          cp timerwheel-0.2.0-2/timerwheel.lua/docs/*  docs/luasocket
+          cp timerwheel-0.2.0-2/timerwheel.lua/README.md  docs/luasocket
+          cp timerwheel-0.2.0-2/timerwheel.lua/LICENSE  docs/luasocket
 
       - name: Build binaryheap
+        if: always()
         run: |
+          luarocks unpack binaryheap
           luarocks install binaryheap
+          mkdir docs/binaryheap
+          cp binaryheap-0.4-1/binaryheap.lua-version_0v4/docs/*  docs/binaryheap
+          cp binaryheap-0.4-1/binaryheap.lua-version_0v4/README.md  docs/binaryheap
+          Invoke-WebRequest  https://raw.githubusercontent.com/Tieske/binaryheap.lua/master/LICENSE   -OutFile  docs/binaryheap/LICENSE
 
       - name: Build luafilesystem
+        if: always()
         run: |
+          luarocks unpack luafilesystem
           luarocks install luafilesystem
+          mkdir docs/luafilesystem
+          cp luafilesystem-1.8.0-1/luafilesystem/doc/us/*  docs/luafilesystem
+          cp luafilesystem-1.8.0-1/luafilesystem/README.md  docs/luafilesystem
+          cp luafilesystem-1.8.0-1/luafilesystem/LICENSE  docs/luafilesystem
 
       - name: Build copas
+        if: always()
         run: |
+          luarocks unpack rockspecs/copas-3.0.0-3.rockspec
           luarocks install rockspecs/copas-3.0.0-3.rockspec
-          patch $env:LOCALAPPDATA"\LUAVM\versions\5.3\lua\copas.lua"  patches/copas.lua.patch 
+          patch $env:LOCALAPPDATA"\LUAVM\versions\5.3\lua\copas.lua"  patches/copas.lua.patch
+          mkdir docs/copas
+          cp copas-3.0.0-3/copas/docs/* docs/copas 
+          cp copas-3.0.0-3/copas/LICENSE docs/copas
+          cp copas-3.0.0-3/copas/README.md docs/copas
 
       - name: Build coxpcall
+        if: always()
         run: |
+          luarocks unpack coxpcall
           luarocks install coxpcall
+          mkdir docs/coxpcall
+          cp coxpcall-1.17.0-1/coxpcall/doc/* docs/coxpcall
+          cp coxpcall-1.17.0-1/coxpcall/README.md docs/coxpcall
           
       - name: Build CopasTimer
         run: |
@@ -254,12 +288,13 @@ jobs:
           mkdir archive
           mkdir archive\bin
           mkdir archive\lua
-          mkdir archive\share
+          mkdir archive\docs
           mkdir archive\tests
           # mkdir archive\luavm
           cp "batteries_header.lua" archive
           cp -r bin\* archive\bin
           cp -r lua\* archive\lua
+          cp -r docs\* archive\docs
           cp -r  $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod\*" archive\bin
           cp -r   $env:LOCALAPPDATA"\LuaVM\versions\5.3\lua\*" archive\lua
           cp -r  tests/* archive/tests
