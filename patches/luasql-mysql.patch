@@ -1,0 +1,22 @@
+commit 00c0da227081b2e9449910f75de4460bd6879ad0
+Author: Mavriq-Dev <1278955+mavriq-dev@users.noreply.github.com>
+Date:   Fri May 27 09:27:13 2022 -0400
+
+    patch
+
+diff --git a/luasql.h b/luasql.h
+index 0ab2d8a..d55d1f6 100644
+--- a/luasql.h
++++ b/luasql.h
+@@ -3,6 +3,11 @@
+ ** See Copyright Notice in license.html
+ */
+ 
++#if _MSC_VER >= 1932 // Visual Studio 2022 version 17.2+
++#    pragma comment(linker, "/alternatename:__imp___std_init_once_complete=__imp_InitOnceComplete")
++#    pragma comment(linker, "/alternatename:__imp___std_init_once_begin_initialize=__imp_InitOnceBeginInitialize")
++#endif
++
+ #ifndef _LUASQL_
+ #define _LUASQL_
+ 

@@ -11,8 +11,8 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: x64
-          # toolset: 14.0
-          # sdk: 10.0.17763.0
+          toolset: 14.0
+          sdk: 10.0.17763.0
 
       - name: Install LuaVM
         run: |
@@ -38,10 +38,6 @@ jobs:
       # - name: Build lanes
       #   run: |
       #     luarocks install lanes
-      
-      - name: Build luasql-mysql
-        run: |
-          luarocks install rockspecs\luasql-mysql-2.6.0-1.rockspec
 
       # - name: Setup Sccache
       #   run: |
@@ -166,7 +162,10 @@ jobs:
 
       - name: Build luasql-mysql
         run: |
-          luarocks install rockspecs\luasql-mysql-2.6.0-1.rockspec
+          luarocks unpack rockspecs\luasql-mysql-2.6.0-1.rockspec
+          patch luasql-mysql-2.6.0-1/luasql/src/luasql.h  patches/luasql-mysql.patch --binary
+          cd luasql-mysql-2.6.0-1/luasql/
+          luarocks make ../../rockspecs\luasql-mysql-2.6.0-1.rockspec
 
       - name: Build luasql-firebird
         run: |

@@ -170,3 +170,11 @@ cmake .. -DwxWidgets_ROOT_DIR="$env:projdir"/wxWidgets/ -DwxLua_LUA_LIBRARY_USE_
 cmake --build . --config Release
 popd
 ```
+# MySql-Server
+Lib is broken under VS 17.2+. Unresolved Symbols
+```
+cmake .. -DDOWNLOAD_BOOST=1 -DWITH_BOOST=C:\Users\geoff_obr9bt1\Documents\GitHub\test
+
+
+
+```
