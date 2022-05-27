@@ -55,12 +55,12 @@ jobs:
         run: |
           mkdir tests/wxlua
           git clone https://github.com/pkulchenko/wxlua
+          patch wxlua/wxlua/modules/luamodule/luamodule.cpp patches/wxlua.patch --binary
           mkdir wxlua/wxlua/wxlua-build
           pushd .
           cd wxlua/wxlua/wxlua-build
           cmake .. -DCMAKE_BUILD_TYPE=Release  -DwxWidgets_ROOT_DIR="$env:GITHUB_WORKSPACE"/wxWidgets/ -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="$env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="$env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
           cmake --build . --config Release
-          cmake -L -N .
           cp bin/Release/wx.dll $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod"
           popd
           cp wxlua/wxlua/samples/* tests/wxlua
@@ -114,7 +114,6 @@ jobs:
       - name: Build rings
         run: |
           luarocks install rings
-
 
       - name: Build lua-curl
         run: |
@@ -208,12 +207,9 @@ jobs:
         run: |
           luarocks install rockspecs/lua-zip-0.2-0.rockspec 
 
-
       - name: Build Lpeg
         run: |
           luarocks install lpeg
-
-
 
       - name: Build Lua-cjson
         run: |
