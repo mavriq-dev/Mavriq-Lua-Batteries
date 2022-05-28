@@ -1,0 +1,944 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>The Programming Language Lua</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" HREF="lua.css">
+<LINK REL="alternate" TYPE="application/rss+xml" HREF="news.rss" TITLE="Lua news RSS feed">
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="description" CONTENT="Official web site of the Lua language">
+<META NAME="keywords" CONTENT="lua, language, extension, embedding, configuration, scripting, rapid prototyping, free, source, portable">
+<STYLE TYPE="text/css">
+table {
+	margin: 20px auto ;
+}
+
+td ul {
+	list-style-type: none ;
+	margin: 0 ;
+	padding: 0 ;
+}
+
+td.menu ul {
+	padding-left: 50px ;
+	font-size: large ;
+	line-height: 1.5 ;
+}
+
+td.menu a:hover {
+	margin: -3px -6px -3px -6px ;
+	padding: 3px  6px  3px  6px ;
+	border-radius: 4px ;
+}
+
+td.news a:hover {
+	margin: -3px -4px -3px -4px ;
+	padding: 3px  4px  3px  4px ;
+}
+
+td.news ul {
+	border-left: solid #F0F0F0 2px ;
+	padding-left: 2em ;
+	padding-top: 1em ;
+	padding-bottom: 1em ;
+	font-size: medium ;
+	line-height: 1.35 ;
+}
+
+td.news li {
+	margin-bottom: 1.5em ;
+}
+
+td.news li:last-child {
+	margin-bottom: 0em ;
+}
+
+span.note {
+	xdisplay: none ;
+	font-size: x-small ;
+	color: gray ;
+}
+
+img {
+	vertical-align: text-bottom ;
+}
+</STYLE>
+</HEAD>
+
+<BODY>
+
+<TABLE>
+<TR>
+
+<TD WIDTH="256">
+<IMG SRC="images/luaa.gif" ALT="The Programming Language Lua" TITLE="welcome!">
+
+<TD WIDTH="200" CLASS="menu">
+<UL>
+<LI><A HREF="about.html" TITLE="read a summary">about</A>
+<LI><A HREF="news.html" TITLE="see what is happening with Lua">news</A>
+<LI><A HREF="start.html" TITLE="get started with Lua">get started</A>
+<LI><A HREF="download.html" TITLE="get a copy of Lua">download</A>
+<LI><A HREF="docs.html" TITLE="read technical information">documentation</A>
+<LI><A HREF="community.html" TITLE="meet other Lua users">community</A>
+<LI><A HREF="map.html" TITLE="find your way around">site map</A>
+<LI><A HREF="portugues.html" TITLE="leia um resumo">português</A>
+</UL>
+
+<TD WIDTH="250" CLASS="news">
+<UL>
+<LI>
+<A HREF="versions.html#5.4">Lua 5.4.4</A> released
+<LI>
+<A HREF="https://www.amazon.com/exec/obidos/ASIN/8590379868/lua-home-20">Fourth edition</A>
+of<BR>
+<A HREF="pil/"><EM>Programming in Lua</EM></A>
+<BR>available as
+<A HREF="https://store.feistyduck.com/products/programming-in-lua-fourth-edition-ebook">e-book</A>
+<!--
+<LI>
+<A HREF="https://www.hs-furtwangen.de/en/faculties/digital-media/labs/games-lab/lua-workshop/">Lua Workshop 2021</A>
+to be held in Freiburg, Germany
+-->
+</UL>
+<TD WIDTH="130">
+<SPAN CLASS="note">designed and developed at</SPAN>
+<P>
+<A HREF="https://www.puc-rio.br/"><IMG SRC="images/puc.png" ALT="PUC-Rio" TITLE="Lua's home"></A>
+
+</TR>
+</TABLE>
+
+<!--
+Last update:
+Wed May  4 10:00:30 UTC 2022
+Last change: minor edit (html)
+-->
+
+</BODY>
+</HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>The Programming Language Lua</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" HREF="lua.css">
+<LINK REL="alternate" TYPE="application/rss+xml" HREF="news.rss" TITLE="Lua news RSS feed">
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="description" CONTENT="Official web site of the Lua language">
+<META NAME="keywords" CONTENT="lua, language, extension, embedding, configuration, scripting, rapid prototyping, free, source, portable">
+<STYLE TYPE="text/css">
+table {
+	margin: 20px auto ;
+}
+
+td ul {
+	list-style-type: none ;
+	margin: 0 ;
+	padding: 0 ;
+}
+
+td.menu ul {
+	padding-left: 50px ;
+	font-size: large ;
+	line-height: 1.5 ;
+}
+
+td.menu a:hover {
+	margin: -3px -6px -3px -6px ;
+	padding: 3px  6px  3px  6px ;
+	border-radius: 4px ;
+}
+
+td.news a:hover {
+	margin: -3px -4px -3px -4px ;
+	padding: 3px  4px  3px  4px ;
+}
+
+td.news ul {
+	border-left: solid #F0F0F0 2px ;
+	padding-left: 2em ;
+	padding-top: 1em ;
+	padding-bottom: 1em ;
+	font-size: medium ;
+	line-height: 1.35 ;
+}
+
+td.news li {
+	margin-bottom: 1.5em ;
+}
+
+td.news li:last-child {
+	margin-bottom: 0em ;
+}
+
+span.note {
+	xdisplay: none ;
+	font-size: x-small ;
+	color: gray ;
+}
+
+img {
+	vertical-align: text-bottom ;
+}
+</STYLE>
+</HEAD>
+
+<BODY>
+
+<TABLE>
+<TR>
+
+<TD WIDTH="256">
+<IMG SRC="images/luaa.gif" ALT="The Programming Language Lua" TITLE="welcome!">
+
+<TD WIDTH="200" CLASS="menu">
+<UL>
+<LI><A HREF="about.html" TITLE="read a summary">about</A>
+<LI><A HREF="news.html" TITLE="see what is happening with Lua">news</A>
+<LI><A HREF="start.html" TITLE="get started with Lua">get started</A>
+<LI><A HREF="download.html" TITLE="get a copy of Lua">download</A>
+<LI><A HREF="docs.html" TITLE="read technical information">documentation</A>
+<LI><A HREF="community.html" TITLE="meet other Lua users">community</A>
+<LI><A HREF="map.html" TITLE="find your way around">site map</A>
+<LI><A HREF="portugues.html" TITLE="leia um resumo">português</A>
+</UL>
+
+<TD WIDTH="250" CLASS="news">
+<UL>
+<LI>
+<A HREF="versions.html#5.4">Lua 5.4.4</A> released
+<LI>
+<A HREF="https://www.amazon.com/exec/obidos/ASIN/8590379868/lua-home-20">Fourth edition</A>
+of<BR>
+<A HREF="pil/"><EM>Programming in Lua</EM></A>
+<BR>available as
+<A HREF="https://store.feistyduck.com/products/programming-in-lua-fourth-edition-ebook">e-book</A>
+<!--
+<LI>
+<A HREF="https://www.hs-furtwangen.de/en/faculties/digital-media/labs/games-lab/lua-workshop/">Lua Workshop 2021</A>
+to be held in Freiburg, Germany
+-->
+</UL>
+<TD WIDTH="130">
+<SPAN CLASS="note">designed and developed at</SPAN>
+<P>
+<A HREF="https://www.puc-rio.br/"><IMG SRC="images/puc.png" ALT="PUC-Rio" TITLE="Lua's home"></A>
+
+</TR>
+</TABLE>
+
+<!--
+Last update:
+Wed May  4 10:00:30 UTC 2022
+Last change: minor edit (html)
+-->
+
+</BODY>
+</HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>The Programming Language Lua</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" HREF="lua.css">
+<LINK REL="alternate" TYPE="application/rss+xml" HREF="news.rss" TITLE="Lua news RSS feed">
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="description" CONTENT="Official web site of the Lua language">
+<META NAME="keywords" CONTENT="lua, language, extension, embedding, configuration, scripting, rapid prototyping, free, source, portable">
+<STYLE TYPE="text/css">
+table {
+	margin: 20px auto ;
+}
+
+td ul {
+	list-style-type: none ;
+	margin: 0 ;
+	padding: 0 ;
+}
+
+td.menu ul {
+	padding-left: 50px ;
+	font-size: large ;
+	line-height: 1.5 ;
+}
+
+td.menu a:hover {
+	margin: -3px -6px -3px -6px ;
+	padding: 3px  6px  3px  6px ;
+	border-radius: 4px ;
+}
+
+td.news a:hover {
+	margin: -3px -4px -3px -4px ;
+	padding: 3px  4px  3px  4px ;
+}
+
+td.news ul {
+	border-left: solid #F0F0F0 2px ;
+	padding-left: 2em ;
+	padding-top: 1em ;
+	padding-bottom: 1em ;
+	font-size: medium ;
+	line-height: 1.35 ;
+}
+
+td.news li {
+	margin-bottom: 1.5em ;
+}
+
+td.news li:last-child {
+	margin-bottom: 0em ;
+}
+
+span.note {
+	xdisplay: none ;
+	font-size: x-small ;
+	color: gray ;
+}
+
+img {
+	vertical-align: text-bottom ;
+}
+</STYLE>
+</HEAD>
+
+<BODY>
+
+<TABLE>
+<TR>
+
+<TD WIDTH="256">
+<IMG SRC="images/luaa.gif" ALT="The Programming Language Lua" TITLE="welcome!">
+
+<TD WIDTH="200" CLASS="menu">
+<UL>
+<LI><A HREF="about.html" TITLE="read a summary">about</A>
+<LI><A HREF="news.html" TITLE="see what is happening with Lua">news</A>
+<LI><A HREF="start.html" TITLE="get started with Lua">get started</A>
+<LI><A HREF="download.html" TITLE="get a copy of Lua">download</A>
+<LI><A HREF="docs.html" TITLE="read technical information">documentation</A>
+<LI><A HREF="community.html" TITLE="meet other Lua users">community</A>
+<LI><A HREF="map.html" TITLE="find your way around">site map</A>
+<LI><A HREF="portugues.html" TITLE="leia um resumo">português</A>
+</UL>
+
+<TD WIDTH="250" CLASS="news">
+<UL>
+<LI>
+<A HREF="versions.html#5.4">Lua 5.4.4</A> released
+<LI>
+<A HREF="https://www.amazon.com/exec/obidos/ASIN/8590379868/lua-home-20">Fourth edition</A>
+of<BR>
+<A HREF="pil/"><EM>Programming in Lua</EM></A>
+<BR>available as
+<A HREF="https://store.feistyduck.com/products/programming-in-lua-fourth-edition-ebook">e-book</A>
+<!--
+<LI>
+<A HREF="https://www.hs-furtwangen.de/en/faculties/digital-media/labs/games-lab/lua-workshop/">Lua Workshop 2021</A>
+to be held in Freiburg, Germany
+-->
+</UL>
+<TD WIDTH="130">
+<SPAN CLASS="note">designed and developed at</SPAN>
+<P>
+<A HREF="https://www.puc-rio.br/"><IMG SRC="images/puc.png" ALT="PUC-Rio" TITLE="Lua's home"></A>
+
+</TR>
+</TABLE>
+
+<!--
+Last update:
+Wed May  4 10:00:30 UTC 2022
+Last change: minor edit (html)
+-->
+
+</BODY>
+</HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>The Programming Language Lua</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" HREF="lua.css">
+<LINK REL="alternate" TYPE="application/rss+xml" HREF="news.rss" TITLE="Lua news RSS feed">
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="description" CONTENT="Official web site of the Lua language">
+<META NAME="keywords" CONTENT="lua, language, extension, embedding, configuration, scripting, rapid prototyping, free, source, portable">
+<STYLE TYPE="text/css">
+table {
+	margin: 20px auto ;
+}
+
+td ul {
+	list-style-type: none ;
+	margin: 0 ;
+	padding: 0 ;
+}
+
+td.menu ul {
+	padding-left: 50px ;
+	font-size: large ;
+	line-height: 1.5 ;
+}
+
+td.menu a:hover {
+	margin: -3px -6px -3px -6px ;
+	padding: 3px  6px  3px  6px ;
+	border-radius: 4px ;
+}
+
+td.news a:hover {
+	margin: -3px -4px -3px -4px ;
+	padding: 3px  4px  3px  4px ;
+}
+
+td.news ul {
+	border-left: solid #F0F0F0 2px ;
+	padding-left: 2em ;
+	padding-top: 1em ;
+	padding-bottom: 1em ;
+	font-size: medium ;
+	line-height: 1.35 ;
+}
+
+td.news li {
+	margin-bottom: 1.5em ;
+}
+
+td.news li:last-child {
+	margin-bottom: 0em ;
+}
+
+span.note {
+	xdisplay: none ;
+	font-size: x-small ;
+	color: gray ;
+}
+
+img {
+	vertical-align: text-bottom ;
+}
+</STYLE>
+</HEAD>
+
+<BODY>
+
+<TABLE>
+<TR>
+
+<TD WIDTH="256">
+<IMG SRC="images/luaa.gif" ALT="The Programming Language Lua" TITLE="welcome!">
+
+<TD WIDTH="200" CLASS="menu">
+<UL>
+<LI><A HREF="about.html" TITLE="read a summary">about</A>
+<LI><A HREF="news.html" TITLE="see what is happening with Lua">news</A>
+<LI><A HREF="start.html" TITLE="get started with Lua">get started</A>
+<LI><A HREF="download.html" TITLE="get a copy of Lua">download</A>
+<LI><A HREF="docs.html" TITLE="read technical information">documentation</A>
+<LI><A HREF="community.html" TITLE="meet other Lua users">community</A>
+<LI><A HREF="map.html" TITLE="find your way around">site map</A>
+<LI><A HREF="portugues.html" TITLE="leia um resumo">português</A>
+</UL>
+
+<TD WIDTH="250" CLASS="news">
+<UL>
+<LI>
+<A HREF="versions.html#5.4">Lua 5.4.4</A> released
+<LI>
+<A HREF="https://www.amazon.com/exec/obidos/ASIN/8590379868/lua-home-20">Fourth edition</A>
+of<BR>
+<A HREF="pil/"><EM>Programming in Lua</EM></A>
+<BR>available as
+<A HREF="https://store.feistyduck.com/products/programming-in-lua-fourth-edition-ebook">e-book</A>
+<!--
+<LI>
+<A HREF="https://www.hs-furtwangen.de/en/faculties/digital-media/labs/games-lab/lua-workshop/">Lua Workshop 2021</A>
+to be held in Freiburg, Germany
+-->
+</UL>
+<TD WIDTH="130">
+<SPAN CLASS="note">designed and developed at</SPAN>
+<P>
+<A HREF="https://www.puc-rio.br/"><IMG SRC="images/puc.png" ALT="PUC-Rio" TITLE="Lua's home"></A>
+
+</TR>
+</TABLE>
+
+<!--
+Last update:
+Wed May  4 10:00:30 UTC 2022
+Last change: minor edit (html)
+-->
+
+</BODY>
+</HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>The Programming Language Lua</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" HREF="lua.css">
+<LINK REL="alternate" TYPE="application/rss+xml" HREF="news.rss" TITLE="Lua news RSS feed">
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="description" CONTENT="Official web site of the Lua language">
+<META NAME="keywords" CONTENT="lua, language, extension, embedding, configuration, scripting, rapid prototyping, free, source, portable">
+<STYLE TYPE="text/css">
+table {
+	margin: 20px auto ;
+}
+
+td ul {
+	list-style-type: none ;
+	margin: 0 ;
+	padding: 0 ;
+}
+
+td.menu ul {
+	padding-left: 50px ;
+	font-size: large ;
+	line-height: 1.5 ;
+}
+
+td.menu a:hover {
+	margin: -3px -6px -3px -6px ;
+	padding: 3px  6px  3px  6px ;
+	border-radius: 4px ;
+}
+
+td.news a:hover {
+	margin: -3px -4px -3px -4px ;
+	padding: 3px  4px  3px  4px ;
+}
+
+td.news ul {
+	border-left: solid #F0F0F0 2px ;
+	padding-left: 2em ;
+	padding-top: 1em ;
+	padding-bottom: 1em ;
+	font-size: medium ;
+	line-height: 1.35 ;
+}
+
+td.news li {
+	margin-bottom: 1.5em ;
+}
+
+td.news li:last-child {
+	margin-bottom: 0em ;
+}
+
+span.note {
+	xdisplay: none ;
+	font-size: x-small ;
+	color: gray ;
+}
+
+img {
+	vertical-align: text-bottom ;
+}
+</STYLE>
+</HEAD>
+
+<BODY>
+
+<TABLE>
+<TR>
+
+<TD WIDTH="256">
+<IMG SRC="images/luaa.gif" ALT="The Programming Language Lua" TITLE="welcome!">
+
+<TD WIDTH="200" CLASS="menu">
+<UL>
+<LI><A HREF="about.html" TITLE="read a summary">about</A>
+<LI><A HREF="news.html" TITLE="see what is happening with Lua">news</A>
+<LI><A HREF="start.html" TITLE="get started with Lua">get started</A>
+<LI><A HREF="download.html" TITLE="get a copy of Lua">download</A>
+<LI><A HREF="docs.html" TITLE="read technical information">documentation</A>
+<LI><A HREF="community.html" TITLE="meet other Lua users">community</A>
+<LI><A HREF="map.html" TITLE="find your way around">site map</A>
+<LI><A HREF="portugues.html" TITLE="leia um resumo">português</A>
+</UL>
+
+<TD WIDTH="250" CLASS="news">
+<UL>
+<LI>
+<A HREF="versions.html#5.4">Lua 5.4.4</A> released
+<LI>
+<A HREF="https://www.amazon.com/exec/obidos/ASIN/8590379868/lua-home-20">Fourth edition</A>
+of<BR>
+<A HREF="pil/"><EM>Programming in Lua</EM></A>
+<BR>available as
+<A HREF="https://store.feistyduck.com/products/programming-in-lua-fourth-edition-ebook">e-book</A>
+<!--
+<LI>
+<A HREF="https://www.hs-furtwangen.de/en/faculties/digital-media/labs/games-lab/lua-workshop/">Lua Workshop 2021</A>
+to be held in Freiburg, Germany
+-->
+</UL>
+<TD WIDTH="130">
+<SPAN CLASS="note">designed and developed at</SPAN>
+<P>
+<A HREF="https://www.puc-rio.br/"><IMG SRC="images/puc.png" ALT="PUC-Rio" TITLE="Lua's home"></A>
+
+</TR>
+</TABLE>
+
+<!--
+Last update:
+Wed May  4 10:00:30 UTC 2022
+Last change: minor edit (html)
+-->
+
+</BODY>
+</HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>The Programming Language Lua</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" HREF="lua.css">
+<LINK REL="alternate" TYPE="application/rss+xml" HREF="news.rss" TITLE="Lua news RSS feed">
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="description" CONTENT="Official web site of the Lua language">
+<META NAME="keywords" CONTENT="lua, language, extension, embedding, configuration, scripting, rapid prototyping, free, source, portable">
+<STYLE TYPE="text/css">
+table {
+	margin: 20px auto ;
+}
+
+td ul {
+	list-style-type: none ;
+	margin: 0 ;
+	padding: 0 ;
+}
+
+td.menu ul {
+	padding-left: 50px ;
+	font-size: large ;
+	line-height: 1.5 ;
+}
+
+td.menu a:hover {
+	margin: -3px -6px -3px -6px ;
+	padding: 3px  6px  3px  6px ;
+	border-radius: 4px ;
+}
+
+td.news a:hover {
+	margin: -3px -4px -3px -4px ;
+	padding: 3px  4px  3px  4px ;
+}
+
+td.news ul {
+	border-left: solid #F0F0F0 2px ;
+	padding-left: 2em ;
+	padding-top: 1em ;
+	padding-bottom: 1em ;
+	font-size: medium ;
+	line-height: 1.35 ;
+}
+
+td.news li {
+	margin-bottom: 1.5em ;
+}
+
+td.news li:last-child {
+	margin-bottom: 0em ;
+}
+
+span.note {
+	xdisplay: none ;
+	font-size: x-small ;
+	color: gray ;
+}
+
+img {
+	vertical-align: text-bottom ;
+}
+</STYLE>
+</HEAD>
+
+<BODY>
+
+<TABLE>
+<TR>
+
+<TD WIDTH="256">
+<IMG SRC="images/luaa.gif" ALT="The Programming Language Lua" TITLE="welcome!">
+
+<TD WIDTH="200" CLASS="menu">
+<UL>
+<LI><A HREF="about.html" TITLE="read a summary">about</A>
+<LI><A HREF="news.html" TITLE="see what is happening with Lua">news</A>
+<LI><A HREF="start.html" TITLE="get started with Lua">get started</A>
+<LI><A HREF="download.html" TITLE="get a copy of Lua">download</A>
+<LI><A HREF="docs.html" TITLE="read technical information">documentation</A>
+<LI><A HREF="community.html" TITLE="meet other Lua users">community</A>
+<LI><A HREF="map.html" TITLE="find your way around">site map</A>
+<LI><A HREF="portugues.html" TITLE="leia um resumo">português</A>
+</UL>
+
+<TD WIDTH="250" CLASS="news">
+<UL>
+<LI>
+<A HREF="versions.html#5.4">Lua 5.4.4</A> released
+<LI>
+<A HREF="https://www.amazon.com/exec/obidos/ASIN/8590379868/lua-home-20">Fourth edition</A>
+of<BR>
+<A HREF="pil/"><EM>Programming in Lua</EM></A>
+<BR>available as
+<A HREF="https://store.feistyduck.com/products/programming-in-lua-fourth-edition-ebook">e-book</A>
+<!--
+<LI>
+<A HREF="https://www.hs-furtwangen.de/en/faculties/digital-media/labs/games-lab/lua-workshop/">Lua Workshop 2021</A>
+to be held in Freiburg, Germany
+-->
+</UL>
+<TD WIDTH="130">
+<SPAN CLASS="note">designed and developed at</SPAN>
+<P>
+<A HREF="https://www.puc-rio.br/"><IMG SRC="images/puc.png" ALT="PUC-Rio" TITLE="Lua's home"></A>
+
+</TR>
+</TABLE>
+
+<!--
+Last update:
+Wed May  4 10:00:30 UTC 2022
+Last change: minor edit (html)
+-->
+
+</BODY>
+</HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>The Programming Language Lua</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" HREF="lua.css">
+<LINK REL="alternate" TYPE="application/rss+xml" HREF="news.rss" TITLE="Lua news RSS feed">
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="description" CONTENT="Official web site of the Lua language">
+<META NAME="keywords" CONTENT="lua, language, extension, embedding, configuration, scripting, rapid prototyping, free, source, portable">
+<STYLE TYPE="text/css">
+table {
+	margin: 20px auto ;
+}
+
+td ul {
+	list-style-type: none ;
+	margin: 0 ;
+	padding: 0 ;
+}
+
+td.menu ul {
+	padding-left: 50px ;
+	font-size: large ;
+	line-height: 1.5 ;
+}
+
+td.menu a:hover {
+	margin: -3px -6px -3px -6px ;
+	padding: 3px  6px  3px  6px ;
+	border-radius: 4px ;
+}
+
+td.news a:hover {
+	margin: -3px -4px -3px -4px ;
+	padding: 3px  4px  3px  4px ;
+}
+
+td.news ul {
+	border-left: solid #F0F0F0 2px ;
+	padding-left: 2em ;
+	padding-top: 1em ;
+	padding-bottom: 1em ;
+	font-size: medium ;
+	line-height: 1.35 ;
+}
+
+td.news li {
+	margin-bottom: 1.5em ;
+}
+
+td.news li:last-child {
+	margin-bottom: 0em ;
+}
+
+span.note {
+	xdisplay: none ;
+	font-size: x-small ;
+	color: gray ;
+}
+
+img {
+	vertical-align: text-bottom ;
+}
+</STYLE>
+</HEAD>
+
+<BODY>
+
+<TABLE>
+<TR>
+
+<TD WIDTH="256">
+<IMG SRC="images/luaa.gif" ALT="The Programming Language Lua" TITLE="welcome!">
+
+<TD WIDTH="200" CLASS="menu">
+<UL>
+<LI><A HREF="about.html" TITLE="read a summary">about</A>
+<LI><A HREF="news.html" TITLE="see what is happening with Lua">news</A>
+<LI><A HREF="start.html" TITLE="get started with Lua">get started</A>
+<LI><A HREF="download.html" TITLE="get a copy of Lua">download</A>
+<LI><A HREF="docs.html" TITLE="read technical information">documentation</A>
+<LI><A HREF="community.html" TITLE="meet other Lua users">community</A>
+<LI><A HREF="map.html" TITLE="find your way around">site map</A>
+<LI><A HREF="portugues.html" TITLE="leia um resumo">português</A>
+</UL>
+
+<TD WIDTH="250" CLASS="news">
+<UL>
+<LI>
+<A HREF="versions.html#5.4">Lua 5.4.4</A> released
+<LI>
+<A HREF="https://www.amazon.com/exec/obidos/ASIN/8590379868/lua-home-20">Fourth edition</A>
+of<BR>
+<A HREF="pil/"><EM>Programming in Lua</EM></A>
+<BR>available as
+<A HREF="https://store.feistyduck.com/products/programming-in-lua-fourth-edition-ebook">e-book</A>
+<!--
+<LI>
+<A HREF="https://www.hs-furtwangen.de/en/faculties/digital-media/labs/games-lab/lua-workshop/">Lua Workshop 2021</A>
+to be held in Freiburg, Germany
+-->
+</UL>
+<TD WIDTH="130">
+<SPAN CLASS="note">designed and developed at</SPAN>
+<P>
+<A HREF="https://www.puc-rio.br/"><IMG SRC="images/puc.png" ALT="PUC-Rio" TITLE="Lua's home"></A>
+
+</TR>
+</TABLE>
+
+<!--
+Last update:
+Wed May  4 10:00:30 UTC 2022
+Last change: minor edit (html)
+-->
+
+</BODY>
+</HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>The Programming Language Lua</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" HREF="lua.css">
+<LINK REL="alternate" TYPE="application/rss+xml" HREF="news.rss" TITLE="Lua news RSS feed">
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="description" CONTENT="Official web site of the Lua language">
+<META NAME="keywords" CONTENT="lua, language, extension, embedding, configuration, scripting, rapid prototyping, free, source, portable">
+<STYLE TYPE="text/css">
+table {
+	margin: 20px auto ;
+}
+
+td ul {
+	list-style-type: none ;
+	margin: 0 ;
+	padding: 0 ;
+}
+
+td.menu ul {
+	padding-left: 50px ;
+	font-size: large ;
+	line-height: 1.5 ;
+}
+
+td.menu a:hover {
+	margin: -3px -6px -3px -6px ;
+	padding: 3px  6px  3px  6px ;
+	border-radius: 4px ;
+}
+
+td.news a:hover {
+	margin: -3px -4px -3px -4px ;
+	padding: 3px  4px  3px  4px ;
+}
+
+td.news ul {
+	border-left: solid #F0F0F0 2px ;
+	padding-left: 2em ;
+	padding-top: 1em ;
+	padding-bottom: 1em ;
+	font-size: medium ;
+	line-height: 1.35 ;
+}
+
+td.news li {
+	margin-bottom: 1.5em ;
+}
+
+td.news li:last-child {
+	margin-bottom: 0em ;
+}
+
+span.note {
+	xdisplay: none ;
+	font-size: x-small ;
+	color: gray ;
+}
+
+img {
+	vertical-align: text-bottom ;
+}
+</STYLE>
+</HEAD>
+
+<BODY>
+
+<TABLE>
+<TR>
+
+<TD WIDTH="256">
+<IMG SRC="images/luaa.gif" ALT="The Programming Language Lua" TITLE="welcome!">
+
+<TD WIDTH="200" CLASS="menu">
+<UL>
+<LI><A HREF="about.html" TITLE="read a summary">about</A>
+<LI><A HREF="news.html" TITLE="see what is happening with Lua">news</A>
+<LI><A HREF="start.html" TITLE="get started with Lua">get started</A>
+<LI><A HREF="download.html" TITLE="get a copy of Lua">download</A>
+<LI><A HREF="docs.html" TITLE="read technical information">documentation</A>
+<LI><A HREF="community.html" TITLE="meet other Lua users">community</A>
+<LI><A HREF="map.html" TITLE="find your way around">site map</A>
+<LI><A HREF="portugues.html" TITLE="leia um resumo">português</A>
+</UL>
+
+<TD WIDTH="250" CLASS="news">
+<UL>
+<LI>
+<A HREF="versions.html#5.4">Lua 5.4.4</A> released
+<LI>
+<A HREF="https://www.amazon.com/exec/obidos/ASIN/8590379868/lua-home-20">Fourth edition</A>
+of<BR>
+<A HREF="pil/"><EM>Programming in Lua</EM></A>
+<BR>available as
+<A HREF="https://store.feistyduck.com/products/programming-in-lua-fourth-edition-ebook">e-book</A>
+<!--
+<LI>
+<A HREF="https://www.hs-furtwangen.de/en/faculties/digital-media/labs/games-lab/lua-workshop/">Lua Workshop 2021</A>
+to be held in Freiburg, Germany
+-->
+</UL>
+<TD WIDTH="130">
+<SPAN CLASS="note">designed and developed at</SPAN>
+<P>
+<A HREF="https://www.puc-rio.br/"><IMG SRC="images/puc.png" ALT="PUC-Rio" TITLE="Lua's home"></A>
+
+</TR>
+</TABLE>
+
+<!--
+Last update:
+Wed May  4 10:00:30 UTC 2022
+Last change: minor edit (html)
+-->
+
+</BODY>
+</HTML>

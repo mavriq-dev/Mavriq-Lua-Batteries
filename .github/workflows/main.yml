@@ -96,66 +96,82 @@ jobs:
           cd wxlua/wxlua/wxlua-build
           cmake .. -DCMAKE_BUILD_TYPE=Release  -DwxWidgets_ROOT_DIR="$env:GITHUB_WORKSPACE"/wxWidgets/ -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="$env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="$env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
           cmake --build . --config Release
-          cp bin/Release/wx.dll $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod"
           popd
+
+
+
+      - name: Copy wxLua   
+        run: |
+          cp wxlua/wxlua/wxlua-build/bin/Release/wx.dll $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod"
           mkdir tests/wxlua
           mkdir docs/wxlua
-          cp wxlua/wxlua/samples/* tests/wxlua
-          cp wxlua/wxlua/docs/* docs/wxlua
+          cp -r wxlua/wxlua/samples/* tests/wxlua
+          cp -r wxlua/wxlua/docs/* docs/wxlua
 
       - name: Build LuaSocket
         run: |
           luarocks unpack luasocket
-          luarocks install luasocket
+          pushd .
+          cd luasocket-3.0.0-1/luasocket
+          luarocks make luasocket-3.0.0-1.rockspec
+          popd
           mkdir docs/luasocket
-          cp luasocket-3.0.0-1/luasocket/docs/* docs/luasocket
-          cp luasocket-3.0.0-1/luasocket/README.md docs/luasocket
-          cp luasocket-3.0.0-1/luasocket/LICENSE docs/luasocket
+          cp -r luasocket-3.0.0-1/luasocket/docs/* docs/luasocket
+          cp -r luasocket-3.0.0-1/luasocket/README.md docs/luasocket
+          cp -r luasocket-3.0.0-1/luasocket/LICENSE docs/luasocket
 
       - name: Build timerwheel
         run: |
           luarocks unpack timerwheel
-          luarocks install timerwheel
+          pushd .
+          cd timerwheel-0.2.0-2/timerwheel.lua/
+          luarocks make timerwheel-0.2.0-2.rockspec
+          popd
           mkdir docs/timerwheel
-          cp timerwheel-0.2.0-2/timerwheel.lua/docs/*  docs/luasocket
-          cp timerwheel-0.2.0-2/timerwheel.lua/README.md  docs/luasocket
-          cp timerwheel-0.2.0-2/timerwheel.lua/LICENSE  docs/luasocket
+          cp -r timerwheel-0.2.0-2/timerwheel.lua/docs/*  docs/timerwheel
+          cp -r timerwheel-0.2.0-2/timerwheel.lua/README.md  docs/timerwheel
+          cp -r timerwheel-0.2.0-2/timerwheel.lua/LICENSE  docs/timerwheel
 
       - name: Build binaryheap
         run: |
           luarocks unpack binaryheap
-          luarocks install binaryheap
+          pushd .
+          cd binaryheap-0.4-1/binaryheap.lua-version_0v4
+          luarocks make binaryheap-0.4-1.rockspec
+          popd
           mkdir docs/binaryheap
-          cp binaryheap-0.4-1/binaryheap.lua-version_0v4/docs/*  docs/binaryheap
-          cp binaryheap-0.4-1/binaryheap.lua-version_0v4/README.md  docs/binaryheap
+          cp -r binaryheap-0.4-1/binaryheap.lua-version_0v4/docs/*  docs/binaryheap
+          cp -r binaryheap-0.4-1/binaryheap.lua-version_0v4/README.md  docs/binaryheap
           Invoke-WebRequest  https://raw.githubusercontent.com/Tieske/binaryheap.lua/master/LICENSE   -OutFile  docs/binaryheap/LICENSE
 
       - name: Build luafilesystem
         run: |
           luarocks unpack luafilesystem
-          luarocks install luafilesystem
+          pushd .
+          cd luafilesystem-1.8.0-1/luafilesystem
+          luarocks make luafilesystem-1.8.0-1.rockspec
+          popd
           mkdir docs/luafilesystem
-          cp luafilesystem-1.8.0-1/luafilesystem/doc/us/*  docs/luafilesystem
-          cp luafilesystem-1.8.0-1/luafilesystem/README.md  docs/luafilesystem
-          cp luafilesystem-1.8.0-1/luafilesystem/LICENSE  docs/luafilesystem
+          cp -r luafilesystem-1.8.0-1/luafilesystem/doc/us/*  docs/luafilesystem
+          cp -r luafilesystem-1.8.0-1/luafilesystem/README.md  docs/luafilesystem
+          cp -r luafilesystem-1.8.0-1/luafilesystem/LICENSE  docs/luafilesystem
 
       - name: Build copas
         run: |
           luarocks unpack rockspecs/copas-3.0.0-3.rockspec
-          luarocks install rockspecs/copas-3.0.0-3.rockspec
+          pushd .
+          cd copas-3.0.0-3/copas
+          luarocks make ../../rockspecs/copas-3.0.0-3.rockspec
+          popd
           patch $env:LOCALAPPDATA"\LUAVM\versions\5.3\lua\copas.lua"  patches/copas.lua.patch
           mkdir docs/copas
-          cp copas-3.0.0-3/copas/docs/* docs/copas 
-          cp copas-3.0.0-3/copas/LICENSE docs/copas
-          cp copas-3.0.0-3/copas/README.md docs/copas
+          cp -r copas-3.0.0-3/copas/docs/* docs/copas 
+          cp -r copas-3.0.0-3/copas/LICENSE docs/copas
+          cp -r copas-3.0.0-3/copas/README.md docs/copas
 
       - name: Build coxpcall
         run: |
-          luarocks unpack coxpcall
           luarocks install coxpcall
-          mkdir docs/coxpcall
-          cp coxpcall-1.17.0-1/coxpcall/doc/* docs/coxpcall
-          cp coxpcall-1.17.0-1/coxpcall/README.md docs/coxpcall
           
       - name: Build CopasTimer
         run: |
@@ -167,111 +183,285 @@ jobs:
 
       - name: Build vstruct
         run: |
-          luarocks install vstruct
+          luarocks unpack vstruct
+          pushd .
+          cd vstruct-2.1.1-1/vstruct
+          luarocks make vstruct-2.1.1-1.rockspec
+          popd
+          mkdir docs/vstruct
+          cp -r vstruct-2.1.1-1/vstruct/README.md docs/vstruct
 
       - name: Build lbase64
         run: |
-          luarocks install lbase64
+          luarocks unpack lbase64
+          pushd .
+          cd lbase64-20120807-3/base64
+          luarocks make lbase64-20120807-3.rockspec
+          popd
+          mkdir docs/lbase64
+          cp -r lbase64-20120807-3/base64/README docs/lbase64
 
-      - name: Build rs232
+      - name: Build librs232
         run: |
-          luarocks install rs232
+          luarocks unpack rs232
+          pushd .
+          cd rs232-0.1.0-1/librs232-0.1.0
+          luarocks make rs232-0.1.0-1.rockspec
+          popd
+          mkdir docs/librs232
+          cp -r rs232-0.1.0-1/librs232-0.1.0/doc/* docs/librs232
+          cp -r rs232-0.1.0-1/librs232-0.1.0/README.md docs/librs232
 
       - name: Build rings
         run: |
-          luarocks install rings
+          luarocks unpack rings
+          pushd .
+          cd rings-1.3.0-1/rings-v_1_3_0
+          luarocks make rings-1.3.0-1.rockspec
+          popd
+          mkdir docs/rings
+          cp -r rings-1.3.0-1/rings-v_1_3_0/doc/* docs/rings
+          cp -r rings-1.3.0-1/rings-v_1_3_0/README docs/rings
 
       - name: Build lua-curl
         run: |
-          luarocks install lua-curl  CC="CL -DCURL_STATICLIB" LD="link wldap32.lib zlibstatic.lib"
+          luarocks unpack lua-curl 
+          pushd .
+          cd lua-curl-0.3.13-1/Lua-cURLv3-0.3.13
+          luarocks make lua-curl-0.3.13-1.rockspec  CC="CL -DCURL_STATICLIB" LD="link wldap32.lib zlibstatic.lib"
+          popd
+          mkdir docs/lua-curl
+          cp -r lua-curl-0.3.13-1/Lua-cURLv3-0.3.13/doc/* docs/lua-curl
+          cp -r lua-curl-0.3.13-1/Lua-cURLv3-0.3.13/README.md docs/lua-curl
+          cp -r lua-curl-0.3.13-1/Lua-cURLv3-0.3.13/LICENSE docs/lua-curl
 
       - name: Build luafft
         run: |
-          luarocks install rockspecs/luafft-1.2-1.rockspec
+          luarocks unpack rockspecs/luafft-1.2-1.rockspec
+          pushd .
+          cd luafft-1.2-1/luafft
+          luarocks make ../../rockspecs/luafft-1.2-1.rockspec
+          popd
+          mkdir docs/luafft
+          cp -r luafft-1.2-1/luafft/docs/* docs/luafft
+          cp -r luafft-1.2-1/luafft/README.md docs/luafft
 
       - name: Build luatz
         run: |
-          luarocks install luatz
+          luarocks unpack luatz
+          pushd .
+          cd luatz-0.4-1/luatz-0.4
+          luarocks make luatz-0.4-1.rockspec
+          popd
+          mkdir docs/luatz
+          cp -r luatz-0.4-1/luatz-0.4/doc/* docs/luatz
+          cp -r luatz-0.4-1/luatz-0.4/README.md docs/luatz
 
       - name: Build middleclass
         run: |
-          luarocks install middleclass
+          luarocks unpack middleclass
+          pushd .
+          cd middleclass-4.1.1-0/middleclass-4.1.1
+          luarocks make middleclass-4.1.1-0.rockspec
+          popd
+          mkdir docs/middleclass
+          cp -r middleclass-4.1.1-0/middleclass-4.1.1/MIT-LICENSE.txt docs/middleclass
+          cp -r middleclass-4.1.1-0/middleclass-4.1.1/README.md docs/middleclass
 
       - name: Build lustache
         run: |
-          luarocks install lustache
+          luarocks unpack lustache
+          pushd .
+          cd lustache-1.3.1-0/lustache-1.3.1-0
+          luarocks make lustache-1.3.1-0.rockspec
+          popd
+          mkdir docs/lustache
+          cp -r lustache-1.3.1-0/lustache-1.3.1-0/LICENSE docs/lustache
+          cp -r lustache-1.3.1-0/lustache-1.3.1-0/README.md docs/lustache
 
       - name: Build moses
         run: |
-          luarocks install moses
+          luarocks unpack moses
+          pushd .
+          cd moses-2.1.0-1/Moses-Moses-2.1.0-1
+          luarocks make moses-2.1.0-1.rockspec
+          popd
+          mkdir docs/moses
+          cp -r moses-2.1.0-1/Moses-Moses-2.1.0-1/doc/* docs/moses
+          cp -r moses-2.1.0-1/Moses-Moses-2.1.0-1/README.md docs/moses
+          cp -r moses-2.1.0-1/Moses-Moses-2.1.0-1/LICENSE docs/moses
 
       - name: Build luafun
         run: |
-          luarocks install rockspecs/fun-0.1.3-1.rockspec
+          luarocks unpack rockspecs/fun-0.1.3-1.rockspec
+          pushd .
+          cd fun-0.1.3-1/luafun
+          luarocks make ../../rockspecs/fun-0.1.3-1.rockspec
+          popd
+          mkdir docs/fun
+          cp -r fun-0.1.3-1/luafun/doc/* docs/fun
+          cp -r fun-0.1.3-1/luafun/README.md docs/fun
 
       - name: Build MD5
         run: |
-          luarocks install MD5
+          luarocks unpack MD5
+          pushd .
+          cd md5-1.3-1/md5-1.3
+          luarocks make md5-1.3-1.rockspec
+          popd
+          mkdir docs/MD5
+          cp -r md5-1.3-1/md5-1.3/doc/* docs/MD5
+          cp -r md5-1.3-1/md5-1.3/README.md docs/MD5
 
       - name: Build xavante
         run: |
-          luarocks install xavante
+          luarocks unpack xavante
+          pushd .
+          cd xavante-2.4.0-1/xavante-2.4.0
+          luarocks make xavante-2.4.0-1.rockspec
+          popd
+          mkdir docs/xavante
+          cp -r xavante-2.4.0-1/xavante-2.4.0/doc/* docs/xavante
+          cp -r xavante-2.4.0-1/xavante-2.4.0/README.md docs/xavante
 
       - name: Build lyaml
         run: |
-          luarocks install rockspecs/lyaml-6.1.3-2.rockspec
+          luarocks unpack rockspecs/lyaml-6.1.3-2.rockspec
+          pushd .
+          cd lyaml-6.1.3-2/lyaml-6.1.3
+          luarocks make ../../rockspecs/lyaml-6.1.3-2.rockspec
+          popd
+          mkdir docs/lyaml
+          cp -r lyaml-6.1.3-2/lyaml-6.1.3/doc/* docs/lyaml
+          cp -r lyaml-6.1.3-2/lyaml-6.1.3/README.md docs/lyaml
+          cp -r lyaml-6.1.3-2/lyaml-6.1.3/LICENSE docs/lyaml
 
       - name: Build lua-protobuf
         run: |
-          luarocks install rockspecs/lua-protobuf-0.3.4-1.rockspec
+          luarocks unpack rockspecs/lua-protobuf-0.3.4-1.rockspec
+          pushd .
+          cd lua-protobuf-0.3.4-1/lua-protobuf
+          luarocks make ../../rockspecs/lua-protobuf-0.3.4-1.rockspec
+          popd
+          mkdir docs/lua-protobuf
+          cp -r lua-protobuf-0.3.4-1/lua-protobuf/LICENSE docs/lua-protobuf
+          cp -r lua-protobuf-0.3.4-1/lua-protobuf/README.md docs/lua-protobuf
 
       - name: Build luasql-mysql
         run: |
           luarocks unpack rockspecs\luasql-mysql-2.6.0-1.rockspec
           patch luasql-mysql-2.6.0-1/luasql/src/luasql.h  patches/luasql-mysql.patch --binary
-          cd luasql-mysql-2.6.0-1/luasql/
+          pushd .
+          cd luasql-mysql-2.6.0-1/luasql
           luarocks make ../../rockspecs\luasql-mysql-2.6.0-1.rockspec
+          popd
+          mkdir docs/luasql-mysql
+          cp -r luasql-mysql-2.6.0-1/luasql/doc/* docs/luasql-mysql
+          cp -r luasql-mysql-2.6.0-1/luasql/README docs/luasql-mysql
+
 
       - name: Build luasql-firebird
         run: |
-          luarocks install rockspecs/luasql-firebird-2.6.0-1.rockspec
+          luarocks unpack rockspecs/luasql-firebird-2.6.0-1.rockspec
+          pushd .
+          cd luasql-firebird-2.6.0-1/luasql
+          luarocks make ../../rockspecs/luasql-firebird-2.6.0-1.rockspec
+          popd
+          mkdir docs/luasql-firebird
+          cp -r luasql-firebird-2.6.0-1/luasql/doc/* docs/luasql-firebird
+          cp -r luasql-firebird-2.6.0-1/luasql/README docs/luasql-firebird
 
       - name: Build luasql-postgres
         run: |
-          luarocks install rockspecs/luasql-postgres-2.6.0-1.rockspec
+          luarocks unpack rockspecs/luasql-postgres-2.6.0-1.rockspec
+          pushd .
+          cd luasql-postgres-2.6.0-1/luasql
+          luarocks make ../../rockspecs/luasql-postgres-2.6.0-1.rockspec
+          popd
+          mkdir docs/luasql-postgres
+          cp -r luasql-postgres-2.6.0-1/luasql/doc/* docs/luasql-postgres
+          cp -r luasql-postgres-2.6.0-1/luasql/README docs/luasql-postgres
 
       - name: Build luasql-sqlite3
         run: |
-          luarocks install rockspecs/luasql-sqlite3-2.6.0-1.rockspec
+          luarocks unpack rockspecs/luasql-sqlite3-2.6.0-1.rockspec
+          pushd .
+          cd luasql-sqlite3-2.6.0-1/luasql
+          luarocks make ../../rockspecs/luasql-sqlite3-2.6.0-1.rockspec
+          popd
+          mkdir docs/luasql-sqlite3
+          cp -r luasql-sqlite3-2.6.0-1/luasql/doc/* docs/luasql-sqlite3
+          cp -r luasql-sqlite3-2.6.0-1/luasql/README docs/luasql-sqlite3
 
       - name: Build luasql-odbc
         run: |
-          luarocks install rockspecs\luasql-odbc-2.6.0-1.rockspec
+          luarocks unpack rockspecs\luasql-odbc-2.6.0-1.rockspec
+          pushd .
+          cd luasql-odbc-2.6.0-1/luasql
+          luarocks make ../../rockspecs/luasql-odbc-2.6.0-1.rockspec
+          popd
+          mkdir docs/luasql-odbc
+          cp -r luasql-odbc-2.6.0-1/luasql/doc/* docs/luasql-odbc
+          cp -r luasql-odbc-2.6.0-1/luasql/README docs/luasql-odbc
 
       - name: Build lrexlib-pcre
         run: |
-           luarocks install lrexlib-pcre CC="CL -DPCRE_STATIC"
+          luarocks unpack lrexlib-pcre 
+          pushd .
+          cd lrexlib-pcre-2.9.1-1/lrexlib
+          luarocks make lrexlib-pcre-2.9.1-1.rockspec CC="CL -DPCRE_STATIC"
+          popd
+          mkdir docs/lrexlib-pcre
+          cp -r lrexlib-pcre-2.9.1-1/lrexlib/doc/* docs/lrexlib-pcre
+          cp -r lrexlib-pcre-2.9.1-1/lrexlib/README.rst docs/lrexlib-pcre
+          cp -r lrexlib-pcre-2.9.1-1/lrexlib/LICENSE docs/lrexlib-pcre
 
       - name: Build stdlib
         run: |
-          luarocks install stdlib
+          luarocks unpack stdlib
+          pushd .
+          cd stdlib-41.2.2-1/lua-stdlib-release-v41.2.2
+          luarocks make stdlib-41.2.2-1.rockspec
+          popd
+          mkdir docs/stdlib
+          cp -r stdlib-41.2.2-1/lua-stdlib-release-v41.2.2/doc/* docs/stdlib
+          cp -r stdlib-41.2.2-1/lua-stdlib-release-v41.2.2/README docs/stdlib
 
       - name: Build luaexpat
         run: |
           luarocks unpack luaexpat
           pushd .
-          cd luaexpat-1.4.1-1\luaexpat\
+          cd luaexpat-1.4.1-1/luaexpat
           patch -p1 -i ..\..\patches\luaexpat.patch --binary
           luarocks make .\luaexpat-1.4.1-1.rockspec
           popd
+          mkdir docs/luaexpat
+          cp -r luaexpat-1.4.1-1/luaexpat/docs/* docs/luaexpat
+          cp -r luaexpat-1.4.1-1/luaexpat/README.md docs/luaexpat
+          cp -r luaexpat-1.4.1-1/luaexpat/LICENSE docs/luaexpat
+
 
       - name: Build luasec
         run: |
-          luarocks install rockspecs/luasec-1.1.0-1.rockspec  
+          luarocks unpack rockspecs/luasec-1.1.0-1.rockspec  
+          pushd .
+          cd luasec-1.1.0-1\luasec
+          luarocks make ../../rockspecs/luasec-1.1.0-1.rockspec 
+          popd
+          mkdir docs/luasec
+          cp -r luasec-1.1.0-1\luasec/samples/* docs/luasec
+          cp -r luasec-1.1.0-1\luasec/README.md docs/luasec
+          cp -r luasec-1.1.0-1\luasec/LICENSE docs/luasec
 
       - name: Build Lua-Zip
         run: |
-          luarocks install rockspecs/lua-zip-0.2-0.rockspec 
+          luarocks unpack rockspecs/lua-zip-0.2-0.rockspec 
+          pushd .
+          cd lua-zip-0.2-0/lua-zip
+          luarocks make ../../rockspecs/lua-zip-0.2-0.rockspec 
+          popd
+          mkdir docs/lua-zip
+          cp -r lua-zip-0.2-0/lua-zip/README.txt docs/lua-zip
 
       - name: Build Lpeg
         run: |
@@ -288,29 +478,71 @@ jobs:
 
       - name: Build Penlight
         run: |
-          luarocks install penlight
+          luarocks unpack penlight
+          pushd .
+          cd penlight-1.12.0-2/penlight
+          luarocks make penlight-1.12.0-2.rockspec 
+          popd
+          mkdir docs/penlight
+          cp -r penlight-1.12.0-2/penlight/docs/* docs/penlight
+          cp -r penlight-1.12.0-2/penlight/README.md docs/penlight
+          cp -r penlight-1.12.0-2/penlight/LICENSE.md docs/penlight
 
       - name: Build Lua-Zlib
         run: |
-          luarocks install rockspecs/lua-zlib-1.2-2.rockspec 
+          luarocks unpack rockspecs/lua-zlib-1.2-2.rockspec 
+          pushd .
+          cd lua-zlib-1.2-2/lua-zlib
+          luarocks make ../../rockspecs/lua-zlib-1.2-2.rockspec
+          popd
+          mkdir docs/lua-zlib
+          cp -r lua-zlib-1.2-2/lua-zlib/README docs/lua-zlib
 
       - name: Build ZipWriter
         run: |
-           luarocks install ZipWriter
-
-      - name: Build luatz
-        run: |
-          luarocks install luatz
+          luarocks unpack ZipWriter
+          pushd .
+          cd zipwriter-0.1.5-1/ZipWriter-0.1.5
+          luarocks make zipwriter-0.1.5-1.rockspec
+          popd
+          mkdir docs/zipwriter
+          cp -r zipwriter-0.1.5-1/ZipWriter-0.1.5/doc/* docs/zipwriter
+          cp -r zipwriter-0.1.5-1/ZipWriter-0.1.5/README.md docs/zipwriter
+          cp -r zipwriter-0.1.5-1/ZipWriter-0.1.5/LICENCE.txt docs/zipwriter
+          "NoIndex: true`n" + (Get-Content docs/zipwriter/APPNOTE.TXT | Out-String) | Set-Content docs/zipwriter/APPNOTE.TXT
 
       - name: Build dkjson
         run: |
-          luarocks install dkjson
+          luarocks unpack dkjson
+          pushd .
+          cd dkjson-2.6-1/dkjson-2.6
+          luarocks make dkjson-2.6-1.rockspec 
+          popd
+          mkdir docs/dkjson
+          cp -r dkjson-2.6-1/dkjson-2.6/README.txt docs/dkjson
 
       - name: Build lxsh
         run: |
-          luarocks install lxsh
+          luarocks unpack lxsh
+          pushd .
+          cd lxsh-0.8.6-2/lxsh-0.8.6-1
+          luarocks make lxsh-0.8.6-2.rockspec 
+          popd
+          mkdir docs/lxsh
+          cp -r lxsh-0.8.6-2/lxsh-0.8.6-1/etc docs/lxsh
+          cp -r lxsh-0.8.6-2/lxsh-0.8.6-1/README.md docs/lxsh
+          cp -r lxsh-0.8.6-2/lxsh-0.8.6-1/examples docs/lxsh
 
-
+      - name: Build serpent
+        run: |
+          luarocks unpack serpent
+          pushd .
+          cd serpent-0.30-2/serpent
+          luarocks make  serpent-0.30-2.rockspec 
+          popd
+          mkdir docs/serpent
+          cp -r serpent-0.30-2/serpent/README.md docs/serpent
+          cp -r serpent-0.30-2/serpent/LICENSE docs/serpent
 
 
 
@@ -337,5 +569,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: Mavriq-Lua-Batteries(win)
+          name: Mavriq-Lua-Batteries
           path: archive
