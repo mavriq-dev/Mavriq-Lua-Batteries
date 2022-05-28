@@ -1,0 +1,960 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>The LuaJIT Project</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Copyright" content="Copyright (C) 2005-2022">
+<meta name="Language" content="en">
+<link rel="stylesheet" type="text/css" href="bluequad.css" media="screen">
+<link rel="stylesheet" type="text/css" href="bluequad-print.css" media="print">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5">
+<script type="text/javascript">
+var n=null,m=0;function toggleMenu(t){m|=t;if(m==t&&n!==null){n=!n;document.getElementById("nav").style.display=n?"block":"none";return true;}}
+if("ontouchstart" in window && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){var l=document.createElement("link");l.id="mcss";l.rel="stylesheet";l.type="text/css";l.href="bluequad-touch.css";l.media="all";document.getElementsByTagName("head")[0].appendChild(l);n=false;}
+</script>
+</head>
+<body>
+<div id="site" ontouchstart="toggleMenu(1);" onclick="toggleMenu(0);">
+<a href="https://luajit.org"><span>Lua<span id="logo">JIT</span></span></a>
+</div>
+<div id="head">
+<h1>The LuaJIT Project</h1>
+</div>
+<div id="nav">
+<ul><li>
+<a class="current" href="index.html">Home</a>
+</li><li>
+<a href="luajit.html">LuaJIT</a>
+<ul><li>
+<a href="download.html">Download &#8681;</a>
+</li><li>
+<a href="install.html">Installation</a>
+</li><li>
+<a href="running.html">Running</a>
+</li></ul>
+</li><li>
+<a href="extensions.html">Extensions</a>
+<ul><li>
+<a href="ext_ffi.html">FFI Library</a>
+<ul><li>
+<a href="ext_ffi_tutorial.html">FFI Tutorial</a>
+</li><li>
+<a href="ext_ffi_api.html">ffi.* API</a>
+</li><li>
+<a href="ext_ffi_semantics.html">FFI Semantics</a>
+</li></ul>
+</li><li>
+<a href="ext_jit.html">jit.* Library</a>
+</li><li>
+<a href="ext_c_api.html">Lua/C API</a>
+</li></ul>
+</li><li>
+<a href="status.html">Status</a>
+</li><li>
+<a href="faq.html">FAQ</a>
+</li><li>
+<a href="performance.html">Performance</a>
+<ul><li>
+<a href="performance_x86.html">on x86/x64</a>
+</li><li>
+<a href="performance_arm.html">on ARM</a>
+</li><li>
+<a href="performance_ppc.html">on PPC</a>
+</li><li>
+<a href="performance_e500.html">on PPC/e500</a>
+</li><li>
+<a href="performance_mips.html">on MIPS</a>
+</li></ul>
+</li><li>
+<a href="http://wiki.luajit.org/">Wiki <span class="ext">&raquo;</span></a>
+</li><li>
+<a href="list.html">Mailing List</a>
+</li><li>
+<a href="sponsors.html">Sponsors</a>
+</li></ul>
+</div>
+<div id="main">
+<p>
+This is the common project page for:
+</p>
+<ul>
+<li>
+<a href="luajit.html">LuaJIT</a> &mdash;
+a <strong>Just-In-Time Compiler</strong> for Lua.
+</li>
+<li>
+<a href="https://coco.luajit.org/">Coco</a> &mdash;
+a Lua extension for <strong>True C&nbsp;Coroutines</strong>.
+</li>
+<li>
+<a href="dynasm.html">DynASM</a> &mdash;
+a <strong>Dynamic Assembler</strong> for code generation engines.
+</li>
+<li>
+<a href="https://bitop.luajit.org/">Lua Bitop</a> &mdash;
+a Lua extension for <strong>bitwise operations</strong> on numbers.
+</li>
+</ul>
+
+<h2 id="privacy_policy">Privacy Policy</h2>
+<p>
+This web site does not request, store or process any private data.
+</p>
+<p>
+This web site is fully static and does not allow entry of personal
+information anywhere. It does not use cookies or any other form of
+tracking or analytics. Page visits and IP addresses are neither logged
+nor analyzed.
+</p>
+<br class="flush">
+</div>
+<div id="foot">
+<hr class="hide">
+Copyright &copy; 2005-2022
+<span class="noprint">
+&middot;
+<a href="contact.html">Contact &ndash; IMPRESSUM</a>
+</span>
+</div>
+</body>
+</html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>The LuaJIT Project</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Copyright" content="Copyright (C) 2005-2022">
+<meta name="Language" content="en">
+<link rel="stylesheet" type="text/css" href="bluequad.css" media="screen">
+<link rel="stylesheet" type="text/css" href="bluequad-print.css" media="print">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5">
+<script type="text/javascript">
+var n=null,m=0;function toggleMenu(t){m|=t;if(m==t&&n!==null){n=!n;document.getElementById("nav").style.display=n?"block":"none";return true;}}
+if("ontouchstart" in window && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){var l=document.createElement("link");l.id="mcss";l.rel="stylesheet";l.type="text/css";l.href="bluequad-touch.css";l.media="all";document.getElementsByTagName("head")[0].appendChild(l);n=false;}
+</script>
+</head>
+<body>
+<div id="site" ontouchstart="toggleMenu(1);" onclick="toggleMenu(0);">
+<a href="https://luajit.org"><span>Lua<span id="logo">JIT</span></span></a>
+</div>
+<div id="head">
+<h1>The LuaJIT Project</h1>
+</div>
+<div id="nav">
+<ul><li>
+<a class="current" href="index.html">Home</a>
+</li><li>
+<a href="luajit.html">LuaJIT</a>
+<ul><li>
+<a href="download.html">Download &#8681;</a>
+</li><li>
+<a href="install.html">Installation</a>
+</li><li>
+<a href="running.html">Running</a>
+</li></ul>
+</li><li>
+<a href="extensions.html">Extensions</a>
+<ul><li>
+<a href="ext_ffi.html">FFI Library</a>
+<ul><li>
+<a href="ext_ffi_tutorial.html">FFI Tutorial</a>
+</li><li>
+<a href="ext_ffi_api.html">ffi.* API</a>
+</li><li>
+<a href="ext_ffi_semantics.html">FFI Semantics</a>
+</li></ul>
+</li><li>
+<a href="ext_jit.html">jit.* Library</a>
+</li><li>
+<a href="ext_c_api.html">Lua/C API</a>
+</li></ul>
+</li><li>
+<a href="status.html">Status</a>
+</li><li>
+<a href="faq.html">FAQ</a>
+</li><li>
+<a href="performance.html">Performance</a>
+<ul><li>
+<a href="performance_x86.html">on x86/x64</a>
+</li><li>
+<a href="performance_arm.html">on ARM</a>
+</li><li>
+<a href="performance_ppc.html">on PPC</a>
+</li><li>
+<a href="performance_e500.html">on PPC/e500</a>
+</li><li>
+<a href="performance_mips.html">on MIPS</a>
+</li></ul>
+</li><li>
+<a href="http://wiki.luajit.org/">Wiki <span class="ext">&raquo;</span></a>
+</li><li>
+<a href="list.html">Mailing List</a>
+</li><li>
+<a href="sponsors.html">Sponsors</a>
+</li></ul>
+</div>
+<div id="main">
+<p>
+This is the common project page for:
+</p>
+<ul>
+<li>
+<a href="luajit.html">LuaJIT</a> &mdash;
+a <strong>Just-In-Time Compiler</strong> for Lua.
+</li>
+<li>
+<a href="https://coco.luajit.org/">Coco</a> &mdash;
+a Lua extension for <strong>True C&nbsp;Coroutines</strong>.
+</li>
+<li>
+<a href="dynasm.html">DynASM</a> &mdash;
+a <strong>Dynamic Assembler</strong> for code generation engines.
+</li>
+<li>
+<a href="https://bitop.luajit.org/">Lua Bitop</a> &mdash;
+a Lua extension for <strong>bitwise operations</strong> on numbers.
+</li>
+</ul>
+
+<h2 id="privacy_policy">Privacy Policy</h2>
+<p>
+This web site does not request, store or process any private data.
+</p>
+<p>
+This web site is fully static and does not allow entry of personal
+information anywhere. It does not use cookies or any other form of
+tracking or analytics. Page visits and IP addresses are neither logged
+nor analyzed.
+</p>
+<br class="flush">
+</div>
+<div id="foot">
+<hr class="hide">
+Copyright &copy; 2005-2022
+<span class="noprint">
+&middot;
+<a href="contact.html">Contact &ndash; IMPRESSUM</a>
+</span>
+</div>
+</body>
+</html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>The LuaJIT Project</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Copyright" content="Copyright (C) 2005-2022">
+<meta name="Language" content="en">
+<link rel="stylesheet" type="text/css" href="bluequad.css" media="screen">
+<link rel="stylesheet" type="text/css" href="bluequad-print.css" media="print">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5">
+<script type="text/javascript">
+var n=null,m=0;function toggleMenu(t){m|=t;if(m==t&&n!==null){n=!n;document.getElementById("nav").style.display=n?"block":"none";return true;}}
+if("ontouchstart" in window && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){var l=document.createElement("link");l.id="mcss";l.rel="stylesheet";l.type="text/css";l.href="bluequad-touch.css";l.media="all";document.getElementsByTagName("head")[0].appendChild(l);n=false;}
+</script>
+</head>
+<body>
+<div id="site" ontouchstart="toggleMenu(1);" onclick="toggleMenu(0);">
+<a href="https://luajit.org"><span>Lua<span id="logo">JIT</span></span></a>
+</div>
+<div id="head">
+<h1>The LuaJIT Project</h1>
+</div>
+<div id="nav">
+<ul><li>
+<a class="current" href="index.html">Home</a>
+</li><li>
+<a href="luajit.html">LuaJIT</a>
+<ul><li>
+<a href="download.html">Download &#8681;</a>
+</li><li>
+<a href="install.html">Installation</a>
+</li><li>
+<a href="running.html">Running</a>
+</li></ul>
+</li><li>
+<a href="extensions.html">Extensions</a>
+<ul><li>
+<a href="ext_ffi.html">FFI Library</a>
+<ul><li>
+<a href="ext_ffi_tutorial.html">FFI Tutorial</a>
+</li><li>
+<a href="ext_ffi_api.html">ffi.* API</a>
+</li><li>
+<a href="ext_ffi_semantics.html">FFI Semantics</a>
+</li></ul>
+</li><li>
+<a href="ext_jit.html">jit.* Library</a>
+</li><li>
+<a href="ext_c_api.html">Lua/C API</a>
+</li></ul>
+</li><li>
+<a href="status.html">Status</a>
+</li><li>
+<a href="faq.html">FAQ</a>
+</li><li>
+<a href="performance.html">Performance</a>
+<ul><li>
+<a href="performance_x86.html">on x86/x64</a>
+</li><li>
+<a href="performance_arm.html">on ARM</a>
+</li><li>
+<a href="performance_ppc.html">on PPC</a>
+</li><li>
+<a href="performance_e500.html">on PPC/e500</a>
+</li><li>
+<a href="performance_mips.html">on MIPS</a>
+</li></ul>
+</li><li>
+<a href="http://wiki.luajit.org/">Wiki <span class="ext">&raquo;</span></a>
+</li><li>
+<a href="list.html">Mailing List</a>
+</li><li>
+<a href="sponsors.html">Sponsors</a>
+</li></ul>
+</div>
+<div id="main">
+<p>
+This is the common project page for:
+</p>
+<ul>
+<li>
+<a href="luajit.html">LuaJIT</a> &mdash;
+a <strong>Just-In-Time Compiler</strong> for Lua.
+</li>
+<li>
+<a href="https://coco.luajit.org/">Coco</a> &mdash;
+a Lua extension for <strong>True C&nbsp;Coroutines</strong>.
+</li>
+<li>
+<a href="dynasm.html">DynASM</a> &mdash;
+a <strong>Dynamic Assembler</strong> for code generation engines.
+</li>
+<li>
+<a href="https://bitop.luajit.org/">Lua Bitop</a> &mdash;
+a Lua extension for <strong>bitwise operations</strong> on numbers.
+</li>
+</ul>
+
+<h2 id="privacy_policy">Privacy Policy</h2>
+<p>
+This web site does not request, store or process any private data.
+</p>
+<p>
+This web site is fully static and does not allow entry of personal
+information anywhere. It does not use cookies or any other form of
+tracking or analytics. Page visits and IP addresses are neither logged
+nor analyzed.
+</p>
+<br class="flush">
+</div>
+<div id="foot">
+<hr class="hide">
+Copyright &copy; 2005-2022
+<span class="noprint">
+&middot;
+<a href="contact.html">Contact &ndash; IMPRESSUM</a>
+</span>
+</div>
+</body>
+</html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>The LuaJIT Project</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Copyright" content="Copyright (C) 2005-2022">
+<meta name="Language" content="en">
+<link rel="stylesheet" type="text/css" href="bluequad.css" media="screen">
+<link rel="stylesheet" type="text/css" href="bluequad-print.css" media="print">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5">
+<script type="text/javascript">
+var n=null,m=0;function toggleMenu(t){m|=t;if(m==t&&n!==null){n=!n;document.getElementById("nav").style.display=n?"block":"none";return true;}}
+if("ontouchstart" in window && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){var l=document.createElement("link");l.id="mcss";l.rel="stylesheet";l.type="text/css";l.href="bluequad-touch.css";l.media="all";document.getElementsByTagName("head")[0].appendChild(l);n=false;}
+</script>
+</head>
+<body>
+<div id="site" ontouchstart="toggleMenu(1);" onclick="toggleMenu(0);">
+<a href="https://luajit.org"><span>Lua<span id="logo">JIT</span></span></a>
+</div>
+<div id="head">
+<h1>The LuaJIT Project</h1>
+</div>
+<div id="nav">
+<ul><li>
+<a class="current" href="index.html">Home</a>
+</li><li>
+<a href="luajit.html">LuaJIT</a>
+<ul><li>
+<a href="download.html">Download &#8681;</a>
+</li><li>
+<a href="install.html">Installation</a>
+</li><li>
+<a href="running.html">Running</a>
+</li></ul>
+</li><li>
+<a href="extensions.html">Extensions</a>
+<ul><li>
+<a href="ext_ffi.html">FFI Library</a>
+<ul><li>
+<a href="ext_ffi_tutorial.html">FFI Tutorial</a>
+</li><li>
+<a href="ext_ffi_api.html">ffi.* API</a>
+</li><li>
+<a href="ext_ffi_semantics.html">FFI Semantics</a>
+</li></ul>
+</li><li>
+<a href="ext_jit.html">jit.* Library</a>
+</li><li>
+<a href="ext_c_api.html">Lua/C API</a>
+</li></ul>
+</li><li>
+<a href="status.html">Status</a>
+</li><li>
+<a href="faq.html">FAQ</a>
+</li><li>
+<a href="performance.html">Performance</a>
+<ul><li>
+<a href="performance_x86.html">on x86/x64</a>
+</li><li>
+<a href="performance_arm.html">on ARM</a>
+</li><li>
+<a href="performance_ppc.html">on PPC</a>
+</li><li>
+<a href="performance_e500.html">on PPC/e500</a>
+</li><li>
+<a href="performance_mips.html">on MIPS</a>
+</li></ul>
+</li><li>
+<a href="http://wiki.luajit.org/">Wiki <span class="ext">&raquo;</span></a>
+</li><li>
+<a href="list.html">Mailing List</a>
+</li><li>
+<a href="sponsors.html">Sponsors</a>
+</li></ul>
+</div>
+<div id="main">
+<p>
+This is the common project page for:
+</p>
+<ul>
+<li>
+<a href="luajit.html">LuaJIT</a> &mdash;
+a <strong>Just-In-Time Compiler</strong> for Lua.
+</li>
+<li>
+<a href="https://coco.luajit.org/">Coco</a> &mdash;
+a Lua extension for <strong>True C&nbsp;Coroutines</strong>.
+</li>
+<li>
+<a href="dynasm.html">DynASM</a> &mdash;
+a <strong>Dynamic Assembler</strong> for code generation engines.
+</li>
+<li>
+<a href="https://bitop.luajit.org/">Lua Bitop</a> &mdash;
+a Lua extension for <strong>bitwise operations</strong> on numbers.
+</li>
+</ul>
+
+<h2 id="privacy_policy">Privacy Policy</h2>
+<p>
+This web site does not request, store or process any private data.
+</p>
+<p>
+This web site is fully static and does not allow entry of personal
+information anywhere. It does not use cookies or any other form of
+tracking or analytics. Page visits and IP addresses are neither logged
+nor analyzed.
+</p>
+<br class="flush">
+</div>
+<div id="foot">
+<hr class="hide">
+Copyright &copy; 2005-2022
+<span class="noprint">
+&middot;
+<a href="contact.html">Contact &ndash; IMPRESSUM</a>
+</span>
+</div>
+</body>
+</html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>The LuaJIT Project</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Copyright" content="Copyright (C) 2005-2022">
+<meta name="Language" content="en">
+<link rel="stylesheet" type="text/css" href="bluequad.css" media="screen">
+<link rel="stylesheet" type="text/css" href="bluequad-print.css" media="print">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5">
+<script type="text/javascript">
+var n=null,m=0;function toggleMenu(t){m|=t;if(m==t&&n!==null){n=!n;document.getElementById("nav").style.display=n?"block":"none";return true;}}
+if("ontouchstart" in window && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){var l=document.createElement("link");l.id="mcss";l.rel="stylesheet";l.type="text/css";l.href="bluequad-touch.css";l.media="all";document.getElementsByTagName("head")[0].appendChild(l);n=false;}
+</script>
+</head>
+<body>
+<div id="site" ontouchstart="toggleMenu(1);" onclick="toggleMenu(0);">
+<a href="https://luajit.org"><span>Lua<span id="logo">JIT</span></span></a>
+</div>
+<div id="head">
+<h1>The LuaJIT Project</h1>
+</div>
+<div id="nav">
+<ul><li>
+<a class="current" href="index.html">Home</a>
+</li><li>
+<a href="luajit.html">LuaJIT</a>
+<ul><li>
+<a href="download.html">Download &#8681;</a>
+</li><li>
+<a href="install.html">Installation</a>
+</li><li>
+<a href="running.html">Running</a>
+</li></ul>
+</li><li>
+<a href="extensions.html">Extensions</a>
+<ul><li>
+<a href="ext_ffi.html">FFI Library</a>
+<ul><li>
+<a href="ext_ffi_tutorial.html">FFI Tutorial</a>
+</li><li>
+<a href="ext_ffi_api.html">ffi.* API</a>
+</li><li>
+<a href="ext_ffi_semantics.html">FFI Semantics</a>
+</li></ul>
+</li><li>
+<a href="ext_jit.html">jit.* Library</a>
+</li><li>
+<a href="ext_c_api.html">Lua/C API</a>
+</li></ul>
+</li><li>
+<a href="status.html">Status</a>
+</li><li>
+<a href="faq.html">FAQ</a>
+</li><li>
+<a href="performance.html">Performance</a>
+<ul><li>
+<a href="performance_x86.html">on x86/x64</a>
+</li><li>
+<a href="performance_arm.html">on ARM</a>
+</li><li>
+<a href="performance_ppc.html">on PPC</a>
+</li><li>
+<a href="performance_e500.html">on PPC/e500</a>
+</li><li>
+<a href="performance_mips.html">on MIPS</a>
+</li></ul>
+</li><li>
+<a href="http://wiki.luajit.org/">Wiki <span class="ext">&raquo;</span></a>
+</li><li>
+<a href="list.html">Mailing List</a>
+</li><li>
+<a href="sponsors.html">Sponsors</a>
+</li></ul>
+</div>
+<div id="main">
+<p>
+This is the common project page for:
+</p>
+<ul>
+<li>
+<a href="luajit.html">LuaJIT</a> &mdash;
+a <strong>Just-In-Time Compiler</strong> for Lua.
+</li>
+<li>
+<a href="https://coco.luajit.org/">Coco</a> &mdash;
+a Lua extension for <strong>True C&nbsp;Coroutines</strong>.
+</li>
+<li>
+<a href="dynasm.html">DynASM</a> &mdash;
+a <strong>Dynamic Assembler</strong> for code generation engines.
+</li>
+<li>
+<a href="https://bitop.luajit.org/">Lua Bitop</a> &mdash;
+a Lua extension for <strong>bitwise operations</strong> on numbers.
+</li>
+</ul>
+
+<h2 id="privacy_policy">Privacy Policy</h2>
+<p>
+This web site does not request, store or process any private data.
+</p>
+<p>
+This web site is fully static and does not allow entry of personal
+information anywhere. It does not use cookies or any other form of
+tracking or analytics. Page visits and IP addresses are neither logged
+nor analyzed.
+</p>
+<br class="flush">
+</div>
+<div id="foot">
+<hr class="hide">
+Copyright &copy; 2005-2022
+<span class="noprint">
+&middot;
+<a href="contact.html">Contact &ndash; IMPRESSUM</a>
+</span>
+</div>
+</body>
+</html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>The LuaJIT Project</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Copyright" content="Copyright (C) 2005-2022">
+<meta name="Language" content="en">
+<link rel="stylesheet" type="text/css" href="bluequad.css" media="screen">
+<link rel="stylesheet" type="text/css" href="bluequad-print.css" media="print">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5">
+<script type="text/javascript">
+var n=null,m=0;function toggleMenu(t){m|=t;if(m==t&&n!==null){n=!n;document.getElementById("nav").style.display=n?"block":"none";return true;}}
+if("ontouchstart" in window && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){var l=document.createElement("link");l.id="mcss";l.rel="stylesheet";l.type="text/css";l.href="bluequad-touch.css";l.media="all";document.getElementsByTagName("head")[0].appendChild(l);n=false;}
+</script>
+</head>
+<body>
+<div id="site" ontouchstart="toggleMenu(1);" onclick="toggleMenu(0);">
+<a href="https://luajit.org"><span>Lua<span id="logo">JIT</span></span></a>
+</div>
+<div id="head">
+<h1>The LuaJIT Project</h1>
+</div>
+<div id="nav">
+<ul><li>
+<a class="current" href="index.html">Home</a>
+</li><li>
+<a href="luajit.html">LuaJIT</a>
+<ul><li>
+<a href="download.html">Download &#8681;</a>
+</li><li>
+<a href="install.html">Installation</a>
+</li><li>
+<a href="running.html">Running</a>
+</li></ul>
+</li><li>
+<a href="extensions.html">Extensions</a>
+<ul><li>
+<a href="ext_ffi.html">FFI Library</a>
+<ul><li>
+<a href="ext_ffi_tutorial.html">FFI Tutorial</a>
+</li><li>
+<a href="ext_ffi_api.html">ffi.* API</a>
+</li><li>
+<a href="ext_ffi_semantics.html">FFI Semantics</a>
+</li></ul>
+</li><li>
+<a href="ext_jit.html">jit.* Library</a>
+</li><li>
+<a href="ext_c_api.html">Lua/C API</a>
+</li></ul>
+</li><li>
+<a href="status.html">Status</a>
+</li><li>
+<a href="faq.html">FAQ</a>
+</li><li>
+<a href="performance.html">Performance</a>
+<ul><li>
+<a href="performance_x86.html">on x86/x64</a>
+</li><li>
+<a href="performance_arm.html">on ARM</a>
+</li><li>
+<a href="performance_ppc.html">on PPC</a>
+</li><li>
+<a href="performance_e500.html">on PPC/e500</a>
+</li><li>
+<a href="performance_mips.html">on MIPS</a>
+</li></ul>
+</li><li>
+<a href="http://wiki.luajit.org/">Wiki <span class="ext">&raquo;</span></a>
+</li><li>
+<a href="list.html">Mailing List</a>
+</li><li>
+<a href="sponsors.html">Sponsors</a>
+</li></ul>
+</div>
+<div id="main">
+<p>
+This is the common project page for:
+</p>
+<ul>
+<li>
+<a href="luajit.html">LuaJIT</a> &mdash;
+a <strong>Just-In-Time Compiler</strong> for Lua.
+</li>
+<li>
+<a href="https://coco.luajit.org/">Coco</a> &mdash;
+a Lua extension for <strong>True C&nbsp;Coroutines</strong>.
+</li>
+<li>
+<a href="dynasm.html">DynASM</a> &mdash;
+a <strong>Dynamic Assembler</strong> for code generation engines.
+</li>
+<li>
+<a href="https://bitop.luajit.org/">Lua Bitop</a> &mdash;
+a Lua extension for <strong>bitwise operations</strong> on numbers.
+</li>
+</ul>
+
+<h2 id="privacy_policy">Privacy Policy</h2>
+<p>
+This web site does not request, store or process any private data.
+</p>
+<p>
+This web site is fully static and does not allow entry of personal
+information anywhere. It does not use cookies or any other form of
+tracking or analytics. Page visits and IP addresses are neither logged
+nor analyzed.
+</p>
+<br class="flush">
+</div>
+<div id="foot">
+<hr class="hide">
+Copyright &copy; 2005-2022
+<span class="noprint">
+&middot;
+<a href="contact.html">Contact &ndash; IMPRESSUM</a>
+</span>
+</div>
+</body>
+</html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>The LuaJIT Project</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Copyright" content="Copyright (C) 2005-2022">
+<meta name="Language" content="en">
+<link rel="stylesheet" type="text/css" href="bluequad.css" media="screen">
+<link rel="stylesheet" type="text/css" href="bluequad-print.css" media="print">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5">
+<script type="text/javascript">
+var n=null,m=0;function toggleMenu(t){m|=t;if(m==t&&n!==null){n=!n;document.getElementById("nav").style.display=n?"block":"none";return true;}}
+if("ontouchstart" in window && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){var l=document.createElement("link");l.id="mcss";l.rel="stylesheet";l.type="text/css";l.href="bluequad-touch.css";l.media="all";document.getElementsByTagName("head")[0].appendChild(l);n=false;}
+</script>
+</head>
+<body>
+<div id="site" ontouchstart="toggleMenu(1);" onclick="toggleMenu(0);">
+<a href="https://luajit.org"><span>Lua<span id="logo">JIT</span></span></a>
+</div>
+<div id="head">
+<h1>The LuaJIT Project</h1>
+</div>
+<div id="nav">
+<ul><li>
+<a class="current" href="index.html">Home</a>
+</li><li>
+<a href="luajit.html">LuaJIT</a>
+<ul><li>
+<a href="download.html">Download &#8681;</a>
+</li><li>
+<a href="install.html">Installation</a>
+</li><li>
+<a href="running.html">Running</a>
+</li></ul>
+</li><li>
+<a href="extensions.html">Extensions</a>
+<ul><li>
+<a href="ext_ffi.html">FFI Library</a>
+<ul><li>
+<a href="ext_ffi_tutorial.html">FFI Tutorial</a>
+</li><li>
+<a href="ext_ffi_api.html">ffi.* API</a>
+</li><li>
+<a href="ext_ffi_semantics.html">FFI Semantics</a>
+</li></ul>
+</li><li>
+<a href="ext_jit.html">jit.* Library</a>
+</li><li>
+<a href="ext_c_api.html">Lua/C API</a>
+</li></ul>
+</li><li>
+<a href="status.html">Status</a>
+</li><li>
+<a href="faq.html">FAQ</a>
+</li><li>
+<a href="performance.html">Performance</a>
+<ul><li>
+<a href="performance_x86.html">on x86/x64</a>
+</li><li>
+<a href="performance_arm.html">on ARM</a>
+</li><li>
+<a href="performance_ppc.html">on PPC</a>
+</li><li>
+<a href="performance_e500.html">on PPC/e500</a>
+</li><li>
+<a href="performance_mips.html">on MIPS</a>
+</li></ul>
+</li><li>
+<a href="http://wiki.luajit.org/">Wiki <span class="ext">&raquo;</span></a>
+</li><li>
+<a href="list.html">Mailing List</a>
+</li><li>
+<a href="sponsors.html">Sponsors</a>
+</li></ul>
+</div>
+<div id="main">
+<p>
+This is the common project page for:
+</p>
+<ul>
+<li>
+<a href="luajit.html">LuaJIT</a> &mdash;
+a <strong>Just-In-Time Compiler</strong> for Lua.
+</li>
+<li>
+<a href="https://coco.luajit.org/">Coco</a> &mdash;
+a Lua extension for <strong>True C&nbsp;Coroutines</strong>.
+</li>
+<li>
+<a href="dynasm.html">DynASM</a> &mdash;
+a <strong>Dynamic Assembler</strong> for code generation engines.
+</li>
+<li>
+<a href="https://bitop.luajit.org/">Lua Bitop</a> &mdash;
+a Lua extension for <strong>bitwise operations</strong> on numbers.
+</li>
+</ul>
+
+<h2 id="privacy_policy">Privacy Policy</h2>
+<p>
+This web site does not request, store or process any private data.
+</p>
+<p>
+This web site is fully static and does not allow entry of personal
+information anywhere. It does not use cookies or any other form of
+tracking or analytics. Page visits and IP addresses are neither logged
+nor analyzed.
+</p>
+<br class="flush">
+</div>
+<div id="foot">
+<hr class="hide">
+Copyright &copy; 2005-2022
+<span class="noprint">
+&middot;
+<a href="contact.html">Contact &ndash; IMPRESSUM</a>
+</span>
+</div>
+</body>
+</html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>The LuaJIT Project</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Copyright" content="Copyright (C) 2005-2022">
+<meta name="Language" content="en">
+<link rel="stylesheet" type="text/css" href="bluequad.css" media="screen">
+<link rel="stylesheet" type="text/css" href="bluequad-print.css" media="print">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5">
+<script type="text/javascript">
+var n=null,m=0;function toggleMenu(t){m|=t;if(m==t&&n!==null){n=!n;document.getElementById("nav").style.display=n?"block":"none";return true;}}
+if("ontouchstart" in window && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){var l=document.createElement("link");l.id="mcss";l.rel="stylesheet";l.type="text/css";l.href="bluequad-touch.css";l.media="all";document.getElementsByTagName("head")[0].appendChild(l);n=false;}
+</script>
+</head>
+<body>
+<div id="site" ontouchstart="toggleMenu(1);" onclick="toggleMenu(0);">
+<a href="https://luajit.org"><span>Lua<span id="logo">JIT</span></span></a>
+</div>
+<div id="head">
+<h1>The LuaJIT Project</h1>
+</div>
+<div id="nav">
+<ul><li>
+<a class="current" href="index.html">Home</a>
+</li><li>
+<a href="luajit.html">LuaJIT</a>
+<ul><li>
+<a href="download.html">Download &#8681;</a>
+</li><li>
+<a href="install.html">Installation</a>
+</li><li>
+<a href="running.html">Running</a>
+</li></ul>
+</li><li>
+<a href="extensions.html">Extensions</a>
+<ul><li>
+<a href="ext_ffi.html">FFI Library</a>
+<ul><li>
+<a href="ext_ffi_tutorial.html">FFI Tutorial</a>
+</li><li>
+<a href="ext_ffi_api.html">ffi.* API</a>
+</li><li>
+<a href="ext_ffi_semantics.html">FFI Semantics</a>
+</li></ul>
+</li><li>
+<a href="ext_jit.html">jit.* Library</a>
+</li><li>
+<a href="ext_c_api.html">Lua/C API</a>
+</li></ul>
+</li><li>
+<a href="status.html">Status</a>
+</li><li>
+<a href="faq.html">FAQ</a>
+</li><li>
+<a href="performance.html">Performance</a>
+<ul><li>
+<a href="performance_x86.html">on x86/x64</a>
+</li><li>
+<a href="performance_arm.html">on ARM</a>
+</li><li>
+<a href="performance_ppc.html">on PPC</a>
+</li><li>
+<a href="performance_e500.html">on PPC/e500</a>
+</li><li>
+<a href="performance_mips.html">on MIPS</a>
+</li></ul>
+</li><li>
+<a href="http://wiki.luajit.org/">Wiki <span class="ext">&raquo;</span></a>
+</li><li>
+<a href="list.html">Mailing List</a>
+</li><li>
+<a href="sponsors.html">Sponsors</a>
+</li></ul>
+</div>
+<div id="main">
+<p>
+This is the common project page for:
+</p>
+<ul>
+<li>
+<a href="luajit.html">LuaJIT</a> &mdash;
+a <strong>Just-In-Time Compiler</strong> for Lua.
+</li>
+<li>
+<a href="https://coco.luajit.org/">Coco</a> &mdash;
+a Lua extension for <strong>True C&nbsp;Coroutines</strong>.
+</li>
+<li>
+<a href="dynasm.html">DynASM</a> &mdash;
+a <strong>Dynamic Assembler</strong> for code generation engines.
+</li>
+<li>
+<a href="https://bitop.luajit.org/">Lua Bitop</a> &mdash;
+a Lua extension for <strong>bitwise operations</strong> on numbers.
+</li>
+</ul>
+
+<h2 id="privacy_policy">Privacy Policy</h2>
+<p>
+This web site does not request, store or process any private data.
+</p>
+<p>
+This web site is fully static and does not allow entry of personal
+information anywhere. It does not use cookies or any other form of
+tracking or analytics. Page visits and IP addresses are neither logged
+nor analyzed.
+</p>
+<br class="flush">
+</div>
+<div id="foot">
+<hr class="hide">
+Copyright &copy; 2005-2022
+<span class="noprint">
+&middot;
+<a href="contact.html">Contact &ndash; IMPRESSUM</a>
+</span>
+</div>
+</body>
+</html>

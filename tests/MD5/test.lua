@@ -1,10 +1,12 @@
-reaper.ShowConsoleMsg("Start MD5 tests.\n")
+local mv = require("mavriq")
+
+mv.msg("Start MD5 tests.\n")
 
 md5 = require("md5.core")
 
-message = md5.crypt("Marviq is da shiznat", "Mavriq")
-reaper.ShowConsoleMsg(string.format("Encripted: %s ", message))
-message = md5.decrypt(message, "Mavriq")
-reaper.ShowConsoleMsg(string.format("\nDecripted: %s \n", message))
+cmessage = md5.crypt("Marviq is da shiznat", "Mavriq")
+mv.printf("Encripted: %s ", cmessage)
+dmessage = md5.decrypt(cmessage, "Mavriq")
+mv.printf("\nDecripted: %s \n", dmessage)
 
-reaper.ShowConsoleMsg("End MD5 tests.\n\n")
+mv.msg("End MD5 tests.\n\n")
