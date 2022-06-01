@@ -1,9 +1,8 @@
-[![License](https://img.shields.io/badge/license-GPLv3-orange)](./LICENSE)
-![Release Build](https://img.shields.io/github/workflow/status/mavriq-dev/Mavriq_Lua_Batteries/Build?label=Build)
-![Code Size](https://img.shields.io/github/languages/code-size/mavriq-dev/Mavriq_Lua_Batteries)
-![Repo Size](https://img.shields.io/github/repo-size/mavriq-dev/Mavriq_Lua_Batteries)
-![Release Ver](https://img.shields.io/github/v/release/mavriq-dev/Mavriq_Lua_Batteries)
-![PreRelease Ver](https://img.shields.io/github/v/release/mavriq-dev/Mavriq_Lua_Batteries?include_prereleases)
+![License](https://img.shields.io/github/license/mavriq-dev/Mavriq-Lua-Batteries)
+![Release Build](https://img.shields.io/github/workflow/status/mavriq-dev/Mavriq-Lua-Batteries/Build?label=Build)
+![Code Size](https://img.shields.io/github/languages/code-size/mavriq-dev/Mavriq-Lua-Batteries)
+![Repo Size](https://img.shields.io/github/repo-size/mavriq-dev/Mavriq-Lua-Batteries)
+![PreRelease Ver](https://img.shields.io/github/v/release/mavriq-dev/Mavriq-Lua-Batteries?include_prereleases)
 # Mavirq Lua Batteries
 
 ### Details
