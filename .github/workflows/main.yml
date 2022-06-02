@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   build_win:
+    # if: ${{ false }}
     runs-on: windows-latest
 
     steps:
@@ -15,27 +16,27 @@ jobs:
           sdk: 10.0.17763.0
 
 
-      - name: Cache LuaVM
+      - name: "Cache LuaVM"
         id: cache-luavm
         uses: actions/cache@v3
         with:
-          path: ~\AppData\Local\LUAVM
+          path: ~/AppData/Local/LUAVM
           key: ${{ runner.os }}-luavm-
           restore-keys: |
             ${{ runner.os }}-luavm-
 
-      - name: Install LuaVM
+      - name: "Install LuaVM"
         if: steps.cache-luavm.outputs.cache-hit != 'true'
         run: |
           $ErrorActionPreference = "Stop"
           
           Invoke-WebRequest -OutFile LuaVM-0.5.4-vs2015-x64.exe https://github.com/xpol/luavm/releases/download/0.5.4/LuaVM-0.5.4-vs2015-x64.exe
           echo "Installing LuaVM"
-          Start-Process .\LuaVM-0.5.4-vs2015-x64.exe -argumentlist "/verysilent" -Wait 
+          Start-Process ./LuaVM-0.5.4-vs2015-x64.exe -argumentlist "/verysilent" -Wait 
           echo "Install Finished"
 
 
-      - name: Setup LuaVM    
+      - name: "Setup LuaVM"    
         run: |
           $env:Path += ";" + $env:LOCALAPPDATA + "\LuaVM;" + $env:LOCALAPPDATA + "\LuaVM\externals\bin;" + $env:LOCALAPPDATA + "\LuaVM\versions\5.3" 
           luavm use 5.3 
@@ -43,12 +44,12 @@ jobs:
           echo $env:LOCALAPPDATA"\LuaVM;"$env:LOCALAPPDATA"\LuaVM\externals\bin;"$env:LOCALAPPDATA"\LuaVM\versions\5.3" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
 
-      - name: Copy Libs
+      - name: "Copy Libs"
         run: |
           $ErrorActionPreference = "Stop" 
 
           Copy-Item externals/bin/* -Destination $env:LOCALAPPDATA"\LuaVM\externals\bin" -Recurse -Force
-          Copy-Item externals/lib/* -Destination $env:LOCALAPPDATA"\LuaVM\externals\lib" -Recurse -Force
+          Copy-Item externals/lib/*.lib -Destination $env:LOCALAPPDATA"\LuaVM\externals\lib" -Recurse -Force
           Copy-Item externals/include/* -Destination $env:LOCALAPPDATA"\LuaVM\externals\include" -Recurse -Force
 
       # - name: Build lanes
@@ -59,7 +60,7 @@ jobs:
       #   run: |
       #     scoop install sccache
 
-      - name: Cache wxwidgets
+      - name: "Cache wxwidgets"
         id: cache-wxwidgets
         uses: actions/cache@v3
         with:
@@ -68,15 +69,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-wxwidgets-
 
-      - name: Build wxWidgets
+      - name: "Build wxWidgets"
         if: steps.cache-wxwidgets.outputs.cache-hit != 'true'
         run: |
           Invoke-WebRequest -OutFile wxWidgets-3.1.6.zip https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.6/wxWidgets-3.1.6.zip
           7z x -owxWidgets wxWidgets-3.1.6.zip
-          cd wxWidgets\build\msw\
+          cd wxWidgets/build/msw/
           nmake -f makefile.vc SHARED=0 UNICODE=1 BUILD=release TARGET_CPU=AMD64
 
-      - name: Cache wxlua
+      - name: "Cache wxlua"
         id: cache-wxlua
         uses: actions/cache@v3
         with:
@@ -86,7 +87,7 @@ jobs:
             ${{ runner.os }}-wxlua-
 
 
-      - name: Build wxlua
+      - name: "Build wxlua"
         if: steps.cache-wxlua.outputs.cache-hit != 'true'
         run: |
           git clone https://github.com/pkulchenko/wxlua
@@ -100,7 +101,7 @@ jobs:
 
 
 
-      - name: Copy wxLua   
+      - name: "Copy wxLua"   
         run: |
           cp wxlua/wxlua/wxlua-build/bin/Release/wx.dll $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod"
           mkdir tests/wxlua
@@ -108,7 +109,7 @@ jobs:
           cp -r wxlua/wxlua/samples/* tests/wxlua
           cp -r wxlua/wxlua/docs/* docs/wxlua
 
-      - name: Build LuaSocket
+      - name: "Build LuaSocket"
         run: |
           luarocks unpack luasocket
           pushd .
@@ -120,7 +121,19 @@ jobs:
           cp -r luasocket-3.0.0-1/luasocket/README.md docs/luasocket
           cp -r luasocket-3.0.0-1/luasocket/LICENSE docs/luasocket
 
-      - name: Build timerwheel
+
+      - name: "Build losc"
+        run: |
+          luarocks unpack losc
+          pushd .
+          cd losc-1.0.1-1/losc
+          luarocks make losc-1.0.1-1.rockspec
+          popd
+          mkdir docs/losc
+          cp -r luasocket-3.0.0-1/luasocket/README.md docs/luasocket
+          cp -r luasocket-3.0.0-1/luasocket/LICENSE docs/luasocket
+
+      - name: "Build timerwheel"
         run: |
           luarocks unpack timerwheel
           pushd .
@@ -132,7 +145,7 @@ jobs:
           cp -r timerwheel-0.2.0-2/timerwheel.lua/README.md  docs/timerwheel
           cp -r timerwheel-0.2.0-2/timerwheel.lua/LICENSE  docs/timerwheel
 
-      - name: Build binaryheap
+      - name: "Build binaryheap"
         run: |
           luarocks unpack binaryheap
           pushd .
@@ -144,7 +157,7 @@ jobs:
           cp -r binaryheap-0.4-1/binaryheap.lua-version_0v4/README.md  docs/binaryheap
           Invoke-WebRequest  https://raw.githubusercontent.com/Tieske/binaryheap.lua/master/LICENSE   -OutFile  docs/binaryheap/LICENSE
 
-      - name: Build luafilesystem
+      - name: "Build luafilesystem"
         run: |
           luarocks unpack luafilesystem
           pushd .
@@ -156,7 +169,7 @@ jobs:
           cp -r luafilesystem-1.8.0-1/luafilesystem/README.md  docs/luafilesystem
           cp -r luafilesystem-1.8.0-1/luafilesystem/LICENSE  docs/luafilesystem
 
-      - name: Build copas
+      - name: "Build copas"
         run: |
           luarocks unpack rockspecs/copas-3.0.0-3.rockspec
           pushd .
@@ -201,7 +214,7 @@ jobs:
           mkdir docs/lbase64
           cp -r lbase64-20120807-3/base64/README docs/lbase64
 
-      - name: Build librs232
+      - name: "Build librs232"
         run: |
           luarocks unpack rs232
           pushd .
@@ -212,7 +225,7 @@ jobs:
           cp -r rs232-0.1.0-1/librs232-0.1.0/doc/* docs/librs232
           cp -r rs232-0.1.0-1/librs232-0.1.0/README.md docs/librs232
 
-      - name: Build rings
+      - name: "Build rings"
         run: |
           luarocks unpack rings
           pushd .
@@ -223,7 +236,7 @@ jobs:
           cp -r rings-1.3.0-1/rings-v_1_3_0/doc/* docs/rings
           cp -r rings-1.3.0-1/rings-v_1_3_0/README docs/rings
 
-      - name: Build lua-curl
+      - name: "Build lua-curl"
         run: |
           luarocks unpack lua-curl 
           pushd .
@@ -235,7 +248,7 @@ jobs:
           cp -r lua-curl-0.3.13-1/Lua-cURLv3-0.3.13/README.md docs/lua-curl
           cp -r lua-curl-0.3.13-1/Lua-cURLv3-0.3.13/LICENSE docs/lua-curl
 
-      - name: Build luafft
+      - name: "Build luafft"
         run: |
           luarocks unpack rockspecs/luafft-1.2-1.rockspec
           pushd .
@@ -246,7 +259,7 @@ jobs:
           cp -r luafft-1.2-1/luafft/docs/* docs/luafft
           cp -r luafft-1.2-1/luafft/README.md docs/luafft
 
-      - name: Build luatz
+      - name: "Build luatz"
         run: |
           luarocks unpack luatz
           pushd .
@@ -257,7 +270,7 @@ jobs:
           cp -r luatz-0.4-1/luatz-0.4/doc/* docs/luatz
           cp -r luatz-0.4-1/luatz-0.4/README.md docs/luatz
 
-      - name: Build middleclass
+      - name: "Build middleclass"
         run: |
           luarocks unpack middleclass
           pushd .
@@ -268,7 +281,7 @@ jobs:
           cp -r middleclass-4.1.1-0/middleclass-4.1.1/MIT-LICENSE.txt docs/middleclass
           cp -r middleclass-4.1.1-0/middleclass-4.1.1/README.md docs/middleclass
 
-      - name: Build lustache
+      - name: "Build lustache"
         run: |
           luarocks unpack lustache
           pushd .
@@ -279,7 +292,7 @@ jobs:
           cp -r lustache-1.3.1-0/lustache-1.3.1-0/LICENSE docs/lustache
           cp -r lustache-1.3.1-0/lustache-1.3.1-0/README.md docs/lustache
 
-      - name: Build moses
+      - name: "Build moses"
         run: |
           luarocks unpack moses
           pushd .
@@ -291,7 +304,7 @@ jobs:
           cp -r moses-2.1.0-1/Moses-Moses-2.1.0-1/README.md docs/moses
           cp -r moses-2.1.0-1/Moses-Moses-2.1.0-1/LICENSE docs/moses
 
-      - name: Build luafun
+      - name: "Build luafun"
         run: |
           luarocks unpack rockspecs/fun-0.1.3-1.rockspec
           pushd .
@@ -302,7 +315,7 @@ jobs:
           cp -r fun-0.1.3-1/luafun/doc/* docs/fun
           cp -r fun-0.1.3-1/luafun/README.md docs/fun
 
-      - name: Build MD5
+      - name: "Build MD5"
         run: |
           luarocks unpack MD5
           pushd .
@@ -313,7 +326,7 @@ jobs:
           cp -r md5-1.3-1/md5-1.3/doc/* docs/MD5
           cp -r md5-1.3-1/md5-1.3/README.md docs/MD5
 
-      - name: Build xavante
+      - name: "Build xavante"
         run: |
           luarocks unpack xavante
           pushd .
@@ -324,7 +337,7 @@ jobs:
           cp -r xavante-2.4.0-1/xavante-2.4.0/doc/* docs/xavante
           cp -r xavante-2.4.0-1/xavante-2.4.0/README.md docs/xavante
 
-      - name: Build lyaml
+      - name: "Build lyaml"
         run: |
           luarocks unpack rockspecs/lyaml-6.1.3-2.rockspec
           pushd .
@@ -336,7 +349,7 @@ jobs:
           cp -r lyaml-6.1.3-2/lyaml-6.1.3/README.md docs/lyaml
           cp -r lyaml-6.1.3-2/lyaml-6.1.3/LICENSE docs/lyaml
 
-      - name: Build lua-protobuf
+      - name: "Build lua-protobuf"
         run: |
           luarocks unpack rockspecs/lua-protobuf-0.3.4-1.rockspec
           pushd .
@@ -347,20 +360,20 @@ jobs:
           cp -r lua-protobuf-0.3.4-1/lua-protobuf/LICENSE docs/lua-protobuf
           cp -r lua-protobuf-0.3.4-1/lua-protobuf/README.md docs/lua-protobuf
 
-      - name: Build luasql-mysql
+      - name: "Build luasql-mysql"
         run: |
-          luarocks unpack rockspecs\luasql-mysql-2.6.0-1.rockspec
+          luarocks unpack rockspecs/luasql-mysql-2.6.0-1.rockspec
           patch luasql-mysql-2.6.0-1/luasql/src/luasql.h  patches/luasql-mysql.patch --binary
           pushd .
           cd luasql-mysql-2.6.0-1/luasql
-          luarocks make ../../rockspecs\luasql-mysql-2.6.0-1.rockspec
+          luarocks make ../../rockspecs/luasql-mysql-2.6.0-1.rockspec
           popd
           mkdir docs/luasql-mysql
           cp -r luasql-mysql-2.6.0-1/luasql/doc/* docs/luasql-mysql
           cp -r luasql-mysql-2.6.0-1/luasql/README docs/luasql-mysql
 
 
-      - name: Build luasql-firebird
+      - name: "Build luasql-firebird"
         run: |
           luarocks unpack rockspecs/luasql-firebird-2.6.0-1.rockspec
           pushd .
@@ -371,7 +384,7 @@ jobs:
           cp -r luasql-firebird-2.6.0-1/luasql/doc/* docs/luasql-firebird
           cp -r luasql-firebird-2.6.0-1/luasql/README docs/luasql-firebird
 
-      - name: Build luasql-postgres
+      - name: "Build luasql-postgres"
         run: |
           luarocks unpack rockspecs/luasql-postgres-2.6.0-1.rockspec
           pushd .
@@ -382,7 +395,7 @@ jobs:
           cp -r luasql-postgres-2.6.0-1/luasql/doc/* docs/luasql-postgres
           cp -r luasql-postgres-2.6.0-1/luasql/README docs/luasql-postgres
 
-      - name: Build luasql-sqlite3
+      - name: "Build luasql-sqlite3"
         run: |
           luarocks unpack rockspecs/luasql-sqlite3-2.6.0-1.rockspec
           pushd .
@@ -393,9 +406,9 @@ jobs:
           cp -r luasql-sqlite3-2.6.0-1/luasql/doc/* docs/luasql-sqlite3
           cp -r luasql-sqlite3-2.6.0-1/luasql/README docs/luasql-sqlite3
 
-      - name: Build luasql-odbc
+      - name: "Build luasql-odbc"
         run: |
-          luarocks unpack rockspecs\luasql-odbc-2.6.0-1.rockspec
+          luarocks unpack rockspecs/luasql-odbc-2.6.0-1.rockspec
           pushd .
           cd luasql-odbc-2.6.0-1/luasql
           luarocks make ../../rockspecs/luasql-odbc-2.6.0-1.rockspec
@@ -404,7 +417,7 @@ jobs:
           cp -r luasql-odbc-2.6.0-1/luasql/doc/* docs/luasql-odbc
           cp -r luasql-odbc-2.6.0-1/luasql/README docs/luasql-odbc
 
-      - name: Build lrexlib-pcre
+      - name: "Build lrexlib-pcre"
         run: |
           luarocks unpack lrexlib-pcre 
           pushd .
@@ -416,7 +429,7 @@ jobs:
           cp -r lrexlib-pcre-2.9.1-1/lrexlib/README.rst docs/lrexlib-pcre
           cp -r lrexlib-pcre-2.9.1-1/lrexlib/LICENSE docs/lrexlib-pcre
 
-      - name: Build stdlib
+      - name: "Build stdlib"
         run: |
           luarocks unpack stdlib
           pushd .
@@ -427,13 +440,13 @@ jobs:
           cp -r stdlib-41.2.2-1/lua-stdlib-release-v41.2.2/doc/* docs/stdlib
           cp -r stdlib-41.2.2-1/lua-stdlib-release-v41.2.2/README docs/stdlib
 
-      - name: Build luaexpat
+      - name: "Build luaexpat"
         run: |
           luarocks unpack luaexpat
           pushd .
           cd luaexpat-1.4.1-1/luaexpat
-          patch -p1 -i ..\..\patches\luaexpat.patch --binary
-          luarocks make .\luaexpat-1.4.1-1.rockspec
+          patch -p1 -i ../../patches/luaexpat.patch --binary
+          luarocks make ./luaexpat-1.4.1-1.rockspec
           popd
           mkdir docs/luaexpat
           cp -r luaexpat-1.4.1-1/luaexpat/docs/* docs/luaexpat
@@ -441,19 +454,19 @@ jobs:
           cp -r luaexpat-1.4.1-1/luaexpat/LICENSE docs/luaexpat
 
 
-      - name: Build luasec
+      - name: "Build luasec"
         run: |
           luarocks unpack rockspecs/luasec-1.1.0-1.rockspec  
           pushd .
-          cd luasec-1.1.0-1\luasec
+          cd luasec-1.1.0-1/luasec
           luarocks make ../../rockspecs/luasec-1.1.0-1.rockspec 
           popd
           mkdir docs/luasec
-          cp -r luasec-1.1.0-1\luasec/samples/* docs/luasec
-          cp -r luasec-1.1.0-1\luasec/README.md docs/luasec
-          cp -r luasec-1.1.0-1\luasec/LICENSE docs/luasec
+          cp -r luasec-1.1.0-1/luasec/samples/* docs/luasec
+          cp -r luasec-1.1.0-1/luasec/README.md docs/luasec
+          cp -r luasec-1.1.0-1/luasec/LICENSE docs/luasec
 
-      - name: Build Lua-Zip
+      - name: "Build Lua-Zip"
         run: |
           luarocks unpack rockspecs/lua-zip-0.2-0.rockspec 
           pushd .
@@ -463,7 +476,7 @@ jobs:
           mkdir docs/lua-zip
           cp -r lua-zip-0.2-0/lua-zip/README.txt docs/lua-zip
 
-      - name: Build Lpeg
+      - name: "Build Lpeg"
         run: |
           luarocks install lpeg
 
@@ -476,7 +489,7 @@ jobs:
           luarocks make
           popd
 
-      - name: Build Penlight
+      - name: "Build Penlight"
         run: |
           luarocks unpack penlight
           pushd .
@@ -488,7 +501,7 @@ jobs:
           cp -r penlight-1.12.0-2/penlight/README.md docs/penlight
           cp -r penlight-1.12.0-2/penlight/LICENSE.md docs/penlight
 
-      - name: Build Lua-Zlib
+      - name: "Build Lua-Zlib"
         run: |
           luarocks unpack rockspecs/lua-zlib-1.2-2.rockspec 
           pushd .
@@ -498,7 +511,7 @@ jobs:
           mkdir docs/lua-zlib
           cp -r lua-zlib-1.2-2/lua-zlib/README docs/lua-zlib
 
-      - name: Build ZipWriter
+      - name: "Build ZipWriter"
         run: |
           luarocks unpack ZipWriter
           pushd .
@@ -511,7 +524,7 @@ jobs:
           cp -r zipwriter-0.1.5-1/ZipWriter-0.1.5/LICENCE.txt docs/zipwriter
           "NoIndex: true`n" + (Get-Content docs/zipwriter/APPNOTE.TXT | Out-String) | Set-Content docs/zipwriter/APPNOTE.TXT
 
-      - name: Build dkjson
+      - name: "Build dkjson"
         run: |
           luarocks unpack dkjson
           pushd .
@@ -521,7 +534,7 @@ jobs:
           mkdir docs/dkjson
           cp -r dkjson-2.6-1/dkjson-2.6/README.txt docs/dkjson
 
-      - name: Build lxsh
+      - name: "Build lxsh"
         run: |
           luarocks unpack lxsh
           pushd .
@@ -533,7 +546,7 @@ jobs:
           cp -r lxsh-0.8.6-2/lxsh-0.8.6-1/README.md docs/lxsh
           cp -r lxsh-0.8.6-2/lxsh-0.8.6-1/examples docs/lxsh
 
-      - name: Build serpent
+      - name: "Build serpent"
         run: |
           luarocks unpack serpent
           pushd .
@@ -546,28 +559,280 @@ jobs:
 
 
 
-      - name: Collect files
+      - name: "Collect files"
         if: always()
         run: |
           mkdir archive
-          mkdir archive\bin
-          mkdir archive\lua
-          mkdir archive\docs
-          mkdir archive\tests
-          # mkdir archive\luavm
+          mkdir archive/bin
+          mkdir archive/lua
+          mkdir archive/docs
+          mkdir archive/tests
+
           cp "batteries_header.lua" archive
-          cp -r bin\* archive\bin
-          cp -r lua\* archive\lua
-          cp -r docs\* archive\docs
-          cp -r  $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod\*" archive\bin
-          cp -r   $env:LOCALAPPDATA"\LuaVM\versions\5.3\lua\*" archive\lua
+          cp -r bin/*.DLL archive/bin
+          cp -r lua/* archive/lua
+          cp -r docs/* archive/docs
+          cp -r  $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod\*" archive/bin
+          cp -r   $env:LOCALAPPDATA"\LuaVM\versions\5.3\lua\*" archive/lua
           cp -r  tests/* archive/tests
-          # cp -r  $env:LOCALAPPDATA"\LuaVM\externals archive\luavm
+
           Remove-Item archive\lua\luarocks -Recurse
 
-      - name: Upload windows artifacts
+      - name: "Upload artifacts"
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: Mavriq-Lua-Batteries
           path: archive
+
+
+
+
+
+  build_mac:
+    runs-on: macos-11
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Install Packages"
+        run: |
+          brew install lua@5.3
+          export PATH="/usr/local/opt/lua@5.3/bin:$PATH"
+          export LDFLAGS="-L/usr/local/opt/lua@5.3/lib"
+          export CPPFLAGS="-I/usr/local/opt/lua@5.3/include"
+          wget https://luarocks.org/releases/luarocks-3.8.0.tar.gz
+          tar -xvf luarocks-3.8.0.tar.gz
+          cd luarocks-3.8.0
+          ./configure --with-lua-include=/usr/local/opt/lua@5.3/include/lua5.3
+          make 
+          make install
+          cd -
+          brew install openssl@3
+
+
+      - name: "Copy Libs"
+        run: |
+          cp -R externals/include/* /usr/local/include
+          cp -R externals/lib/*.dylib /usr/local/lib
+
+
+      # - name: "Cache wxwidgets"
+      #   id: cache-wxwidgets
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: wxWidgets
+      #     key: ${{ runner.os }}-wxwidgets-
+      #     restore-keys: |
+      #       ${{ runner.os }}-wxwidgets-
+
+      # - name: "Build wxWidgets"
+      #   if: steps.cache-wxwidgets.outputs.cache-hit != 'true'
+      #   run: |
+      #     Invoke-WebRequest -OutFile wxWidgets-3.1.6.zip https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.6/wxWidgets-3.1.6.zip
+      #     7z x -owxWidgets wxWidgets-3.1.6.zip
+      #     cd wxWidgets/build/msw/
+      #     nmake -f makefile.vc SHARED=0 UNICODE=1 BUILD=release TARGET_CPU=AMD64
+
+      # - name: "Cache wxlua"
+      #   id: cache-wxlua
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: wxlua
+      #     key: ${{ runner.os }}-wxlua-
+      #     restore-keys: |
+      #       ${{ runner.os }}-wxlua-
+
+
+      # - name: "Build wxlua"
+      #   if: steps.cache-wxlua.outputs.cache-hit != 'true'
+      #   run: |
+      #     git clone https://github.com/pkulchenko/wxlua
+      #     patch wxlua/wxlua/modules/luamodule/luamodule.cpp patches/wxlua.patch --binary
+      #     mkdir wxlua/wxlua/wxlua-build
+      #     pushd .
+      #     cd wxlua/wxlua/wxlua-build
+      #     cmake .. -DCMAKE_BUILD_TYPE=Release  -DwxWidgets_ROOT_DIR="$env:GITHUB_WORKSPACE"/wxWidgets/ -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="$env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="$env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
+      #     cmake --build . --config Release
+      #     popd
+
+
+      # - name: Copy wxLua   
+      #   run: |
+      #     cp wxlua/wxlua/wxlua-build/bin/Release/wx.dll $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod"
+      #     mkdir tests/wxlua
+      #     mkdir docs/wxlua
+      #     cp -r wxlua/wxlua/samples/* tests/wxlua
+      #     cp -r wxlua/wxlua/docs/* docs/wxlua
+
+
+
+      - name: "Build LuaSocket"
+        run: |
+          luarocks install luasocket
+
+
+      - name: "Build losc"
+        run: |
+          luarocks install losc
+
+
+      - name: "build luafilesystem"
+        run: |
+          luarocks --lua-dir=$(brew --prefix)/opt/lua@5.3 install luafilesystem
+
+
+      - name: "Build lbase64"
+        run: |
+          luarocks install lbase64
+
+
+      - name: "Build librs232"
+        run: |
+          luarocks install rs232
+
+
+      - name: "Build rings"
+        run: |
+          luarocks install rings
+
+
+      - name: "Build lua-curl"
+        run: |
+          luarocks install lua-curl 
+
+
+      - name: "Build MD5"
+        run: |
+          luarocks install MD5
+
+
+      - name: "Build lyaml"
+        run: |
+          luarocks install rockspecs/lyaml-6.1.3-2.rockspec
+
+      - name: Build lua-protobuf
+        run: |
+          luarocks install rockspecs/lua-protobuf-0.3.4-1.rockspec
+
+      # - name: Build luasql-mysql
+      #   run: |
+      #     luarocks install rockspecs/luasql-mysql-2.6.0-1.rockspec
+
+
+      - name: "Build luasql-firebird"
+        run: |
+          luarocks install rockspecs/luasql-firebird-2.6.0-1.rockspec
+
+
+      - name: "Build luasql-postgres"
+        run: |
+          luarocks install rockspecs/luasql-postgres-2.6.0-1.rockspec
+
+
+      - name: "Build luasql-sqlite3"
+        run: |
+          luarocks install rockspecs/luasql-sqlite3-2.6.0-1.rockspec
+
+
+      - name: "Build lrexlib-pcre"
+        run: |
+          luarocks install lrexlib-pcre 
+
+
+      - name: "Build stdlib"
+        run: |
+          luarocks install stdlib
+
+
+      - name: "Build luaexpat"
+        run: |
+          luarocks install luaexpat
+
+
+      - name: "Build luasec"
+        run: |
+          luarocks install rockspecs/luasec-1.1.0-1.rockspec OPENSSL_DIR=/usr/local/opt/openssl@3
+
+
+      - name: Build Lua-Zip
+        run: |
+          luarocks install rockspecs/lua-zip-0.2-0.rockspec 
+
+
+      - name: "Build Lpeg"
+        run: |
+          luarocks install lpeg
+
+      - name: Build Lua-cjson
+        run: |
+          git clone https://github.com/mpx/lua-cjson
+          mkdir lua-cjson/build
+          cd lua-cjson/build
+          cmake .. -DLUA_LIBRARIES=/usr/local/opt/lua@5.3/lib -DLUA_INCLUDE_DIR=/usr/local/opt/lua@5.3/include/lua5.3
+          cmake --build . --config=Release
+          cp cjson.so /usr/local/lib/lua/5.3/
+          cd -
+
+
+      - name: "Build Lua-Zlib"
+        run: |
+          luarocks install rockspecs/lua-zlib-1.2-2.rockspec 
+
+
+      - name: "Build lxsh"
+        run: |
+          luarocks install lxsh
+
+
+
+
+
+
+      - name: "Collect files"
+        if: always()
+        run: |
+          mkdir archive
+          mkdir archive/bin
+          cp -r bin/*.dylib archive/bin
+          cp -RvL /usr/local/lib/lua/5.3/* archive/bin
+          cd archive
+          find . -type f -name "*.so" -exec bash -c 'mv "$1" "${1%.so}".dylib' - '{}' \;
+          pwd
+
+      - name: "Codesign executable"
+        env: 
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+          APPLE_ID_HASH: ${{secrets.APPLE_ID_HASH}}
+          APPLE_ID: ${{secrets.APPLE_ID}}
+          APP_SECRET: ${{secrets.APP_SECRET}}
+          TEAM_ID: ${{secrets.TEAM_ID}}
+        run: |
+          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
+          security create-keychain -p build-password build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p build-password build.keychain
+          security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k build-password build.keychain
+          /usr/bin/codesign --force -s $APPLE_ID_HASH archive/bin/**/*.dylib -v
+          /usr/bin/codesign --force -s $APPLE_ID_HASH archive/bin/*.dylib -v
+          zip -r mavriq.zip archive/bin/ -x *.dll
+          xcrun notarytool submit mavriq.zip --apple-id $APPLE_ID --password $APP_SECRET --team-id $TEAM_ID
+
+      # - name: "Notarize Release DYLIBS"
+      #   uses: devbotsxyz/xcode-notarize@v1 
+      #   with:
+      #     product-path: mavriq.zip
+      #     appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
+      #     appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
+      #     verbose: true
+
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: Mavriq-Lua-Batteries
+          path: archive
+

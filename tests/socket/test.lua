@@ -16,10 +16,11 @@ mv.msg("Using host '" ..host.. "' and port " ..port.. "...")
 udp:setpeername(host, port)
 udp:settimeout(3)
 sent, err = udp:send("anything")
-if err then mv.msg(err) os.exit() end
+if err then mv.msg(err) end
 dgram, err = udp:receive()
-if not dgram then mv.msg(err) os.exit() end
-mv.msg(dgram)
+if not dgram then --mv.msg(err) end
+else mv.msg(dgram)
+end
 
 mv.msg("\n\nSimple Http Request\n")
 

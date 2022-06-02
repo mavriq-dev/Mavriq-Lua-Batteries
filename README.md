@@ -65,6 +65,13 @@ Pure Lua base64 encoder/decoder.
 #### Librs232
 Multiplatform library for serial communications over RS-232 (serial port). Great for things that are controlled via a com port.
 
+#### Losc
+* Implements the complete OSC 1.0 specification.
+* Support for extended OSC types.
+* Plugin system for transport layers.
+* Address pattern matching.
+* Scheduled bundle evaluation (plugin dependent).
+
 #### Lpeg
 ![Lpeg](https://i.postimg.cc/NFqZvRrv/lpeg.png)
 LPeg is a new pattern-matching library for Lua, based on Parsing Expression Grammars (PEGs).

@@ -5,6 +5,7 @@ Even though REAPER uses 5.3.3 there is a bug which will cause many modules to cr
 
 Issue number 2 is that Modules loaded with the newer style will complain about multiple VMs. This is patched to remove that check.
 ```
+Windows
       Invoke-WebRequest -OutFile lua-5.3.6.tar.gz https://www.lua.org/ftp/lua-5.3.6.tar.gz
       tar -xvf lua-5.3.6.tar.gz
       patch lua-5.3.6/src/lauxlib.c checkversion.patch --binary
@@ -15,7 +16,20 @@ Issue number 2 is that Modules loaded with the newer style will complain about m
       ren luac.obj luac.o
       link /DLL /IMPLIB:lua53.lib /OUT:lua53.dll *.obj
       popd
+
+macos
+      wget https://www.lua.org/ftp/lua-5.3.6.tar.gz
+      tar -xvf lua-5.3.6.tar.gz
+      patch lua-5.3.6/src/lauxlib.c mavriq-lua-batteries/patches/checkversion.patch
+
+      add to makefile in src
+      lua53.dylib: $(CORE_O) $(LIB_O)
+      $(CC) -dynamiclib -o $@ $^ $(LIBS) -fPIC -mmacosx-version-min=10.9 -arch arm64 -arch x86_64  -install_name @rpath/$@ 
+      
+      make -C src lua53.dylib
+      
 ```
+
 
 ## zlib
 ```
@@ -106,6 +120,7 @@ Building from source
 ```
 # cffi-lua
 ```
+win      
       MSYS2 64 bit env
       pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config
       pacman -S mingw-w64-x86_64-meson
@@ -114,6 +129,12 @@ Building from source
       use Meson same as for cmake
       In build dir:  ```LDFLAGS="-static-libgcc -static-libstdc++" meson .. -Dlua_version=5.3 -Dshared_libffi=false```
       Ninja All
+mac
+      clone from github
+      brew install lua@5.3 and follow all instructions after installing ie export settings so pkg config can find
+      mkdir build
+      meson ..
+      ninja all
 ```
 # lua-sec
 ```
@@ -149,8 +170,13 @@ usual cmake
 ```
 # libcurl
 ```
-cmake .. -DBUILD_SHARED_LIBS=OFF
-just use cmake as usual
+Win
+      cmake .. -DBUILD_SHARED_LIBS=OFF
+      just use cmake as usual
+mac
+      brew install openssl@3
+      cmake .. -DBUILD_SHARED_LIBS=OFF -DOPENSSL_ROOT_DIR=/usr/local/Cellar/openssl@3/3.0.3/
+      cmake --build . -config Release
 ```
 # moonglfw (TODO)
 ```
