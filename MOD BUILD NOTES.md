@@ -133,7 +133,7 @@ mac
       clone from github
       brew install lua@5.3 and follow all instructions after installing ie export settings so pkg config can find
       mkdir build
-      meson ..
+      meson .. -Dlua_version=5.3 -Dshared_libffi=false
       ninja all
 ```
 # lua-sec
