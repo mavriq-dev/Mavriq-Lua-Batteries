@@ -8,7 +8,7 @@ diff --git a/luamodule.cpp b/luamodule.cpp
 index b4f9d53..183791f 100644
 --- a/luamodule.cpp
 +++ b/luamodule.cpp
-@@ -219,7 +219,7 @@ extern "C" {
+@@ -219,7 +219,7 @@
  int luaopen_wx(lua_State *L)
  {
      // only initialize the wxLuaState once, allows require to be called more than once

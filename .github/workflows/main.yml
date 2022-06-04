@@ -617,24 +617,26 @@ jobs:
           cp -R externals/lib/*.dylib /usr/local/lib
 
 
-      # - name: "Cache wxwidgets"
-      #   id: cache-wxwidgets
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: wxWidgets
-      #     key: ${{ runner.os }}-wxwidgets-
-      #     restore-keys: |
-      #       ${{ runner.os }}-wxwidgets-
+      - name: "Cache wxwidgets"
+        id: cache-wxwidgets
+        uses: actions/cache@v3
+        with:
+          path: wxWidgets
+          key: ${{ runner.os }}-wxwidgets-
+          restore-keys: |
+            ${{ runner.os }}-wxwidgets-
 
-      # - name: "Build wxWidgets"
-      #   if: steps.cache-wxwidgets.outputs.cache-hit != 'true'
-      #   run: |
-      #     wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.6/wxWidgets-3.1.6.zip
-      #     unzip wxWidgets-3.1.6.zip -d wxWidgets
-      #     mkdir wxWidgets/build-release
-      #     cd wxWidgets/build-release
-      #     ../configure --enable-universal_binary=x86_64,arm64 --disable-shared --with-macosx-version-min=10.10
-      #     make
+      - name: "Build wxWidgets"
+        if: steps.cache-wxwidgets.outputs.cache-hit != 'true'
+        run: |
+          wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.6/wxWidgets-3.1.6.zip
+          unzip wxWidgets-3.1.6.zip -d wxWidgets
+          mkdir wxWidgets/build-release
+          cd wxWidgets/build-release
+          # ../configure --enable-universal_binary=x86_64,arm64 --disable-shared --disable-sys-libs --disable-tests 
+          ../configure --enable-universal_binary=x86_64,arm64 --disable-shared 
+          make -j2
+          cd -
 
       # - name: "Cache wxlua"
       #   id: cache-wxlua
@@ -646,17 +648,19 @@ jobs:
       #       ${{ runner.os }}-wxlua-
 
 
-      # - name: "Build wxlua"
-      #   if: steps.cache-wxlua.outputs.cache-hit != 'true'
-      #   run: |
-      #     git clone https://github.com/pkulchenko/wxlua
-      #     patch wxlua/wxlua/modules/luamodule/luamodule.cpp patches/wxlua.patch --binary
-      #     mkdir wxlua/wxlua/wxlua-build
-      #     pushd .
-      #     cd wxlua/wxlua/wxlua-build
-      #     cmake .. -DCMAKE_BUILD_TYPE=Release  -DwxWidgets_ROOT_DIR="$env:GITHUB_WORKSPACE"/wxWidgets/ -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="$env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="$env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
-      #     cmake --build . --config Release
-      #     popd
+      - name: "Build wxlua"
+        if: steps.cache-wxlua.outputs.cache-hit != 'true'
+        run: |
+          git clone https://github.com/pkulchenko/wxlua
+          patch wxlua/wxlua/modules/luamodule/luamodule.cpp patches/wxlua.patch
+          mkdir wxlua/wxlua/wxlua-build
+          cd wxlua/wxlua/wxlua-build
+          ls "${GITHUB_WORKSPACE}/wxWidgets/build-release/"
+          cmake .. -DCMAKE_BUILD_TYPE=Release  -DwxWidgets_CONFIG_EXECUTABLE="${GITHUB_WORKSPACE}/wxWidgets/build-release/wx-config"
+
+          # -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
+          cmake --build . --config Release
+          cd -
 
 
       # - name: Copy wxLua   
@@ -802,6 +806,7 @@ jobs:
           find . -type f -name "*.so" -exec bash -c 'mv "$1" "${1%.so}".dylib' - '{}' \;
           pwd
 
+
       - name: "Codesign executable"
         env: 
           MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
@@ -821,14 +826,6 @@ jobs:
           /usr/bin/codesign --force -s $APPLE_ID_HASH archive/bin/*.dylib -v
           zip -r mavriq.zip archive/bin/ -x *.dll
           xcrun notarytool submit mavriq.zip --apple-id $APPLE_ID --password $APP_SECRET --team-id $TEAM_ID
-
-      # - name: "Notarize Release DYLIBS"
-      #   uses: devbotsxyz/xcode-notarize@v1 
-      #   with:
-      #     product-path: mavriq.zip
-      #     appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
-      #     appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
-      #     verbose: true
 
 
       - name: Upload artifacts
