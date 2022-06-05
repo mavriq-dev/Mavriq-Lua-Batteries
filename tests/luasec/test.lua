@@ -11,4 +11,4 @@ local r, c, h, s = https.request{
 mv.msg(string.format("r:%s, c:%s, h:%s, s:%s",r,c,h,s))
 
 
-mv.msg("End luasec Tests\n\n")
+mv.msg("\nEnd luasec Tests\n\n")

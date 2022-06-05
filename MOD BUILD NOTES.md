@@ -33,7 +33,8 @@ macos
 
 ## zlib
 ```
-      git clone https://github.com/madler/zlib
+win      
+      git clone https://github.com/madler/zlib --depth 1
       mkdir zlib/build 
       pushd .
       cd zlib/build
@@ -44,25 +45,32 @@ macos
       cp Release/zlib.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
       cp Release/zlibstatic.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
       popd
+mac
+      sim as per win
+      cmake .. -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
 ```
 
 ## bzip
 ```
-      git clone https://github.com/libarchive/bzip2
+win      
+      git clone https://github.com/libarchive/bzip2 --depth 1
       mkdir bzip2/build 
       pushd .
       cd bzip2/build
-      cmake -DENABLE_STATIC_LIB=true ..
+      cmake ..
       cmake --build . --config Release
       cp Release/bz2.dll $env:LOCALAPPDATA"\LuaVM\externals\bin"
       cp Release/bz2.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
       cp Release/bz2_static.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
       cp ../*.h $env:LOCALAPPDATA"\LuaVM\externals\include"
       popd
+mac
+      similar to win
+      cmake .. -DENABLE_LIB_ONLY=ON -DENABLE_SHARED_LIB=OFF -DENABLE_STATIC_LIB=ON -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
 ```
 ## zstd
 ```
-      git clone https://github.com/facebook/zstd
+      git clone https://github.com/facebook/zstd --depth 1
       mkdir zstd/build/cmake/builddir
       pushd .
       cd zstd/build/cmake/builddir
@@ -73,10 +81,13 @@ macos
       cp lib\Release/zstd_static.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
       cp ../../../lib/*.h $env:LOCALAPPDATA"\LuaVM\externals\include"
       popd
+
+      sim proc as win
+      cmake .. -DZSTD_BUILD_SHARED=OFF -DZSTD_BUILD_PROGRAMS=OFF -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
 ```
 ## lzma (xz)
 ```
-      git clone https://github.com/xz-mirror/xz
+      git clone https://github.com/xz-mirror/xz --depth 1
       mkdir xz/build
       pushd .
       cd xz/build
@@ -87,10 +98,13 @@ macos
       mkdir $env:LOCALAPPDATA"\LuaVM\externals\include\lzma"
       cp ../src/liblzma/api/lzma/*.h $env:LOCALAPPDATA"\LuaVM\externals\include\lzma"
       popd
+
+mac
+      currently can't build for m1 building x64 only
 ```
 ## libzip
 ```
-      git clone https://github.com/nih-at/libzip
+      git clone https://github.com/nih-at/libzip --depth 1
       patch libzip/lib/zip_algorithm_xz.c libzip.patch --binary
       mkdir libzip/build
       pushd .
@@ -101,6 +115,10 @@ macos
       cp ../lib/zip.h $env:LOCALAPPDATA"\LuaVM\externals\include"
       cp zipconf.h $env:LOCALAPPDATA"\LuaVM\externals\include"
       popd
+
+mac
+      simliar to win
+      cmake .. -DBUILD_DOC=OFF -DBUILD_EXAMPLES=OFF -DBUILD_SHARED_LIBS=OFF -DBUILD_TOOLS=OFF -DENABLE_LZMA=OFF -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
 ```
 ## libffi
 ```
@@ -203,4 +221,9 @@ cmake .. -DDOWNLOAD_BOOST=1 -DWITH_BOOST=C:\Users\geoff_obr9bt1\Documents\GitHub
 
 
 
+```
+
+# lua-zip
+```
+cmake .. -DLUA_INCLUDE_DIR=/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DLUA_LIBRARIES=/usr/local/Cellar/lua@5.3/5.3.6/lib/liblua.dylib -DCMAKE_MODULE_LINKER_FLAGS:STRING="-L/usr/local/lib -lzstd -lz -llzma -lbz2_static -v"
 ```
