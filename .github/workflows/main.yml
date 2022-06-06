@@ -688,10 +688,13 @@ jobs:
           cd -
 
 
-
-      # - name: "build luafilesystem"
-      #   run: |
-      #     luarocks --lua-dir=$(brew --prefix)/opt/lua@5.3 install luafilesystem
+      - name: "build luafilesystem"
+        run: |
+          luarocks unpack luafilesystem
+          cd luafilesystem-1.8.0-1/luafilesystem
+          make CFLAGS="-O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  LIB_OPTION="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
+          cp src/lfs.so /usr/local/lib/lua/5.3/
+          cd -
 
 
       - name: "Build lbase64"
