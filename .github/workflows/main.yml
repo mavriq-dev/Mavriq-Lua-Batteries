@@ -615,6 +615,7 @@ jobs:
         run: |
           cp -R externals/include/* /usr/local/include
           sudo cp -R externals/lib/mac/*.a /usr/local/lib
+          sudo cp -R externals/lib/mac/*.dylib /usr/local/lib
 
 
       - name: "Cache wxwidgets"
@@ -693,9 +694,15 @@ jobs:
       #     luarocks --lua-dir=$(brew --prefix)/opt/lua@5.3 install luafilesystem
 
 
-      # - name: "Build lbase64"
-      #   run: |
-      #     luarocks install lbase64
+      - name: "Build lbase64"
+        run: |
+          luarocks unpack lbase64
+          cd lbase64-20120807-3/base64
+          gcc -O2 -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10   -c -o lbase64.o lbase64.c
+          gcc -Wl,-L/usr/local/lib -Wl,-llua53  -shared -o base64.so lbase64.o -arch arm64 -arch x86_64 -mmacosx-version-min=10.10
+          mv base64.so /usr/local/lib/lua/5.3/
+          cd -
+
 
 
       # - name: "Build librs232"
@@ -771,7 +778,7 @@ jobs:
           luarocks unpack rockspecs/lua-zip-0.2-0.rockspec
           mkdir lua-zip-0.2-0/lua-zip/build
           cd lua-zip-0.2-0/lua-zip/build
-          cmake .. -DLUA_INCLUDE_DIR=/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DLUA_LIBRARIES=/usr/local/lib/lua53.dylib -DCMAKE_MODULE_LINKER_FLAGS:STRING="-L/usr/local/lib -lzstd -lz -lbz2_static -v" -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
+          cmake .. -DLUA_INCLUDE_DIR=/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DLUA_LIBRARIES=/usr/local/Cellar/lua@5.3/5.3.6/lib/liblua.dylib -DLIBZIP_LIBRARY=/usr/local/lib/libzip_static.a -DCMAKE_MODULE_LINKER_FLAGS:STRING="-L/usr/local/lib -lzstd_static -lz_static -llua53 -lbz2_static -v" -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
           cmake --build . --config=Release
           cp brimworks/zip.so  /usr/local/lib/lua/5.3/
           cd -
