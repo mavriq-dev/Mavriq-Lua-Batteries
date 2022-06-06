@@ -675,12 +675,17 @@ jobs:
 
       - name: "Build LuaSocket"
         run: |
-          luarocks install luasocket
+          git clone https://github.com/lunarmodules/luasocket --depth 1
+          cd luasocket
+          make macosx MYCFLAGS="-I /usr/local/opt/lua@5.3/include/lua5.3 -mmacosx-version-min=10.9 -arch arm64 -arch x86_64" LUAV=5.3 MYLDFLAGS="-mmacosx-version-min=10.9 -arch arm64 -arch x86_64"
+          mkdir -p /usr/local/lib/lua/5.3/socket
+          mkdir -p /usr/local/lib/lua/5.3/mime
+          mv src/socket-3.0.0.so /usr/local/lib/lua/5.3/socket/core.so
+          mv src/mime-1.0.3.so /usr/local/lib/lua/5.3/mime/core.so
+          mv src/serial.so /usr/local/lib/lua/5.3/socket/serial.so
+          mv src/unix.so /usr/local/lib/lua/5.3/socket/unix.so
+          cd -
 
-
-      # - name: "Build losc"
-      #   run: |
-      #     luarocks install losc
 
 
       # - name: "build luafilesystem"
