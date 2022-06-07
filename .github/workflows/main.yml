@@ -721,9 +721,14 @@ jobs:
           cd -
 
 
-      # - name: "Build rings"
-      #   run: |
-      #     luarocks install rings
+      - name: "Build rings"
+        run: |
+          luarocks unpack rings
+          cd rings-1.3.0-1/rings-v_1_3_0
+          cc -O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic -I/usr/local/opt/lua@5.3/include/lua5.3 -mmacosx-version-min=10.10   -arch arm64 -arch x86_64   -c -o src/rings.o src/rings.c
+          cc -O2 -fPIC -mmacosx-version-min=10.10 -arch arm64 -arch x86_64 -L/usr/local/lib -llua53 -bundle  -dynamic_lookup  -o src/rings.so src/rings.o
+          cp src/rings.so /usr/local/lib/lua/5.3
+          cd -
 
 
       # - name: "Build lua-curl"
