@@ -678,7 +678,7 @@ jobs:
         run: |
           git clone https://github.com/lunarmodules/luasocket --depth 1
           cd luasocket
-          make macosx MYCFLAGS="-I /usr/local/opt/lua@5.3/include/lua5.3 -mmacosx-version-min=10.9 -arch arm64 -arch x86_64" LUAV=5.3 MYLDFLAGS="-mmacosx-version-min=10.9 -arch arm64 -arch x86_64"
+          make macosx MYCFLAGS="-I /usr/local/opt/lua@5.3/include/lua5.3 -mmacosx-version-min=10.10 -arch arm64 -arch x86_64" LUAV=5.3 MYLDFLAGS="-mmacosx-version-min=10.9 -arch arm64 -arch x86_64"
           mkdir -p /usr/local/lib/lua/5.3/socket
           mkdir -p /usr/local/lib/lua/5.3/mime
           mv src/socket-3.0.0.so /usr/local/lib/lua/5.3/socket/core.so
@@ -708,9 +708,17 @@ jobs:
 
 
 
-      # - name: "Build librs232"
-      #   run: |
-      #     luarocks install rs232
+      - name: "Build librs232"
+        run: |
+          luarocks unpack rs232
+          cd rs232-0.1.0-1/librs232-0.1.0
+          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -arch arm64 -arch x86_64 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -c src/rs232.c -o src/rs232.o -DRS232_EXPORT -Iinclude
+          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -arch arm64 -arch x86_64 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -c src/rs232_posix.c -o src/rs232_posix.o -DRS232_EXPORT -Iinclude
+          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -arch arm64 -arch x86_64 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -c bindings/lua/luars232.c -o bindings/lua/luars232.o -DRS232_EXPORT -Iinclude
+          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -arch arm64 -arch x86_64 -bundle -undefined dynamic_lookup -all_load -o core.so src/rs232.o src/rs232_posix.o bindings/lua/luars232.o
+          mkdir /usr/local/lib/lua/5.3/rs232
+          cp core.so /usr/local/lib/lua/5.3/rs232
+          cd -
 
 
       # - name: "Build rings"
