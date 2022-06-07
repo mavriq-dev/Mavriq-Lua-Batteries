@@ -804,15 +804,15 @@ jobs:
       #   run: |
       #     luarocks install lpeg
 
-      # - name: Build Lua-cjson
-      #   run: |
-      #     git clone https://github.com/mpx/lua-cjson
-      #     mkdir lua-cjson/build
-      #     cd lua-cjson/build
-      #     cmake .. -DLUA_LIBRARIES=/usr/local/opt/lua@5.3/lib -DLUA_INCLUDE_DIR=/usr/local/opt/lua@5.3/include/lua5.3
-      #     cmake --build . --config=Release
-      #     cp cjson.so /usr/local/lib/lua/5.3/
-      #     cd -
+      - name: Build Lua-cjson
+        run: |
+          git clone https://github.com/mpx/lua-cjson
+          mkdir lua-cjson/build
+          cd lua-cjson/build
+          cmake .. -DLUA_INCLUDE_DIR=/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DLUA_LIBRARIES=/usr/local/Cellar/lua@5.3/5.3.6/lib/liblua.dylib -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.10
+          cmake --build . --config=Release
+          cp cjson.so /usr/local/lib/lua/5.3/
+          cd -
 
 
       # - name: "Build Lua-Zlib"
