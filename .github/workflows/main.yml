@@ -635,7 +635,7 @@ jobs:
       #     mkdir wxWidgets/build-release
       #     cd wxWidgets/build-release
       #     # ../configure --enable-universal_binary=x86_64,arm64 --disable-shared --disable-sys-libs --disable-tests 
-      #     ../configure --enable-universal_binary=x86_64,arm64 --disable-shared 
+      #     cd ..
       #     make -j2
       #     cd -
 
@@ -800,9 +800,20 @@ jobs:
           cd -
 
 
-      # - name: "Build Lpeg"
-      #   run: |
-      #     luarocks install lpeg
+      - name: "Build Lpeg"
+        run: |
+          luarocks unpack lpeg
+          cd lpeg-1.0.2-1/lpeg-1.0.2
+          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lpcap.c -o lpcap.o
+          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lpcode.c -o lpcode.o
+          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lpprint.c -o lpprint.o
+          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lptree.c -o lptree.o
+          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lpvm.c -o lpvm.o
+          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -o lpeg.so lpcap.o lpcode.o lpprint.o lptree.o lpvm.o
+          cp lpeg.so /usr/local/lib/lua/5.3/
+          cd -
+
+
 
       - name: Build Lua-cjson
         run: |
