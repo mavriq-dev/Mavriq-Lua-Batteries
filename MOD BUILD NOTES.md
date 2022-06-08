@@ -227,3 +227,25 @@ cmake .. -DDOWNLOAD_BOOST=1 -DWITH_BOOST=C:\Users\geoff_obr9bt1\Documents\GitHub
 ```
 cmake .. -DLUA_INCLUDE_DIR=/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DLUA_LIBRARIES=/usr/local/Cellar/lua@5.3/5.3.6/lib/liblua.dylib -DCMAKE_MODULE_LINKER_FLAGS:STRING="-L/usr/local/lib -lzstd -lz -llzma -lbz2_static -v"
 ```
+
+# openssl
+```
+mac
+git clone https://github.com/openssl/openssl --depth 1
+cp openssl openssl-arm
+mv openssl openssl-intel
+
+cd openssl-intel
+export MACOSX_DEPLOYMENT_TARGET=10.10
+./Configure darwin64-x86_64-cc 
+cd -
+
+cd openssl-arm
+export MACOSX_DEPLOYMENT_TARGET=10.10
+./Configure darwin64-arm64-cc 
+cd -
+
+mkdir openssl-mac
+lipo -create openssl-intel/libcrypto.a openssl-arm/libcrypto.a -output openssl-mac/libcrypto.a
+lipo -create openssl-intel/libssl.a openssl-arm/libssl.a -output openssl-mac/libssl.a
+```

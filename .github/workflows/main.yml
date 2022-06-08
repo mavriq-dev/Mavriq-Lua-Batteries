@@ -608,7 +608,7 @@ jobs:
           make 
           make install
           cd -
-          brew install openssl@3
+          # brew install openssl@3
 
 
       - name: "Copy Libs"
@@ -707,7 +707,6 @@ jobs:
           cd -
 
 
-
       - name: "Build librs232"
         run: |
           luarocks unpack rs232
@@ -784,9 +783,13 @@ jobs:
       #     luarocks install luaexpat
 
 
-      # - name: "Build luasec" 
-      #   run: |
-      #     luarocks install rockspecs/luasec-1.1.0-1.rockspec OPENSSL_DIR=/usr/local/opt/openssl@3
+      - name: "Build luasec" 
+        run: |
+          luarocks unpack rockspecs/luasec-1.1.0-1.rockspec 
+          cd luasec-1.1.0-1/luasec
+          make macosx CFLAGS="-O2 -fno-common -Wall -pedantic -arch arm64 -arch x86_64 -I. -I/usr/include -I/usr/local/include -I/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DWITH_LUASOCKET -DLUASOCKET_DEBUG -mmacosx-version-min=10.10" LDFLAGS="-bundle -undefined dynamic_lookup -arch arm64 -arch x86_64 -L./luasocket -L/usr/lib  -v" LIBS="-lssl_static -lcrypto_static -lluasocket"
+          cp src/ssl.so /usr/local/lib/lua/5.3/
+          cd -
 
 
       - name: "Build Lua-Zip"
@@ -812,7 +815,6 @@ jobs:
           env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -o lpeg.so lpcap.o lpcode.o lpprint.o lptree.o lpvm.o
           cp lpeg.so /usr/local/lib/lua/5.3/
           cd -
-
 
 
       - name: Build Lua-cjson
