@@ -630,8 +630,9 @@ jobs:
       # - name: "Build wxWidgets"
       #   if: steps.cache-wxwidgets.outputs.cache-hit != 'true'
       #   run: |
-      #     wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.6/wxWidgets-3.1.6.zip
-      #     unzip wxWidgets-3.1.6.zip -d wxWidgets
+      #     wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.7/wxWidgets-3.1.7.zip
+      #     export MACOSX_DEPLOYMENT_TARGET=10.10
+      #     unzip wxWidgets-3.1.7.zip -d wxWidgets
       #     mkdir wxWidgets/build-release
       #     cd wxWidgets/build-release
       #     # ../configure --enable-universal_binary=x86_64,arm64 --disable-shared --disable-sys-libs --disable-tests 
@@ -657,9 +658,7 @@ jobs:
       #     mkdir wxlua/wxlua/wxlua-build
       #     cd wxlua/wxlua/wxlua-build
       #     ls "${GITHUB_WORKSPACE}/wxWidgets/build-release/"
-      #     cmake .. -DCMAKE_BUILD_TYPE=Release  -DwxWidgets_CONFIG_EXECUTABLE="${GITHUB_WORKSPACE}/wxWidgets/build-release/wx-config"
-
-      #     # -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
+      #     cmake .. -Dwxlua_LUA_LIBRARY_USE_BUILTIN=FALSE -Dwxlua_LUA_LIBRARY_VERSION=5.3 -Dwxlua_LUA_INCLUDE_DIR=/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3 -Dwxlua_LUA_LIBRARY=/usr/local/lib/lua53.dylib -DwxWidgets_CONFIG_EXECUTABLE="${GITHUB_WORKSPACE}/wxWidgets/build-release/wx-config"
       #     cmake --build . --config Release
       #     cd -
 
@@ -678,7 +677,7 @@ jobs:
         run: |
           git clone https://github.com/lunarmodules/luasocket --depth 1
           cd luasocket
-          make macosx MYCFLAGS="-I /usr/local/opt/lua@5.3/include/lua5.3 -mmacosx-version-min=10.10 -arch arm64 -arch x86_64" LUAV=5.3 MYLDFLAGS="-mmacosx-version-min=10.9 -arch arm64 -arch x86_64"
+          make macosx MYCFLAGS="-I /usr/local/opt/lua@5.3/include/lua5.3 -mmacosx-version-min=10.10 -arch arm64 -arch x86_64" LUAV=5.3 MYLDFLAGS="-mmacosx-version-min=10.10 -arch arm64 -arch x86_64"
           mkdir -p /usr/local/lib/lua/5.3/socket
           mkdir -p /usr/local/lib/lua/5.3/mime
           mv src/socket-3.0.0.so /usr/local/lib/lua/5.3/socket/core.so
@@ -735,9 +734,14 @@ jobs:
       #     luarocks install lua-curl 
 
 
-      # - name: "Build MD5"
-      #   run: |
-      #     luarocks install MD5
+      - name: "Build MD5"
+        run: |
+          luarocks unpack MD5
+          cd md5-1.3-1/md5-1.3
+          make CFLAGS="-O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  LIB_OPTION="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
+          mkdir /usr/local/lib/lua/5.3/MD5
+          cp src/core.so /usr/local/lib/lua/5.3/MD5
+          cd -
 
 
       # - name: "Build lyaml"
