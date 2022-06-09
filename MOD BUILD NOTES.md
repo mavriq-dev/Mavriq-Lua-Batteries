@@ -183,8 +183,11 @@ mac
 ```
 # libyaml
 ```
-git clone https://github.com/yaml/libyaml
-usual cmake
+win 
+      git clone https://github.com/yaml/libyaml
+      usual cmake
+mac
+      cmake .. -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
 ```
 # libcurl
 ```
