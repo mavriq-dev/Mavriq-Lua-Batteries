@@ -252,3 +252,10 @@ mkdir openssl-mac
 lipo -create openssl-intel/libcrypto.a openssl-arm/libcrypto.a -output openssl-mac/libcrypto.a
 lipo -create openssl-intel/libssl.a openssl-arm/libssl.a -output openssl-mac/libssl.a
 ```
+
+# pcre2
+```
+
+mac
+       cmake .. -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
+```

@@ -752,7 +752,7 @@ jobs:
 
       - name: Build lua-protobuf
         run: |
-          luarocks install rockspecs/lua-protobuf-0.3.4-1.rockspec CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LDFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
+          luarocks install rockspecs/lua-protobuf-0.3.4-1.rockspec CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
 
       # - name: Build luasql-mysql
       #   run: |
@@ -776,8 +776,7 @@ jobs:
 
       # - name: "Build lrexlib-pcre"
       #   run: |
-      #     luarocks install lrexlib-pcre 
-
+      #     luarocks make CFLAGS="-arch arm64 -arch x86_64" LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64"
 
       # - name: "Build stdlib"
       #   run: |
