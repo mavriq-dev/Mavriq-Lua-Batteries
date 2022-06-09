@@ -774,13 +774,9 @@ jobs:
       #     luarocks install rockspecs/luasql-sqlite3-2.6.0-1.rockspec
 
 
-      # - name: "Build lrexlib-pcre"
-      #   run: |
-      #     luarocks make CFLAGS="-arch arm64 -arch x86_64" LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64"
-
-      # - name: "Build stdlib"
-      #   run: |
-      #     luarocks install stdlib
+      - name: "Build lrexlib-pcre2"
+        run: |
+          luarocks install lrexlib-pcre2 CFLAGS="-arch arm64 -arch x86_64" LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64"
 
 
       # - name: "Build luaexpat"
