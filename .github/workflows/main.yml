@@ -832,9 +832,10 @@ jobs:
           cd -
 
 
-      # - name: "Build Lua-Zlib"
-      #   run: |
-      #     luarocks install rockspecs/lua-zlib-1.2-2.rockspec 
+      - name: "Build Lua-Zlib"
+        run: |
+          luarocks install rockspecs/lua-zlib-1.2-2.rockspec CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
+
 
 
       # - name: "Build lxsh"
