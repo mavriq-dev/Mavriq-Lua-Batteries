@@ -650,20 +650,20 @@ jobs:
       #       ${{ runner.os }}-wxlua-
 
 
-      - name: "Build wxlua"
-        if: steps.cache-wxlua.outputs.cache-hit != 'true'
-        run: |
-          git clone https://github.com/pkulchenko/wxlua
-          cd wxlua
-          git checkout fix-wxbitmap
-          cd ..
-          # patch wxlua/wxlua/modules/luamodule/luamodule.cpp patches/wxlua.patch
-          mkdir wxlua/wxlua/wxlua-build
-          cd wxlua/wxlua/wxlua-build
-          ls "${GITHUB_WORKSPACE}/wxWidgets/build-release/"
-          cmake .. -Dwxlua_LUA_LIBRARY_USE_BUILTIN=FALSE -Dwxlua_LUA_LIBRARY_VERSION=5.3 -Dwxlua_LUA_INCLUDE_DIR=/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3 -Dwxlua_LUA_LIBRARY=/usr/local/lib/lua53.dylib -DwxWidgets_CONFIG_EXECUTABLE="${GITHUB_WORKSPACE}/wxWidgets/build-release/wx-config"
-          cmake --build . --config Release
-          cd -
+      # - name: "Build wxlua"
+      #   if: steps.cache-wxlua.outputs.cache-hit != 'true'
+      #   run: |
+      #     git clone https://github.com/pkulchenko/wxlua
+      #     cd wxlua
+      #     git checkout fix-wxbitmap
+      #     cd ..
+      #     # patch wxlua/wxlua/modules/luamodule/luamodule.cpp patches/wxlua.patch
+      #     mkdir wxlua/wxlua/wxlua-build
+      #     cd wxlua/wxlua/wxlua-build
+      #     ls "${GITHUB_WORKSPACE}/wxWidgets/build-release/"
+      #     cmake .. -Dwxlua_LUA_LIBRARY_USE_BUILTIN=FALSE -Dwxlua_LUA_LIBRARY_VERSION=5.3 -Dwxlua_LUA_INCLUDE_DIR=/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3 -Dwxlua_LUA_LIBRARY=/usr/local/lib/lua53.dylib -DwxWidgets_CONFIG_EXECUTABLE="${GITHUB_WORKSPACE}/wxWidgets/build-release/wx-config"
+      #     cmake --build . --config Release
+      #     cd -
 
 
       # - name: Copy wxLua   
