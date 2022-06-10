@@ -122,11 +122,14 @@ mac
 ```
 ## libffi
 ```
+win      
       git clone https://github.com/am11/libffi
       cd libffi
       git checkout --track origin/feature/cmake-build-configs
       cmake ..
       Open Visual Studio Solution adn build static lib.
+
+mac
 ```
 ### Other Alternatives for libffi
 `https://github.com/winlibs/libffi` has vc16 etc projectgs
@@ -149,9 +152,11 @@ win
       Ninja All
 mac
       clone from github
-      brew install lua@5.3 and follow all instructions after installing ie export settings so pkg config can find
-      mkdir build
-      meson .. -Dlua_version=5.3 -Dshared_libffi=false
+      brew install pkg-config
+      brew install lua@5.3 and follow all instructions after installing ie export settings so pkg config can find esp pkgconfigni
+      mkdir -R build/deps/include
+      put stattic ffi in deps and its headers in include
+      CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LDFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10"  meson .. -Dlua_version=5.3 -Dlibffi=vendor
       ninja all
 ```
 # lua-sec
