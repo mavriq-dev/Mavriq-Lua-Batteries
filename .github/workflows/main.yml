@@ -751,7 +751,39 @@ jobs:
       - name: "Build lyaml"
         run: |
           # luarocks install rockspecs/lyaml-6.1.3-2.rockspec CFLAGS="-O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
-          luarocks install lyaml CFLAGS="-O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
+          # luarocks unpack lyaml
+          # cd lyaml-6.2.7-1/lyaml-6.2.7
+
+          # /usr/local/opt/lua@5.3/bin/lua5.3 build-aux/luke package="lyaml" version="6.2.7" PREFIX="/usr/local/lib/luarocks/rocks-5.3/lyaml/6.2.7-1" \
+          # CFLAGS="-O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+          # LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lyaml_static " \
+          # LIB_EXTENSION="so" OBJ_EXTENSION="o" \
+          # LUA="/usr/local/opt/lua@5.3/bin/lua5.3" \
+          # LUA_DIR="/usr/local/lib/luarocks/rocks-5.3/lyaml/6.2.7-1/lua" \
+          # LUA_INCDIR="/usr/local/opt/lua@5.3/include/lua5.3" \
+          # YAML_DIR="/usr/local" YAML_INCDIR="/usr/local/include" \
+          # YAML_LIBDIR="/usr/local/lib"
+
+          # env MACOSX_DEPLOYMENT_TARGET=10.8 gcc -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 \
+          # -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10  \
+          # -I/usr/local/opt/lua@5.3/include -DVERSION='"6.2.7"' \
+          # -DPACKAGE='"lyaml_static"' \
+          # -D_FORTIFY_SOURCE=2 \
+          # -D_DARWIN_C_SOURCE \
+          # -D_BSD_SOURCE \
+          # -DNDEBUG \
+          # -Iext/include \
+          # -I/usr/local/opt/lua@5.3/include/lua5.3 \
+          # -I/usr/local/include \
+          # ext/yaml/yaml.c ext/yaml/emitter.c ext/yaml/parser.c ext/yaml/scanner.c -o macosx/yaml.so \
+          # -L/usr/local/opt/lua@5.3/lib \
+          # -L/usr/local/lib  \
+          # -lyaml_static
+
+          # cp macos/yaml.so /usr/local/lib/lua/5.3/
+
+          # cd -
+
 
 
       - name: Build lua-protobuf
