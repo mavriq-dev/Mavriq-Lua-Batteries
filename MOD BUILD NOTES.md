@@ -1,5 +1,16 @@
 # Build Notes
 
+
+## General Mac Notes
+Most of the libs can be built automatically using macports basic gist is:
+```
+      install macports
+      /opt/local/ext/macports/macports.conf.    macosx_deployment_target=10.10
+      port -s install libexpat +universal
+      under /opt/local/lib/libexpat.a
+```
+
+
 ## lua 5.3.6
 Even though REAPER uses 5.3.3 there is a bug which will cause many modules to crash. Using 5.3.6 Dynamically loaded in reaper fixes the issue.
 
@@ -48,6 +59,8 @@ win
 mac
       sim as per win
       cmake .. -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
+mac alt
+      macport
 ```
 
 ## bzip
@@ -67,6 +80,8 @@ win
 mac
       similar to win
       cmake .. -DENABLE_LIB_ONLY=ON -DENABLE_SHARED_LIB=OFF -DENABLE_STATIC_LIB=ON -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
+mac alt
+      macports
 ```
 ## zstd
 ```
@@ -81,9 +96,11 @@ mac
       cp lib\Release/zstd_static.lib $env:LOCALAPPDATA"\LuaVM\externals\lib"
       cp ../../../lib/*.h $env:LOCALAPPDATA"\LuaVM\externals\include"
       popd
-
+mac
       sim proc as win
       cmake .. -DZSTD_BUILD_SHARED=OFF -DZSTD_BUILD_PROGRAMS=OFF -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
+mac alt
+      macports
 ```
 ## lzma (xz)
 ```
@@ -100,7 +117,7 @@ mac
       popd
 
 mac
-      currently can't build for m1 building x64 only
+      macports
 ```
 ## libzip
 ```
@@ -130,6 +147,7 @@ win
       Open Visual Studio Solution adn build static lib.
 
 mac
+      macports
 ```
 ### Other Alternatives for libffi
 `https://github.com/winlibs/libffi` has vc16 etc projectgs
@@ -154,7 +172,7 @@ mac
       clone from github
       brew install pkg-config
       brew install lua@5.3 and follow all instructions after installing ie export settings so pkg config can find esp pkgconfigni
-      mkdir -R build/deps/include
+      mkdir -p build/deps/include
       put stattic ffi in deps and its headers in include
       CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LDFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10"  meson .. -Dlua_version=5.3 -Dlibffi=vendor
       ninja all
@@ -263,4 +281,24 @@ lipo -create openssl-intel/libssl.a openssl-arm/libssl.a -output openssl-mac/lib
 
 mac
        cmake .. -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
+alternate mac
+      sudo port -s install pcre2 configure.args="PCRE2_SUPPORT_JIT=OFF"  +universal
+```
+
+# libexpat
+```
+mac
+      use macport
+
+```
+
+# pcre2
+```
+mac
+      use macport
+```
+
+# postgres
+```
+Universal install will fail as mac has an old build of zic on it. install macports build and let it fail. Under the x86 build directory /opt/local/var/macports/build copy zic to a place earlier in the path than the apple version in /usr/sbin/. You will have to wipe and rebuild so configure can find the new version before building.
 ```

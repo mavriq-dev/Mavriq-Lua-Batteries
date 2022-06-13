@@ -750,12 +750,14 @@ jobs:
 
       - name: "Build lyaml"
         run: |
-          luarocks install rockspecs/lyaml-6.1.3-2.rockspec CFLAGS="-O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
+          # luarocks install rockspecs/lyaml-6.1.3-2.rockspec CFLAGS="-O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
+          luarocks install lyaml CFLAGS="-O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
 
 
       - name: Build lua-protobuf
         run: |
-          luarocks install rockspecs/lua-protobuf-0.3.4-1.rockspec CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
+          # luarocks install rockspecs/lua-protobuf-0.3.4-1.rockspec CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
+          luarocks install lua-protobuf CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
 
       # - name: Build luasql-mysql
       #   run: |
@@ -784,12 +786,15 @@ jobs:
 
       - name: "Build luaexpat"
         run: |
-          luarocks install luaexpat CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
+          luarocks install luaexpat CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle \
+          -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
 
 
       - name: "Build luasec" 
         run: |
-          luarocks unpack rockspecs/luasec-1.1.0-1.rockspec 
+          # luarocks unpack rockspecs/luasec-1.1.0-1.rockspec 
+          luarocks unpack luasec
+          
           cd luasec-1.1.0-1/luasec
           make macosx CFLAGS="-O2 -fno-common -Wall -pedantic -arch arm64 -arch x86_64 -I. -I/usr/include -I/usr/local/include -I/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DWITH_LUASOCKET -DLUASOCKET_DEBUG -mmacosx-version-min=10.10" LDFLAGS="-bundle -undefined dynamic_lookup -arch arm64 -arch x86_64 -L./luasocket -L/usr/lib  -v" LIBS="-lssl_static -lcrypto_static -lluasocket"
           cp src/ssl.so /usr/local/lib/lua/5.3/
@@ -798,7 +803,8 @@ jobs:
 
       - name: "Build Lua-Zip"
         run: |
-          luarocks unpack rockspecs/lua-zip-0.2-0.rockspec
+          # luarocks unpack rockspecs/lua-zip-0.2-0.rockspec
+          luarocks unpack lua-zip
           mkdir lua-zip-0.2-0/lua-zip/build
           cd lua-zip-0.2-0/lua-zip/build
           cmake .. -DLUA_INCLUDE_DIR=/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DLUA_LIBRARIES=/usr/local/Cellar/lua@5.3/5.3.6/lib/liblua.dylib -DLIBZIP_LIBRARY=/usr/local/lib/libzip_static.a -DCMAKE_MODULE_LINKER_FLAGS:STRING="-L/usr/local/lib -lzstd_static -lz_static -llua53 -lbz2_static -v" -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
@@ -835,7 +841,8 @@ jobs:
 
       - name: "Build Lua-Zlib"
         run: |
-          luarocks install rockspecs/lua-zlib-1.2-2.rockspec CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
+          # luarocks install rockspecs/lua-zlib-1.2-2.rockspec CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
+          luarocks install lua-zlib CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
 
 
 
