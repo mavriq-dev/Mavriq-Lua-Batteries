@@ -745,7 +745,7 @@ jobs:
 
       - name: "Build lyaml"
         run: |
-          luarocks install rockspecs/lyaml-6.1.3-2.rockspec CFLAGS="-O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
+          luarocks install rockspecs/lyaml-6.1.3-2.rockspec CFLAGS="-O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="/usr/local/lib/libyaml.a -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
           # luarocks unpack lyaml
           # cd lyaml-6.2.7-1/lyaml-6.2.7
 
@@ -808,12 +808,12 @@ jobs:
 
       - name: "Build lrexlib-pcre2"
         run: |
-          luarocks install lrexlib-pcre2 CFLAGS="-arch arm64 -arch x86_64" LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64"
+          luarocks install lrexlib-pcre2 CFLAGS="-arch arm64 -arch x86_64" LIBFLAG="/usr/local/lib/libpcre2-8.a -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64"
 
 
       - name: "Build luaexpat"
         run: |
-          luarocks install luaexpat CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle \
+          luarocks install luaexpat CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG=" -bundle \
           -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
 
 
