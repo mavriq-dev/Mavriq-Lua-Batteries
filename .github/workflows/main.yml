@@ -678,58 +678,37 @@ jobs:
 
       - name: "Build LuaSocket"
         run: |
-          git clone https://github.com/lunarmodules/luasocket --depth 1
-          cd luasocket
-          make macosx MYCFLAGS="-I /usr/local/opt/lua@5.3/include/lua5.3 -mmacosx-version-min=10.10 -arch arm64 -arch x86_64" LUAV=5.3 MYLDFLAGS="-mmacosx-version-min=10.10 -arch arm64 -arch x86_64"
-          mkdir -p /usr/local/lib/lua/5.3/socket
-          mkdir -p /usr/local/lib/lua/5.3/mime
-          mv src/socket-3.0.0.so /usr/local/lib/lua/5.3/socket/core.so
-          mv src/mime-1.0.3.so /usr/local/lib/lua/5.3/mime/core.so
-          mv src/serial.so /usr/local/lib/lua/5.3/socket/serial.so
-          mv src/unix.so /usr/local/lib/lua/5.3/socket/unix.so
-          cd -
+          luarocks install luasocket \
+          CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+          LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
 
 
       - name: "build luafilesystem"
         run: |
-          luarocks unpack luafilesystem
-          cd luafilesystem-1.8.0-1/luafilesystem
-          make CFLAGS="-O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  LIB_OPTION="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
-          cp src/lfs.so /usr/local/lib/lua/5.3/
-          cd -
+          luarocks install luafilesystem \
+          CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+          LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
 
 
       - name: "Build lbase64"
         run: |
-          luarocks unpack lbase64
-          cd lbase64-20120807-3/base64
-          gcc -O2 -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10   -c -o lbase64.o lbase64.c
-          gcc -Wl,-L/usr/local/lib -Wl,-llua53  -shared -o base64.so lbase64.o -arch arm64 -arch x86_64 -mmacosx-version-min=10.10
-          mv base64.so /usr/local/lib/lua/5.3/
-          cd -
+          luarocks install lbase64 \
+          CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+          LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
 
 
       - name: "Build librs232"
         run: |
-          luarocks unpack rs232
-          cd rs232-0.1.0-1/librs232-0.1.0
-          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -arch arm64 -arch x86_64 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -c src/rs232.c -o src/rs232.o -DRS232_EXPORT -Iinclude
-          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -arch arm64 -arch x86_64 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -c src/rs232_posix.c -o src/rs232_posix.o -DRS232_EXPORT -Iinclude
-          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -arch arm64 -arch x86_64 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -c bindings/lua/luars232.c -o bindings/lua/luars232.o -DRS232_EXPORT -Iinclude
-          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -arch arm64 -arch x86_64 -bundle -undefined dynamic_lookup -all_load -o core.so src/rs232.o src/rs232_posix.o bindings/lua/luars232.o
-          mkdir /usr/local/lib/lua/5.3/rs232
-          cp core.so /usr/local/lib/lua/5.3/rs232
-          cd -
+          luarocks install rs232 \
+          CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+          LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
 
 
       - name: "Build rings"
         run: |
-          luarocks unpack rings
-          cd rings-1.3.0-1/rings-v_1_3_0
-          cc -O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic -I/usr/local/opt/lua@5.3/include/lua5.3 -mmacosx-version-min=10.10   -arch arm64 -arch x86_64   -c -o src/rings.o src/rings.c
-          cc -O2 -fPIC -mmacosx-version-min=10.10 -arch arm64 -arch x86_64 -L/usr/local/lib -llua53 -bundle  -dynamic_lookup  -o src/rings.so src/rings.o
-          cp src/rings.so /usr/local/lib/lua/5.3
-          cd -
+          luarocks install rings  \
+          CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+          LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
 
 
       # - name: "Build lua-curl"
@@ -739,52 +718,24 @@ jobs:
 
       - name: "Build MD5"
         run: |
-          luarocks install MD5 CFLAGS="-O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  LIBFLAG="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
-
+          luarocks install MD5 \
+          CFLAGS="-O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic \
+          -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  \
+          LIBFLAG="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
 
 
       - name: "Build lyaml"
         run: |
-          luarocks install rockspecs/lyaml-6.1.3-2.rockspec CFLAGS="-O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="/usr/local/lib/libyaml.a -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
-          # luarocks unpack lyaml
-          # cd lyaml-6.2.7-1/lyaml-6.2.7
-
-          # /usr/local/opt/lua@5.3/bin/lua5.3 build-aux/luke package="lyaml" version="6.2.7" PREFIX="/usr/local/lib/luarocks/rocks-5.3/lyaml/6.2.7-1" \
-          # CFLAGS="-O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
-          # LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lyaml_static " \
-          # LIB_EXTENSION="so" OBJ_EXTENSION="o" \
-          # LUA="/usr/local/opt/lua@5.3/bin/lua5.3" \
-          # LUA_DIR="/usr/local/lib/luarocks/rocks-5.3/lyaml/6.2.7-1/lua" \
-          # LUA_INCDIR="/usr/local/opt/lua@5.3/include/lua5.3" \
-          # YAML_DIR="/usr/local" YAML_INCDIR="/usr/local/include" \
-          # YAML_LIBDIR="/usr/local/lib"
-
-          # env MACOSX_DEPLOYMENT_TARGET=10.8 gcc -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 \
-          # -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10  \
-          # -I/usr/local/opt/lua@5.3/include -DVERSION='"6.2.7"' \
-          # -DPACKAGE='"lyaml_static"' \
-          # -D_FORTIFY_SOURCE=2 \
-          # -D_DARWIN_C_SOURCE \
-          # -D_BSD_SOURCE \
-          # -DNDEBUG \
-          # -Iext/include \
-          # -I/usr/local/opt/lua@5.3/include/lua5.3 \
-          # -I/usr/local/include \
-          # ext/yaml/yaml.c ext/yaml/emitter.c ext/yaml/parser.c ext/yaml/scanner.c -o macosx/yaml.so \
-          # -L/usr/local/opt/lua@5.3/lib \
-          # -L/usr/local/lib  \
-          # -lyaml_static
-
-          # cp macos/yaml.so /usr/local/lib/lua/5.3/
-
-          # cd -
-
+          luarocks install rockspecs/lyaml-6.1.3-2.rockspec \
+          CFLAGS="-O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+          LIBFLAG="/usr/local/lib/libyaml.a -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
 
 
       - name: Build lua-protobuf
         run: |
-          # luarocks install rockspecs/lua-protobuf-0.3.4-1.rockspec CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
-          luarocks install lua-protobuf CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
+           luarocks install lua-protobuf \
+           CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+           LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
 
       # - name: Build luasql-mysql
       #   run: |
@@ -808,13 +759,16 @@ jobs:
 
       - name: "Build lrexlib-pcre2"
         run: |
-          luarocks install lrexlib-pcre2 CFLAGS="-arch arm64 -arch x86_64" LIBFLAG="/usr/local/lib/libpcre2-8.a -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64"
+          luarocks install lrexlib-pcre2 \
+          CFLAGS="-arch arm64 -arch x86_64" \
+          LIBFLAG="/usr/local/lib/libpcre2-8.a -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64"
 
 
       - name: "Build luaexpat"
         run: |
-          luarocks install luaexpat CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG=" -bundle \
-          -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
+          luarocks install luaexpat \
+          CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+          LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
 
 
       - name: "Build luasec" 
@@ -823,7 +777,7 @@ jobs:
           luarocks unpack luasec
           
           cd luasec-1.1.0-1/luasec
-          make macosx CFLAGS="-O2 -fno-common -Wall -pedantic -arch arm64 -arch x86_64 -I. -I/usr/include -I/usr/local/include -I/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DWITH_LUASOCKET -DLUASOCKET_DEBUG -mmacosx-version-min=10.10" LDFLAGS="-bundle -undefined dynamic_lookup -arch arm64 -arch x86_64 -L./luasocket -L/usr/lib  -v" LIBS="-lssl_static -lcrypto_static -lluasocket"
+          make macosx CFLAGS="-O2 -fno-common -Wall -pedantic -arch arm64 -arch x86_64 -I. -I/usr/include -I/usr/local/include -I/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DWITH_LUASOCKET -DLUASOCKET_DEBUG -mmacosx-version-min=10.10" LDFLAGS="-bundle -undefined dynamic_lookup -arch arm64 -arch x86_64 -L./luasocket -L/usr/lib  -v" LIBS="-lz_static -lssl_static -lcrypto_static -lluasocket"
           cp src/ssl.so /usr/local/lib/lua/5.3/
           cd -
 
@@ -843,16 +797,20 @@ jobs:
 
       - name: "Build Lpeg"
         run: |
-          luarocks unpack lpeg
-          cd lpeg-1.0.2-1/lpeg-1.0.2
-          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lpcap.c -o lpcap.o
-          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lpcode.c -o lpcode.o
-          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lpprint.c -o lpprint.o
-          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lptree.c -o lptree.o
-          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lpvm.c -o lpvm.o
-          env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -o lpeg.so lpcap.o lpcode.o lpprint.o lptree.o lpvm.o
-          cp lpeg.so /usr/local/lib/lua/5.3/
-          cd -
+          luarocks install lpeg \
+          CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+          LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
+
+          # luarocks unpack lpeg
+          # cd lpeg-1.0.2-1/lpeg-1.0.2
+          # env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lpcap.c -o lpcap.o
+          # env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lpcode.c -o lpcode.o
+          # env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lpprint.c -o lpprint.o
+          # env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lptree.c -o lptree.o
+          # env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -c lpvm.c -o lpvm.o
+          # env MACOSX_DEPLOYMENT_TARGET=10.10 gcc -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -o lpeg.so lpcap.o lpcode.o lpprint.o lptree.o lpvm.o
+          # cp lpeg.so /usr/local/lib/lua/5.3/
+          # cd -
 
 
       - name: Build Lua-cjson
@@ -868,8 +826,9 @@ jobs:
 
       - name: "Build Lua-Zlib"
         run: |
-          # luarocks install rockspecs/lua-zlib-1.2-2.rockspec CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
-          luarocks install lua-zlib CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LIBFLAG="-bundle -undefined dynamic_lookup -all_load  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
+          luarocks install lua-zlib \
+          CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+          LIBFLAG="/usr/local/lib/libz_static.a -bundle -undefined dynamic_lookup -all_load  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
 
 
 
