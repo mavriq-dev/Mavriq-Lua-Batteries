@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build_win:
-    # if: ${{ false }}
+    if: ${{ false }}
     runs-on: windows-latest
 
     steps:
