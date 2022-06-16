@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build_win:
-    if: ${{ false }}
+    # if: ${{ false }}
     runs-on: windows-latest
 
     steps:
@@ -114,7 +114,7 @@ jobs:
           luarocks unpack luasocket
           pushd .
           cd luasocket-3.0.0-1/luasocket
-          luarocks make luasocket-3.0.0-1.rockspec
+          luarocks make luasocket-3.0.0-1.rockspec 
           popd
           mkdir docs/luasocket
           cp -r luasocket-3.0.0-1/luasocket/docs/* docs/luasocket
@@ -557,6 +557,10 @@ jobs:
           cp -r serpent-0.30-2/serpent/README.md docs/serpent
           cp -r serpent-0.30-2/serpent/LICENSE docs/serpent
 
+      - name: "Install LuaUnit"
+        run: |
+          luarocks install luaunit
+
 
 
       - name: "Collect files"
@@ -718,12 +722,15 @@ jobs:
         run: |
           luarocks unpack lua-curl 
           cd lua-curl-0.3.13-1/Lua-cURLv3-0.3.13
+
           make \
           CFLAGS="-I/usr/local/opt/lua@5.3/include/lua -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
           LDFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
           CURL_LIBS="/usr/local/lib/libcurl.a /usr/local/lib/libzstd_static.a /usr/local/lib/libssl_static.a /usr/local/lib/libcrypto_static.a \
           /usr/local/lib/libz_static.a /usr/local/lib/libnghttp2_static.a /usr/local/lib/libbrotlidec-static.a /usr/local/lib/libbrotlicommon-static.a \
-          /usr/local/lib/libpsl_static.a /usr/local/lib/libidn2_static.a /usr/local/lib/libunistring_static.a /usr/local/lib/libiconv_static.a"
+          /usr/local/lib/libpsl_static.a /usr/local/lib/libidn2_static.a /usr/local/lib/libunistring_static.a /usr/local/lib/libiconv_static.a" \
+          -j2
+
           cp lcurl.so /usr/local/lib/lua/5.3/
           cd -
 
@@ -749,7 +756,7 @@ jobs:
            CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
            LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
 
-      # - name: Build luasql-mysql
+      # - name: Build luasql-mysql # Note 10.13 only as mysql requires
       #   run: |
       #     luarocks install rockspecs/luasql-mysql-2.6.0-1.rockspec
 
@@ -787,7 +794,14 @@ jobs:
         run: |
           luarocks unpack luasec
           cd luasec-1.1.0-1/luasec
-          make macosx CFLAGS="-O2 -fno-common -Wall -pedantic -arch arm64 -arch x86_64 -I. -I/usr/include -I/usr/local/include -I/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DWITH_LUASOCKET -DLUASOCKET_DEBUG -mmacosx-version-min=10.10" LDFLAGS="-bundle -undefined dynamic_lookup -arch arm64 -arch x86_64 -L./luasocket -L/usr/lib  -v" LIBS="-lz_static -lssl_static -lcrypto_static -lluasocket"
+
+          make macosx \
+          CFLAGS="-O2 -fno-common -Wall -pedantic -arch arm64 -arch x86_64 -I. -I/usr/include -I/usr/local/include \
+          -I/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DWITH_LUASOCKET -DLUASOCKET_DEBUG -mmacosx-version-min=10.10" \
+          LDFLAGS="-bundle -undefined dynamic_lookup -arch arm64 -arch x86_64 -L./luasocket -L/usr/lib  -v" \
+          LIBS="-lz_static -lssl_static -lcrypto_static -lluasocket" \
+          -j2
+
           cp src/ssl.so /usr/local/lib/lua/5.3/
           cd -
 
@@ -798,8 +812,15 @@ jobs:
           luarocks unpack lua-zip
           mkdir lua-zip-0.2-0/lua-zip/build
           cd lua-zip-0.2-0/lua-zip/build
-          cmake .. -DLUA_INCLUDE_DIR=/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DLUA_LIBRARIES=/usr/local/Cellar/lua@5.3/5.3.6/lib/liblua.dylib -DLIBZIP_LIBRARY=/usr/local/lib/libzip_static.a -DCMAKE_MODULE_LINKER_FLAGS:STRING="-L/usr/local/lib -lzstd_static -lz_static -llua53 -lbz2_static -v" -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
-          cmake --build . --config=Release
+
+          cmake .. -DLUA_INCLUDE_DIR=/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ \
+          -DLUA_LIBRARIES=/usr/local/Cellar/lua@5.3/5.3.6/lib/liblua.dylib \
+          -DLIBZIP_LIBRARY=/usr/local/lib/libzip_static.a \
+          -DCMAKE_MODULE_LINKER_FLAGS:STRING="-L/usr/local/lib -lzstd_static -lz_static -llua53 -lbz2_static -v" \
+          -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=10.10
+
+          cmake --build . --config=Release -j2
           mkdir /usr/local/lib/lua/5.3/brimworks
           cp brimworks/zip.so  /usr/local/lib/lua/5.3/brimworks
           cd -
@@ -817,8 +838,13 @@ jobs:
           git clone https://github.com/mpx/lua-cjson 
           mkdir lua-cjson/build
           cd lua-cjson/build
-          cmake .. -DLUA_INCLUDE_DIR=/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DLUA_LIBRARIES=/usr/local/Cellar/lua@5.3/5.3.6/lib/liblua.dylib -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.10
-          cmake --build . --config=Release
+
+          cmake .. -DLUA_INCLUDE_DIR=/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ \
+          -DLUA_LIBRARIES=/usr/local/Cellar/lua@5.3/5.3.6/lib/liblua.dylib \
+          -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.10
+
+          cmake --build . --config=Release -j2
           cp cjson.so /usr/local/lib/lua/5.3/
           cd -
 
