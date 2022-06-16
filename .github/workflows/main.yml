@@ -756,10 +756,14 @@ jobs:
            CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
            LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
 
-      # - name: Build luasql-mysql # Note 10.13 only as mysql requires
-      #   run: |
-      #     luarocks install rockspecs/luasql-mysql-2.6.0-1.rockspec
 
+
+      - name: Build luasql-mysql # Note 10.14 only as mysql requires may even require 11.0
+        run: |
+          luarocks install luasql-mysql \
+          CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+          LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 /usr/local/lib/libmysqlclient.a \
+          /usr/local/lib/libssl_static.a /usr/local/lib/libcrypto_static.a"
 
       # - name: "Build luasql-firebird"
       #   run: |

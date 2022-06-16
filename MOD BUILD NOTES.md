@@ -247,8 +247,8 @@ win
       cmake .. -DDOWNLOAD_BOOST=1 -DWITH_BOOST=C:\Users\geoff_obr9bt1\Documents\GitHub\test
 
 mac
-      this isn't working for universal build right now
-      cmake .. -DDOWNLOAD_BOOST=1 -DWITH_BOOST=~/Downloads -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 -DWITH_SSL=/opt/local/libexec/openssl11/ 
+      download arm and x64 versions of mysql
+      lipo -create mysql-8.0.29-macos12-arm64/lib/libmysqlclient.a mysql-8.0.29-macos12-x86_64/lib/libmysqlclient.a -output fat/libmysqlclient.a
 ```
 
 # lua-zip
