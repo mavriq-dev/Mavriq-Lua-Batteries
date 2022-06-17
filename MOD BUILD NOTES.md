@@ -1,4 +1,4 @@
-# Build Notes
+brew # Build Notes
 
 
 ## General Mac Notes
@@ -147,7 +147,16 @@ win
       Open Visual Studio Solution adn build static lib.
 
 mac
-      macports
+      macports -- universal not correct
+      clone from github
+      compile arm64 and x86_64 seperatly, lipo together
+      to configure arm64 use:
+      env CFLAGS="-arch arm64 -mmacosx-version-min=11.0" LDFLAGS="-arch arm64 -mmacosx-version-min=11.0" ./configure --host=aarch64-apple-darwin20
+      use for x86_64 
+      env CFLAGS="-mmacosx-version-min=10.10" LDFLAGS="-mmacosx-version-min=10.10" ./configure 
+      make each with make -j3
+      lipo -create aarch64-apple-darwin20/.libs/libffi.a x86_64-apple-darwin20.6.0/.libs/libffi.a -output ../libffi.a
+
 ```
 ### Other Alternatives for libffi
 `https://github.com/winlibs/libffi` has vc16 etc projectgs
@@ -173,9 +182,28 @@ mac
       brew install pkg-config
       brew install lua@5.3 and follow all instructions after installing ie export settings so pkg config can find esp pkgconfigni
       mkdir -p build/deps/include
+      cd to build
       put stattic ffi in deps and its headers in include
-      CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" LDFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10"  meson .. -Dlua_version=5.3 -Dlibffi=vendor
+      meson .. -Dlua_version=5.3 -Dlibffi=vendor
+      edit build.ninja --add -mmacosc-version-min=10.10 as shown below to the comiple args and linker_args
+
+      build cffi.so.p/src_ffilib.cc.o: cpp_COMPILER ../src/ffilib.cc
+      DEPFILE = cffi.so.p/src_ffilib.cc.o.d
+      DEPFILE_UNQUOTED = cffi.so.p/src_ffilib.cc.o.d
+      ARGS = -Icffi.so.p -I. -I.. -Ideps/include -I../deps/include -I/usr/local/opt/lua@5.3/include/lua -mmacosx-version-min=10.10 -fcolor-diagnostics -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -Wpedantic -std=c++14 -fno-exceptions -fno-rtti -O2 -g -DCFFI_LUA_DLL -Wshadow -Wold-style-cast -fvisibility=hidden -DFFI_LITTLE_ENDIAN -DHAVE_FFI_H
       ninja all
+
+      copy cffi.so ../../cffi.arm.so
+      replace the -mmacox directive with -arch arm64
+      ninja clean
+      ninja all
+
+      copy cffi.so ../../cffi.x86.so
+      cd ../../
+      lipo -create cffi.arm.so cffi.x86.so -output cffi.so
+
+
+
 ```
 # lua-sec
 ```
