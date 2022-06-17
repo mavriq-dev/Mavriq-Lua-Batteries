@@ -775,9 +775,11 @@ jobs:
       #     luarocks install rockspecs/luasql-postgres-2.6.0-1.rockspec
 
 
-      # - name: "Build luasql-sqlite3"
-      #   run: |
-      #     luarocks install rockspecs/luasql-sqlite3-2.6.0-1.rockspec
+      - name: "Build luasql-sqlite3"
+        run: |
+          luarocks install luasql-sqlite3 \
+          CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+          LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 /usr/local/lib/libsqlite3.a"
 
 
       - name: "Build lrexlib-pcre2"
