@@ -183,7 +183,7 @@ mac
       brew install lua@5.3 and follow all instructions after installing ie export settings so pkg config can find esp pkgconfigni
       mkdir -p build/deps/include
       cd to build
-      put stattic ffi in deps and its headers in include
+      put stattic ffi in deps and its headers in include, use headers from x86_64-apple-darwin20.6.0 dir of libffi
       meson .. -Dlua_version=5.3 -Dlibffi=vendor
       edit build.ninja --add -mmacosc-version-min=10.10 as shown below to the comiple args and linker_args
 
@@ -195,6 +195,7 @@ mac
 
       copy cffi.so ../../cffi.arm.so
       replace the -mmacox directive with -arch arm64
+      replace headers in deps directory with files from aarch64-apple-darwin20 of libffi
       ninja clean
       ninja all
 
@@ -258,6 +259,19 @@ make LIBS="-llua -lglfw3"
 Looks like glfw3 is loaded at runtime via dlopen. This needs to be changed.
 
 ```
+# wxWidgets
+```
+
+mac
+
+      ./configure --disable-debug --disable-shared --enable-unicode \
+          --enable-compat30 --enable-privatefonts --with-cxx=11 \
+          --with-libjpeg=builtin --with-libpng=builtin --with-libtiff=builtin --with-expat=builtin \
+          --with-zlib=builtin --enable-universal_binary=x86_64,arm64 \
+          --with-macosx-version-min=10.10 \
+          --with-osx_cocoa CFLAGS="-Os" CXXFLAGS="-Os"
+```
+
 # wxLua
 ```
 git clone https://github.com/pkulchenko/wxlua
