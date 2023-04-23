@@ -796,20 +796,20 @@ jobs:
       #    LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
 
 
-      - name: "Build luasec" 
-        run: |
-          luarocks unpack luasec
-          cd luasec-1.1.0-1/luasec
+      # - name: "Build luasec" 
+      #  run: |
+      #    luarocks unpack luasec
+      #    cd luasec-1.1.0-1/luasec
 
-          make macosx \
-          CFLAGS="-O2 -fno-common -Wall -pedantic -arch arm64 -arch x86_64 -I. -I/usr/include -I/usr/local/include \
-          -I/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DWITH_LUASOCKET -DLUASOCKET_DEBUG -mmacosx-version-min=10.10" \
-          LDFLAGS="-bundle -undefined dynamic_lookup -arch arm64 -arch x86_64 -L./luasocket -L/usr/lib  -v" \
-          LIBS="-lz_static -lssl_static -lcrypto_static -lluasocket" \
-          -j2
+      #    make macosx \
+      #    CFLAGS="-O2 -fno-common -Wall -pedantic -arch arm64 -arch x86_64 -I. -I/usr/include -I/usr/local/include \
+      #    -I/usr/local/Cellar/lua@5.3/5.3.6/include/lua5.3/ -DWITH_LUASOCKET -DLUASOCKET_DEBUG -mmacosx-version-min=10.10" \
+      #    LDFLAGS="-bundle -undefined dynamic_lookup -arch arm64 -arch x86_64 -L./luasocket -L/usr/lib  -v" \
+      #    LIBS="-lz_static -lssl_static -lcrypto_static -lluasocket" \
+      #    -j2
 
-          cp src/ssl.so /usr/local/lib/lua/5.3/
-          cd -
+      #    cp src/ssl.so /usr/local/lib/lua/5.3/
+      #    cd -
 
 
       - name: "Build Lua-Zip"
