@@ -813,7 +813,7 @@ jobs:
 
       - name: "Build coxpcall"
         run: |
-          luarocks install  \
+          luarocks install coxpcall \
           CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
           LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
           
