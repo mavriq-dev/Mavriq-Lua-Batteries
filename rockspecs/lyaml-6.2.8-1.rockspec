@@ -1,5 +1,5 @@
 local MODULE_VERSION = '6.2.8' 
-local ROCKSPEC_VERSION = '-1'
+local ROCKSPEC_VERSION = '1'
 local USE_STATIC_LIBYAML = true
 
 package = 'lyaml'
