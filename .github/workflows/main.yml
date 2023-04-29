@@ -483,17 +483,19 @@ jobs:
           cp -r stdlib-41.2.2-1/lua-stdlib-release-v41.2.2/README docs/stdlib
 
       - name: "Build luaexpat"
-        run: |
-          luarocks unpack luaexpat
-          pushd .
-          cd luaexpat-1.5.1-1/luaexpat
-          patch -p1 -i ../../patches/luaexpat.patch --binary
-          luarocks make ./luaexpat-1.5.1-1.rockspec
-          popd
-          mkdir docs/luaexpat
-          cp -r luaexpat-1.5.1-1/luaexpat/docs/* docs/luaexpat
-          cp -r luaexpat-1.5.1-1/luaexpat/README.md docs/luaexpat
-          cp -r luaexpat-1.5.1-1/luaexpat/LICENSE docs/luaexpat
+        # run: |
+        #   luarocks unpack luaexpat
+        #   pushd .
+        #   cd luaexpat-1.5.1-1/luaexpat
+        #   patch -p1 -i ../../patches/luaexpat.patch --binary
+        #   luarocks make ./luaexpat-1.5.1-1.rockspec
+        #   popd
+        #   mkdir docs/luaexpat
+        #   cp -r luaexpat-1.5.1-1/luaexpat/docs/* docs/luaexpat
+        #   cp -r luaexpat-1.5.1-1/luaexpat/README.md docs/luaexpat
+        #   cp -r luaexpat-1.5.1-1/luaexpat/LICENSE docs/luaexpat
+
+        # Need to fix error src/lxplib.c(13): fatal error C1083: Cannot open include file: 'expat_config.h': No such file or directory
 
 
       - name: "Build luasec"
