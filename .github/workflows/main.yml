@@ -87,27 +87,27 @@ jobs:
       #       ${{ runner.os }}-wxlua-
 
 
-      - name: "Build wxlua"
-        if: steps.cache-wxlua.outputs.cache-hit != 'true'
-        run: |
-          git clone https://github.com/pkulchenko/wxlua
-          patch wxlua/wxlua/modules/luamodule/luamodule.cpp patches/wxlua.patch --binary
-          mkdir wxlua/wxlua/wxlua-build
-          pushd .
-          cd wxlua/wxlua/wxlua-build
-          cmake .. -DCMAKE_BUILD_TYPE=Release  -DwxWidgets_ROOT_DIR="$env:GITHUB_WORKSPACE"/wxWidgets/ -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="$env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="$env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
-          cmake --build . --config Release
-          popd
+      # - name: "Build wxlua"
+      #   if: steps.cache-wxlua.outputs.cache-hit != 'true'
+      #   run: |
+      #     git clone https://github.com/pkulchenko/wxlua
+      #     patch wxlua/wxlua/modules/luamodule/luamodule.cpp patches/wxlua.patch --binary
+      #     mkdir wxlua/wxlua/wxlua-build
+      #     pushd .
+      #     cd wxlua/wxlua/wxlua-build
+      #     cmake .. -DCMAKE_BUILD_TYPE=Release  -DwxWidgets_ROOT_DIR="$env:GITHUB_WORKSPACE"/wxWidgets/ -DwxLua_LUA_LIBRARY_USE_BUILTIN=false -DwxLua_LUA_INCLUDE_DIR="$env:LOCALAPPDATA"\LUAVM\versions\5.3\include -DwxLua_LUA_LIBRARY="$env:LOCALAPPDATA"\LUAVM\versions\5.3\lua53.lib
+      #     cmake --build . --config Release
+      #     popd
 
 
 
-      - name: "Copy wxLua"   
-        run: |
-          cp wxlua/wxlua/wxlua-build/bin/Release/wx.dll $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod"
-          mkdir tests/wxlua
-          mkdir docs/wxlua
-          cp -r wxlua/wxlua/samples/* tests/wxlua
-          cp -r wxlua/wxlua/docs/* docs/wxlua
+      # - name: "Copy wxLua"   
+      #   run: |
+      #     cp wxlua/wxlua/wxlua-build/bin/Release/wx.dll $env:LOCALAPPDATA"\LuaVM\versions\5.3\cmod"
+      #     mkdir tests/wxlua
+      #     mkdir docs/wxlua
+      #     cp -r wxlua/wxlua/samples/* tests/wxlua
+      #     cp -r wxlua/wxlua/docs/* docs/wxlua
 
       - name: "Build LuaSocket"
         run: |
@@ -625,14 +625,14 @@ jobs:
           sudo cp -R externals/lib/mac/*.dylib /usr/local/lib
 
 
-      - name: "Cache wxwidgets"
-        id: cache-wxwidgets
-        uses: actions/cache@v3
-        with:
-          path: wxWidgets
-          key: ${{ runner.os }}-wxwidgets-
-          restore-keys: |
-            ${{ runner.os }}-wxwidgets-
+      # - name: "Cache wxwidgets"
+      #   id: cache-wxwidgets
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: wxWidgets
+      #     key: ${{ runner.os }}-wxwidgets-
+      #     restore-keys: |
+      #       ${{ runner.os }}-wxwidgets-
 
       # - name: "Build wxWidgets"
       #   if: steps.cache-wxwidgets.outputs.cache-hit != 'true'
