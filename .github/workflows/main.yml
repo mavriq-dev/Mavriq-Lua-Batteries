@@ -349,29 +349,19 @@ jobs:
           cp -r xavante-2.4.0-1/xavante-2.4.0/doc/* docs/xavante
           cp -r xavante-2.4.0-1/xavante-2.4.0/README.md docs/xavante
 
-      - name: "Build yaml"
+
+
+      - name: "Build lyaml"
         run: |
-          luarocks unpack yaml
+          luarocks unpack rockspecs/lyaml-6.2.8.1.rockspec
           pushd .
-          cd yaml-1.1.2-1/yaml
-          luarocks make yaml-1.1.2-1.rockspec
+          cd lyaml-6.2.8-1/lyaml-6.2.8
+          luarocks make ../../rockspecs/lyaml-6.2.8-1.rockspec
           popd
           mkdir docs/lyaml
-          cp -r yaml-1.1.2-1/yaml/doc/* docs/yaml
-          cp -r yaml-1.1.2-1/yaml/readme.md docs/yaml
-          cp -r yaml-1.1.2-1/yaml/LICENSE docs/yaml
-
-      # - name: "Build lyaml"
-      #   run: |
-      #     luarocks unpack rockspecs/lyaml-6.1.3-2.rockspec
-      #     pushd .
-      #     cd lyaml-6.1.3-2/lyaml-6.1.3
-      #     luarocks make ../../rockspecs/lyaml-6.1.3-2.rockspec
-      #     popd
-      #     mkdir docs/lyaml
-      #     cp -r lyaml-6.1.3-2/lyaml-6.1.3/doc/* docs/lyaml
-      #     cp -r lyaml-6.1.3-2/lyaml-6.1.3/README.md docs/lyaml
-      #     cp -r lyaml-6.1.3-2/lyaml-6.1.3/LICENSE docs/lyaml
+          cp -r lyaml-6.2.8-1/lyaml-6.2.8/doc/* docs/lyaml
+          cp -r lyaml-6.2.8-1/lyaml-6.2.8/README.md docs/lyaml
+          cp -r lyaml-6.2.8-1/lyaml-6.2.8/LICENSE docs/lyaml
 
       - name: "Build lua-protobuf"
         run: |
@@ -827,9 +817,9 @@ jobs:
           LIBFLAG="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
 
 
-      - name: "Build yaml"
+      - name: "Build lyaml"
         run: |
-          luarocks install yaml \
+          luarocks install lyaml \
           CFLAGS="-O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
           LIBFLAG="/usr/local/lib/libyaml.a -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
 

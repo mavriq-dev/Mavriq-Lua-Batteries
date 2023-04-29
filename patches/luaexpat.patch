@@ -4,7 +4,7 @@ Date:   Fri May 20 15:22:07 2022 -0400
 
     patch
 
-diff --git a/luaexpat-1.4.1-1.rockspec b/luaexpat-1.4.1-1.rockspec
+diff --git a/luaexpat-1.5.1-1.rockspec b/luaexpat-1.5.1-1.rockspec
 index c13eafc..52aed3d 100644
 --- a/luaexpat-1.4.1-1.rockspec
 +++ b/luaexpat-1.4.1-1.rockspec
