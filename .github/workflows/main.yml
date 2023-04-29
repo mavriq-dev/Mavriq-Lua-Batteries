@@ -482,7 +482,7 @@ jobs:
           cp -r stdlib-41.2.2-1/lua-stdlib-release-v41.2.2/doc/* docs/stdlib
           cp -r stdlib-41.2.2-1/lua-stdlib-release-v41.2.2/README docs/stdlib
 
-      - name: "Build luaexpat"
+        # - name: "Build luaexpat"
         # run: |
         #   luarocks unpack luaexpat
         #   pushd .
