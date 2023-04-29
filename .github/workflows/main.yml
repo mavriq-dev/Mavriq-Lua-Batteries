@@ -353,7 +353,7 @@ jobs:
 
       - name: "Build lyaml"
         run: |
-          luarocks unpack lyaml
+          luarocks unpack rockspecs/lyaml-6.2.8-1.rockspec
           pushd .
           cd lyaml-6.2.8-1/lyaml-6.2.8
           luarocks make ../../rockspecs/lyaml-6.2.8-1.rockspec
@@ -839,7 +839,7 @@ jobs:
       #     LIBFLAG="/usr/local/lib/libyaml.a -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 "
       #   
       #   Need to fix luke file as per https://github.com/gvvaughan/lyaml/issues/30
-      
+
 
 
       - name: "Build lua-protobuf"
