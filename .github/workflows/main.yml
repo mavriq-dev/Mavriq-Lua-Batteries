@@ -173,27 +173,27 @@ jobs:
         run: |
           luarocks unpack copas
           pushd .
-          cd copas--4.7.0-1/copas
-          luarocks make copas--4.7.0-1.rockspec
+          cd copas-4.7.0-1/copas
+          luarocks make copas-4.7.0-1.rockspec
           popd
           patch $env:LOCALAPPDATA"\LUAVM\versions\5.3\lua\copas.lua"  patches/copas.lua.patch
           mkdir docs/copas
-          cp -r copas--4.7.0-1/copas/docs/* docs/copas 
-          cp -r copas--4.7.0-1/copas/LICENSE docs/copas
-          cp -r copas--4.7.0-1/copas/README.md docs/copas
+          cp -r copas-4.7.0-1/copas/docs/* docs/copas 
+          cp -r copas-4.7.0-1/copas/LICENSE docs/copas
+          cp -r copas-4.7.0-1/copas/README.md docs/copas
 
       # - name: "Build copas"
       #   run: |
-      #     luarocks unpack rockspecs/copas--4.7.0-1.rockspec
+      #     luarocks unpack rockspecs/copas-4.7.0-1.rockspec
       #     pushd .
-      #     cd copas--4.7.0-1/copas
+      #     cd copas-4.7.0-1/copas
       #     luarocks make ../../rockspecs/copas--4.7.0-1.rockspec
       #     popd
       #     patch $env:LOCALAPPDATA"\LUAVM\versions\5.3\lua\copas.lua"  patches/copas.lua.patch
       #     mkdir docs/copas
-      #     cp -r copas--4.7.0-1/copas/docs/* docs/copas 
-      #     cp -r copas--4.7.0-1/copas/LICENSE docs/copas
-      #     cp -r copas--4.7.0-1/copas/README.md docs/copas
+      #     cp -r copas-4.7.0-1/copas/docs/* docs/copas 
+      #     cp -r copas-4.7.0-1/copas/LICENSE docs/copas
+      #     cp -r copas-4.7.0-1/copas/README.md docs/copas
 
       - name: Build coxpcall
         run: |
