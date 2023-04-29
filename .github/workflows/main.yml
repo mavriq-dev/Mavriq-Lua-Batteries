@@ -194,19 +194,19 @@ jobs:
       #     cp -r copas-4.7.0-1/copas/LICENSE docs/copas
       #     cp -r copas-4.7.0-1/copas/README.md docs/copas
 
-      - name: Build coxpcall
+      - name: "Build coxpcall"
         run: |
           luarocks install coxpcall
           
-      - name: Build CopasTimer
+      - name: "Build CopasTimer"
         run: |
           luarocks install CopasTimer
 
-      - name: Build lub
+      - name: "Build lub"
         run: |
           luarocks install lub
 
-      - name: Build vstruct
+      - name: "Build vstruct"
         run: |
           luarocks unpack vstruct
           pushd .
@@ -216,7 +216,7 @@ jobs:
           mkdir docs/vstruct
           cp -r vstruct-2.1.1-1/vstruct/README.md docs/vstruct
 
-      - name: Build lbase64
+      - name: "Build lbase64"
         run: |
           luarocks unpack lbase64
           pushd .
@@ -799,6 +799,12 @@ jobs:
       - name: "build luafilesystem"
         run: |
           luarocks install luafilesystem \
+          CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+          LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
+
+      - name: "Build copas"
+        run: |
+          luarocks install copas \
           CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
           LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
 
