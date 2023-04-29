@@ -874,11 +874,11 @@ jobs:
           LIBFLAG="/usr/local/lib/libpcre2-8.a -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
 
 
-      - name: "Build luaexpat"
-        run: |
-         luarocks install luaexpat \
-         CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
-         LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
+      # - name: "Build luaexpat"
+      #   run: |
+      #    luarocks install luaexpat \
+      #    CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+      #    LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
 
 
       - name: "Build luasec" 
