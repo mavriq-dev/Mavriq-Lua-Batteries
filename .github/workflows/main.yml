@@ -176,7 +176,6 @@ jobs:
           cd copas-4.7.0-1/copas
           luarocks make copas-4.7.0-1.rockspec
           popd
-          patch $env:LOCALAPPDATA"\LUAVM\versions\5.3\lua\copas.lua"  patches/copas.lua.patch
           mkdir docs/copas
           cp -r copas-4.7.0-1/copas/docs/* docs/copas 
           cp -r copas-4.7.0-1/copas/LICENSE docs/copas
