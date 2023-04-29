@@ -790,14 +790,14 @@ jobs:
 
 
       - name: "Build luaexpat"
-       run: |
+        run: |
          luarocks install luaexpat \
          CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
          LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
 
 
       - name: "Build luasec" 
-       run: |
+        run: |
          luarocks unpack luasec
          cd luasec-1.1.0-1/luasec
 
