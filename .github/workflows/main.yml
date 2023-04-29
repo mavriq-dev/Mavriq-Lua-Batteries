@@ -353,7 +353,7 @@ jobs:
 
       - name: "Build lyaml"
         run: |
-          luarocks unpack rockspecs/lyaml-6.2.8.1.rockspec
+          luarocks unpack lyaml
           pushd .
           cd lyaml-6.2.8-1/lyaml-6.2.8
           luarocks make ../../rockspecs/lyaml-6.2.8-1.rockspec
@@ -362,6 +362,21 @@ jobs:
           cp -r lyaml-6.2.8-1/lyaml-6.2.8/doc/* docs/lyaml
           cp -r lyaml-6.2.8-1/lyaml-6.2.8/README.md docs/lyaml
           cp -r lyaml-6.2.8-1/lyaml-6.2.8/LICENSE docs/lyaml
+
+
+      # - name: "Build lyaml"
+      #   run: |
+      #     luarocks unpack rockspecs/lyaml-6.2.8.1.rockspec
+      #     pushd .
+      #     cd lyaml-6.2.8-1/lyaml-6.2.8
+      #     luarocks make ../../rockspecs/lyaml-6.2.8-1.rockspec
+      #     popd
+      #     mkdir docs/lyaml
+      #     cp -r lyaml-6.2.8-1/lyaml-6.2.8/doc/* docs/lyaml
+      #     cp -r lyaml-6.2.8-1/lyaml-6.2.8/README.md docs/lyaml
+      #     cp -r lyaml-6.2.8-1/lyaml-6.2.8/LICENSE docs/lyaml
+
+
 
       - name: "Build lua-protobuf"
         run: |
