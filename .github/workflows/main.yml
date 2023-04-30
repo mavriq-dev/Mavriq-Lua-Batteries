@@ -528,10 +528,10 @@ jobs:
           luarocks unpack lua-zip 
           pushd .
           cd lua-zip-0.2-0/lua-zip
-          luarocks make .luazip-1.2.7-1.rockspec 
+          luarocks make .luazip-0.2.0-0.rockspec 
           popd
           mkdir docs/lua-zip
-          cp -r luazip-1.2.7-1/lua-zip/README.txt docs/lua-zip
+          cp -r lua-zip-0.2-0/lua-zip/README.txt docs/lua-zip
 
       # - name: "Build Lua-Zip"
       #   run: |
