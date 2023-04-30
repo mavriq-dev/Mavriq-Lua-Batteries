@@ -553,7 +553,7 @@ jobs:
           luarocks unpack penlight
           pushd .
           cd penlight-1.13.1-1/penlight
-          luarocks make penlight-1.12.0-2.rockspec 
+          luarocks make penlight-1.13.0-2.rockspec 
           popd
           mkdir docs/penlight
           cp -r penlight-1.13.1-1/penlight/docs/* docs/penlight
