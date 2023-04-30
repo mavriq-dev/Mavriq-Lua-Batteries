@@ -443,18 +443,33 @@ jobs:
 
       - name: "Build luaexpat"
         run: |
-          luarocks unpack luaexpat
+          git clone https://github.com/lunarmodules/luaexpat
           pushd .
-          cd luaexpat-1.5.1-1/luaexpat
-          patch -p1 -i ../../patches/luaexpat.patch --binary
-          luarocks make ./luaexpat-1.5.1-1.rockspec CC="gcc -DLUAEXPAT_SKIP_DTD_SUPPORT -DXML_DTD"
+          cd luaexpat
+          git checkout dtdbuild
+          # patch -p1 -i ../../patches/luaexpat.patch --binary
+          luarocks make rockspecs/luaexpat-1.5.1-1.rockspec CC="gcc -DLUAEXPAT_SKIP_DTD_SUPPORT -DXML_DTD"
           popd
           mkdir docs/luaexpat
-          cp -r luaexpat-1.5.1-1/luaexpat/docs/* docs/luaexpat
-          cp -r luaexpat-1.5.1-1/luaexpat/README.md docs/luaexpat
-          cp -r luaexpat-1.5.1-1/luaexpat/LICENSE docs/luaexpat
+          cp -r luaexpat/docs/* docs/luaexpat
+          cp -r luaexpat/README.md docs/luaexpat
+          cp -r luaexpat/LICENSE docs/luaexpat
 
        # Need to fix error src/lxplib.c(13): fatal error C1083: Cannot open include file: 'expat_config.h': No such file or directory
+
+
+      # - name: "Build luaexpat"
+      #   run: |
+      #     luarocks unpack luaexpat
+      #     pushd .
+      #     cd luaexpat-1.5.1-1/luaexpat
+      #     patch -p1 -i ../../patches/luaexpat.patch --binary
+      #     luarocks make ./luaexpat-1.5.1-1.rockspec CC="gcc -DLUAEXPAT_SKIP_DTD_SUPPORT -DXML_DTD"
+      #     popd
+      #     mkdir docs/luaexpat
+      #     cp -r luaexpat-1.5.1-1/luaexpat/docs/* docs/luaexpat
+      #     cp -r luaexpat-1.5.1-1/luaexpat/README.md docs/luaexpat
+      #     cp -r luaexpat-1.5.1-1/luaexpat/LICENSE docs/luaexpat
 
 
       - name: "Build luasec"
@@ -942,7 +957,11 @@ jobs:
 
       - name: "Build luaexpat"
         run: |
-         luarocks install luaexpat \
+          git clone https://github.com/lunarmodules/luaexpat
+          pushd .
+          cd luaexpat
+          git checkout dtdbuild
+         luarocks install rockspecs/lua-expat-1.5.1-1.rockspec \
          CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -DLUAEXPAT_SKIP_DTD_SUPPORT -DXML_DTD" \
          LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
 
