@@ -20,8 +20,7 @@ jobs:
         id: cache-luavm
         uses: actions/cache@v3
         with:
-          # path: ~/AppData/Local/LUAVM
-          path: $env:LOCALAPPDATA + "\LuaVM"
+          path: ~/AppData/Local/LuaVM
           key: ${{ runner.os }}-luavm-
           restore-keys: |
             ${{ runner.os }}-luavm-
@@ -182,19 +181,6 @@ jobs:
           cp -r copas-4.7.0-1/copas/LICENSE docs/copas
           cp -r copas-4.7.0-1/copas/README.md docs/copas
 
-      # - name: "Build copas"
-      #   run: |
-      #     luarocks unpack rockspecs/copas-4.7.0-1.rockspec
-      #     pushd .
-      #     cd copas-4.7.0-1/copas
-      #     luarocks make ../../rockspecs/copas--4.7.0-1.rockspec
-      #     popd
-      #     patch $env:LOCALAPPDATA"\LUAVM\versions\5.3\lua\copas.lua"  patches/copas.lua.patch
-      #     mkdir docs/copas
-      #     cp -r copas-4.7.0-1/copas/docs/* docs/copas 
-      #     cp -r copas-4.7.0-1/copas/LICENSE docs/copas
-      #     cp -r copas-4.7.0-1/copas/README.md docs/copas
-
       - name: "Build coxpcall"
         run: |
           luarocks install coxpcall
@@ -350,8 +336,6 @@ jobs:
           cp -r xavante-2.4.0-1/xavante-2.4.0/doc/* docs/xavante
           cp -r xavante-2.4.0-1/xavante-2.4.0/README.md docs/xavante
 
-
-
       - name: "Build lyaml"
         run: |
           luarocks unpack rockspecs/lyaml-6.2.8-1.rockspec
@@ -365,20 +349,6 @@ jobs:
           cp -r lyaml-6.2.8-1/lyaml-6.2.8/LICENSE docs/lyaml
 
 
-      # - name: "Build lyaml"
-      #   run: |
-      #     luarocks unpack rockspecs/lyaml-6.2.8.1.rockspec
-      #     pushd .
-      #     cd lyaml-6.2.8-1/lyaml-6.2.8
-      #     luarocks make ../../rockspecs/lyaml-6.2.8-1.rockspec
-      #     popd
-      #     mkdir docs/lyaml
-      #     cp -r lyaml-6.2.8-1/lyaml-6.2.8/doc/* docs/lyaml
-      #     cp -r lyaml-6.2.8-1/lyaml-6.2.8/README.md docs/lyaml
-      #     cp -r lyaml-6.2.8-1/lyaml-6.2.8/LICENSE docs/lyaml
-
-
-
       - name: "Build lua-protobuf"
         run: |
           luarocks unpack lua-protobuf
@@ -390,18 +360,6 @@ jobs:
           cp -r lua-protobuf-0.4.2-1/lua-protobuf/LICENSE docs/lua-protobuf
           cp -r lua-protobuf-0.4.2-1/lua-protobuf/README.md docs/lua-protobuf
 
-
-
-      # - name: "Build lua-protobuf"
-      #   run: |
-      #     luarocks unpack rockspecs/lua-protobuf-0.3.4-1.rockspec
-      #     pushd .
-      #     cd lua-protobuf-0.3.4-1/lua-protobuf
-      #     luarocks make ../../rockspecs/lua-protobuf-0.3.4-1.rockspec
-      #     popd
-      #     mkdir docs/lua-protobuf
-      #     cp -r lua-protobuf-0.3.4-1/lua-protobuf/LICENSE docs/lua-protobuf
-      #     cp -r lua-protobuf-0.3.4-1/lua-protobuf/README.md docs/lua-protobuf
 
       - name: "Build luasql-mysql"
         run: |
@@ -483,20 +441,20 @@ jobs:
           cp -r stdlib-41.2.2-1/lua-stdlib-release-v41.2.2/doc/* docs/stdlib
           cp -r stdlib-41.2.2-1/lua-stdlib-release-v41.2.2/README docs/stdlib
 
-        # - name: "Build luaexpat"
-        # run: |
-        #   luarocks unpack luaexpat
-        #   pushd .
-        #   cd luaexpat-1.5.1-1/luaexpat
-        #   patch -p1 -i ../../patches/luaexpat.patch --binary
-        #   luarocks make ./luaexpat-1.5.1-1.rockspec
-        #   popd
-        #   mkdir docs/luaexpat
-        #   cp -r luaexpat-1.5.1-1/luaexpat/docs/* docs/luaexpat
-        #   cp -r luaexpat-1.5.1-1/luaexpat/README.md docs/luaexpat
-        #   cp -r luaexpat-1.5.1-1/luaexpat/LICENSE docs/luaexpat
+      - name: "Build luaexpat"
+        run: |
+          luarocks unpack luaexpat
+          pushd .
+          cd luaexpat-1.5.1-1/luaexpat
+          patch -p1 -i ../../patches/luaexpat.patch --binary
+          luarocks make ./luaexpat-1.5.1-1.rockspec
+          popd
+          mkdir docs/luaexpat
+          cp -r luaexpat-1.5.1-1/luaexpat/docs/* docs/luaexpat
+          cp -r luaexpat-1.5.1-1/luaexpat/README.md docs/luaexpat
+          cp -r luaexpat-1.5.1-1/luaexpat/LICENSE docs/luaexpat
 
-        # Need to fix error src/lxplib.c(13): fatal error C1083: Cannot open include file: 'expat_config.h': No such file or directory
+       # Need to fix error src/lxplib.c(13): fatal error C1083: Cannot open include file: 'expat_config.h': No such file or directory
 
 
       - name: "Build luasec"
