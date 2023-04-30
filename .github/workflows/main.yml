@@ -1067,25 +1067,25 @@ jobs:
           pwd
 
 
-      # - name: "Codesign executable"
-      #   env: 
-      #     MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
-      #     MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
-      #     APPLE_ID_HASH: ${{secrets.APPLE_ID_HASH}}
-      #     APPLE_ID: ${{secrets.APPLE_ID}}
-      #     APP_SECRET: ${{secrets.APP_SECRET}}
-      #     TEAM_ID: ${{secrets.TEAM_ID}}
-      #   run: |
-      #     echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
-      #     security create-keychain -p build-password build.keychain
-      #     security default-keychain -s build.keychain
-      #     security unlock-keychain -p build-password build.keychain
-      #     security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
-      #     security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k build-password build.keychain
-      #     /usr/bin/codesign --force -s $APPLE_ID_HASH archive/bin/**/*.dylib -v
-      #     /usr/bin/codesign --force -s $APPLE_ID_HASH archive/bin/*.dylib -v
-      #     zip -r mavriq.zip archive/bin/ -x *.dll
-      #     xcrun notarytool submit mavriq.zip --apple-id $APPLE_ID --password $APP_SECRET --team-id $TEAM_ID
+      - name: "Codesign executable"
+        env: 
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+          APPLE_ID_HASH: ${{secrets.APPLE_ID_HASH}}
+          APPLE_ID: ${{secrets.APPLE_ID}}
+          APP_SECRET: ${{secrets.APP_SECRET}}
+          TEAM_ID: ${{secrets.TEAM_ID}}
+        run: |
+          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
+          security create-keychain -p build-password build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p build-password build.keychain
+          security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k build-password build.keychain
+          /usr/bin/codesign --force -s $APPLE_ID_HASH archive/bin/**/*.dylib -v
+          /usr/bin/codesign --force -s $APPLE_ID_HASH archive/bin/*.dylib -v
+          zip -r mavriq.zip archive/bin/ -x *.dll
+          xcrun notarytool submit mavriq.zip --apple-id $APPLE_ID --password $APP_SECRET --team-id $TEAM_ID
 
 
       - name: Upload artifacts
