@@ -883,7 +883,7 @@ jobs:
 
       - name: "Build luafft"
         run: |
-          luarocks instal luafft \
+          luarocks install luafft \
           CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
           LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
           cp -r luafft-1.2-1/luafft/README.md docs/luafft
