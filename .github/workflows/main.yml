@@ -528,7 +528,7 @@ jobs:
           luarocks unpack lua-zip 
           pushd .
           cd lua-zip-0.2-0/lua-zip
-          luarocks make .luazip-0.2.0-0.rockspec 
+          luarocks make .luazip-0.2.0.rockspec 
           popd
           mkdir docs/lua-zip
           cp -r lua-zip-0.2-0/lua-zip/README.txt docs/lua-zip
@@ -875,11 +875,11 @@ jobs:
           cd -
 
 
-      - name: "Build lua-curl"
-        run: |
-          luarocks install lua-curl \
-          CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
-          LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
+      # - name: "Build lua-curl"
+      #   run: |
+      #     luarocks install lua-curl \
+      #     CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
+      #     LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
 
       - name: "Build luafft"
         run: |
@@ -917,10 +917,6 @@ jobs:
           CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3 -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
           LIBFLAG="-bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
 
-
-
-
-
       - name: "Build MD5"
         run: |
           luarocks install MD5 \
@@ -928,6 +924,14 @@ jobs:
           -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  \
           LIBFLAG="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
 
+
+
+      - name: "Build xavante"
+        run: |
+          luarocks install xavante \
+          CFLAGS="-O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic \
+          -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  \
+          LIBFLAG="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
 
       # - name: "Build lyaml"
       #   run: |
@@ -976,6 +980,14 @@ jobs:
           luarocks install lrexlib-pcre2 \
           CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
           LIBFLAG="/usr/local/lib/libpcre2-8.a -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
+
+
+      - name: "Build stdlib"
+        run: |
+          luarocks install stdlib \
+          CFLAGS="-O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic \
+          -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  \
+          LIBFLAG="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
 
 
       # - name: "Build luaexpat"
@@ -1044,11 +1056,56 @@ jobs:
           cd -
 
 
+      - name: "Build Penlight"
+        run: |
+          luarocks install penlight \
+          CFLAGS="-O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic \
+          -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  \
+          LIBFLAG="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
+
       - name: "Build Lua-Zlib"
         run: |
           luarocks install lua-zlib \
           CFLAGS="-O2 -fPIC -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10" \
           LIBFLAG="/usr/local/lib/libz_static.a -bundle -undefined dynamic_lookup -all_load  -arch arm64 -arch x86_64 -mmacosx-version-min=10.10"
+
+      - name: "Build ZipWriter"
+        run: |
+          luarocks install ZipWriter \
+          CFLAGS="-O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic \
+          -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  \
+          LIBFLAG="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
+
+      - name: "Build dkjson"
+        run: |
+          luarocks install dkjson \
+          CFLAGS="-O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic \
+          -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  \
+          LIBFLAG="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
+
+      - name: "Build lxsh"
+        run: |
+          luarocks install lxsh \
+          CFLAGS="-O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic \
+          -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  \
+          LIBFLAG="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
+
+      - name: "Build serpent"
+        run: |
+          luarocks install serpent \
+          CFLAGS="-O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic \
+          -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  \
+          LIBFLAG="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
+
+      - name: "Install LuaUnit"
+        run: |
+          luarocks install luaunit \
+          CFLAGS="-O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic \
+          -I/usr/local/opt/lua@5.3/include/lua5.3  -arch arm64 -arch x86_64" MACOSX_DEPLOYMENT_TARGET=10.10  \
+          LIBFLAG="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
+
+
+
 
 
 
