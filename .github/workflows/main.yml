@@ -961,9 +961,9 @@ jobs:
           pushd .
           cd luaexpat
           git checkout dtdbuild
-         luarocks install rockspecs/lua-expat-1.5.1-1.rockspec \
-         CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -DLUAEXPAT_SKIP_DTD_SUPPORT -DXML_DTD" \
-         LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
+          luarocks install rockspecs/lua-expat-1.5.1-1.rockspec \
+          CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -DLUAEXPAT_SKIP_DTD_SUPPORT -DXML_DTD" \
+          LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
 
 
       - name: "Build luasec" 
