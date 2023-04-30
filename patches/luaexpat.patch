@@ -17,7 +17,7 @@ index c13eafc..52aed3d 100644
  			incdirs = { "$(EXPAT_INCDIR)", "src/" },
  			libdirs = { "$(EXPAT_LIBDIR)" },
  		},
-diff --git a/src/lxplib.c b/src/lxplib.c
+diff --git a../src/lxplib.c b../src/lxplib.c
 index 6157204..0d6432d 100644
 --- a/src/lxplib.c
 +++ b/src/lxplib.c
