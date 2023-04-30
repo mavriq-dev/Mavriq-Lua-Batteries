@@ -929,15 +929,15 @@ jobs:
           LIBFLAG="-L/usr/local/lib -llua53 -bundle  -dynamic_lookup -arch arm64 -arch x86_64"
 
 
-      - name: "Build luaexpat"
-        run: |
-          git clone https://github.com/lunarmodules/luaexpat
-          pushd .
-          cd luaexpat
-          git checkout dtdbuild
-          luarocks install rockspecs/luaexpat-1.5.1-1.rockspec \
-          CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -DLUAEXPAT_SKIP_EXPAT_CONFIG" \
-          LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
+      # - name: "Build luaexpat"
+      #   run: |
+      #     git clone https://github.com/lunarmodules/luaexpat
+      #     pushd .
+      #     cd luaexpat
+      #     git checkout dtdbuild
+      #     luarocks install rockspecs/luaexpat-1.5.1-1.rockspec \
+      #     CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -DLUAEXPAT_SKIP_EXPAT_CONFIG" \
+      #     LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
 
 
       - name: "Build luasec" 
