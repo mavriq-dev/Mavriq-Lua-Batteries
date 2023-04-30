@@ -20,7 +20,8 @@ jobs:
         id: cache-luavm
         uses: actions/cache@v3
         with:
-          path: ~/AppData/Local/LUAVM
+          # path: ~/AppData/Local/LUAVM
+          path: $env:LOCALAPPDATA + "\LuaVM"
           key: ${{ runner.os }}-luavm-
           restore-keys: |
             ${{ runner.os }}-luavm-
