@@ -528,7 +528,7 @@ jobs:
           luarocks unpack lua-zip 
           pushd .
           cd lua-zip-0.2-0/lua-zip
-          luarocks make .luazip-0.2.0.rockspec 
+          luarocks make luazip-0.2.0.rockspec 
           popd
           mkdir docs/lua-zip
           cp -r lua-zip-0.2-0/lua-zip/README.txt docs/lua-zip
@@ -651,7 +651,7 @@ jobs:
 
       - name: "Upload artifacts"
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Mavriq-Lua-Batteries
           path: archive
@@ -1147,7 +1147,7 @@ jobs:
 
       - name: Upload artifacts
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Mavriq-Lua-Batteries
           path: archive
