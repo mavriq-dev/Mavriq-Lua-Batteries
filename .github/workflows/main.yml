@@ -447,7 +447,7 @@ jobs:
           pushd .
           cd luaexpat
           git checkout dtdbuild
-          # patch -p1 -i ../../patches/luaexpat.patch --binary
+      # patch -p1 -i ../../patches/luaexpat.patch --binary
           luarocks make rockspecs/luaexpat-1.5.1-1.rockspec CC="gcc -DLUAEXPAT_SKIP_DTD_SUPPORT -DXML_DTD"
           popd
           mkdir docs/luaexpat
@@ -961,7 +961,7 @@ jobs:
           pushd .
           cd luaexpat
           git checkout dtdbuild
-          luarocks install rockspecs/lua-expat-1.5.1-1.rockspec \
+          luarocks install rockspecs/luaexpat-1.5.1-1.rockspec \
           CFLAGS=" -O2 -fPIC -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -DLUAEXPAT_SKIP_DTD_SUPPORT -DXML_DTD" \
           LIBFLAG=" -bundle -undefined dynamic_lookup -all_load -arch arm64 -arch x86_64 -mmacosx-version-min=10.10 -lexpat_static"
 
