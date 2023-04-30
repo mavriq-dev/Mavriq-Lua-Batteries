@@ -447,9 +447,8 @@ jobs:
           pushd .
           cd luaexpat
           git checkout dtdbuild
-          cd rockspecs
-          patch -p1 -i ../../patches/luaexpat.patch --binary
-          cd ..
+          cp rockspecs/luaexpat-1.5.1-1.rockspec luaexpat-1.5.1-1.rockspec
+          patch -p1 -i ../patches/luaexpat.patch --binary
           luarocks make rockspecs/luaexpat-1.5.1-1.rockspec CC="gcc -DLUAEXPAT_SKIP_EXPAT_CONFIG"
           popd
           mkdir docs/luaexpat
