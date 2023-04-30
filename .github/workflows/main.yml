@@ -122,6 +122,21 @@ jobs:
           cp -r luasocket-3.1.0-1/luasocket/LICENSE docs/luasocket
 
 
+      - name: "Build luaexpat"
+        run: |
+          git clone https://github.com/lunarmodules/luaexpat
+          pushd .
+          cd luaexpat
+          git checkout dtdbuild
+          cp rockspecs/luaexpat-1.5.1-1.rockspec luaexpat-1.5.1-1.rockspec
+          patch -p1 -i ../patches/luaexpat.patch 
+          luarocks make rockspecs/luaexpat-1.5.1-1.rockspec CC="gcc -DLUAEXPAT_SKIP_EXPAT_CONFIG"
+          popd
+          mkdir docs/luaexpat
+          cp -r luaexpat/docs/* docs/luaexpat
+          cp -r luaexpat/README.md docs/luaexpat
+          cp -r luaexpat/LICENSE docs/luaexpat
+
       - name: "Build losc"
         run: |
           luarocks unpack losc
@@ -448,7 +463,7 @@ jobs:
           cd luaexpat
           git checkout dtdbuild
           cp rockspecs/luaexpat-1.5.1-1.rockspec luaexpat-1.5.1-1.rockspec
-          patch -p1 -i ../patches/luaexpat.patch --binary
+          patch -p1 -i ../patches/luaexpat.patch 
           luarocks make rockspecs/luaexpat-1.5.1-1.rockspec CC="gcc -DLUAEXPAT_SKIP_EXPAT_CONFIG"
           popd
           mkdir docs/luaexpat
