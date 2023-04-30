@@ -523,25 +523,17 @@ jobs:
       #     cp -r luasec-1.1.0-1/luasec/README.md docs/luasec
       #     cp -r luasec-1.1.0-1/luasec/LICENSE docs/luasec
 
+
+
       - name: "Build Lua-Zip"
         run: |
-          luarocks unpack lua-zip 
+          luarocks unpack rockspecs/lua-zip-0.2-0.rockspec 
           pushd .
           cd lua-zip-0.2-0/lua-zip
-          luarocks make lua-zip-0.2-0.rockspec 
+          luarocks make ../../rockspecs/lua-zip-0.2-0.rockspec 
           popd
           mkdir docs/lua-zip
           cp -r lua-zip-0.2-0/lua-zip/README.txt docs/lua-zip
-
-      # - name: "Build Lua-Zip"
-      #   run: |
-      #     luarocks unpack rockspecs/lua-zip-0.2-0.rockspec 
-      #     pushd .
-      #     cd lua-zip-0.2-0/lua-zip
-      #     luarocks make ../../rockspecs/lua-zip-0.2-0.rockspec 
-      #     popd
-      #     mkdir docs/lua-zip
-      #     cp -r lua-zip-0.2-0/lua-zip/README.txt docs/lua-zip
 
       - name: "Build Lpeg"
         run: |
