@@ -1,6 +1,6 @@
 opsys = reaper.GetOS()
 extension = "dll"  
-if opsys == "OSX64" then  extension = "dylib" elseif opsys == "Other" then  extension = "so" end
+if opsys == "OSX64" or opsys == "macOS-arm64" then  extension = "dylib" elseif opsys == "Other" then  extension = "so" end
 
 mav_bat_path = reaper.GetResourcePath() .. "/Scripts/Mavriq ReaScript Repository/Various/Mavriq-Lua-Batteries/"
 
