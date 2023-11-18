@@ -109,17 +109,17 @@ jobs:
       #     cp -r wxlua/wxlua/samples/* tests/wxlua
       #     cp -r wxlua/wxlua/docs/* docs/wxlua
 
-      - name: "Build LuaSocket"
-        run: |
-          luarocks unpack luasocket
-          pushd .
-          cd luasocket-3.1.0-1/luasocket
-          luarocks make luasocket-3.1.0-1.rockspec 
-          popd
-          mkdir docs/luasocket
-          cp -r luasocket-3.1.0-1/luasocket/docs/* docs/luasocket
-          cp -r luasocket-3.1.0-1/luasocket/README.md docs/luasocket
-          cp -r luasocket-3.1.0-1/luasocket/LICENSE docs/luasocket
+      #- name: "Build LuaSocket"
+      #  run: |
+      #    luarocks unpack luasocket
+      #    pushd .
+      #    cd luasocket-3.1.0-1/luasocket
+      #    luarocks make luasocket-3.1.0-1.rockspec 
+      #    popd
+      #    mkdir docs/luasocket
+      #    cp -r luasocket-3.1.0-1/luasocket/docs/* docs/luasocket
+      #    cp -r luasocket-3.1.0-1/luasocket/README.md docs/luasocket
+      #    cp -r luasocket-3.1.0-1/luasocket/LICENSE docs/luasocket
 
 
       - name: "Build losc"
